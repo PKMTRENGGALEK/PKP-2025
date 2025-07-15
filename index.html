@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard E-PKP - PKM Trenggalek</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f8f9fa;
+      }
+
+      .sidebar {
+        height: 100vh;
+        width: 240px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #ffffff;
+        border-right: 1px solid #ddd;
+        padding: 1rem;
+      }
+
+      .sidebar h5 {
+        font-weight: bold;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+      }
+
+      .sidebar .nav-link {
+        color: #4f46e5;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+      }
+
+      .sidebar .nav-link.active {
+        background-color: #e0e7ff;
+      }
+
+      .main-content {
+        margin-left: 260px;
+        padding: 2rem;
+      }
+
+      .card {
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      }
+
+      iframe {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      footer {
+        font-size: 0.85rem;
+        text-align: center;
+        color: #999;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h5>PKP PKM TRENGGALEK</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="bi bi-house-door-fill me-2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="bi bi-folder2-open me-2"></i> Program PKP
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="card p-4">
+        <h2 class="mb-3">1. MANAJEMEN</h2>
+
+        <!-- FORM INPUT -->
+        <form id="epkpForm" class="mb-4">
+          <div class="row g-2">
+            <div class="col-md-5">
+              <input
+                type="text"
+                class="form-control"
+                name="variabel"
+                placeholder="Jenis Variabel"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <input
+                type="text"
+                class="form-control"
+                name="nilai"
+                placeholder="Nilai"
+                required
+              />
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary">Kirim</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- TABEL -->
+        <h5 class="mb-3">📄 Tabel Rekap E-PKP</h5>
+        <div class="table-responsive">
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS0owJ1YLTgj3gHX0myfxHlkHnDmY08_kJR4dgtGKzWqMJhkuWnWKYG85fdzu7_vpKoL8gRkEZ4z1g2/pubhtml?gid=0&single=true&widget=true&headers=false"
+            width="100%"
+            height="520"
+          ></iframe>
+        </div>
+      </div>
+
+      <footer>© 2025, made with ❤️ by PKM Trenggalek</footer>
+    </div>
+
+    <!-- SCRIPT KIRIM -->
+    <script>
+      document
+        .getElementById("epkpForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+
+          fetch("https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.text())
+            .then((data) => {
+              alert("✅ Data berhasil dikirim!");
+              e.target.reset();
+            })
+            .catch((err) => {
+              console.error("Gagal kirim:", err);
+              alert("❌ Gagal mengirim data");
+            });
+        });
+    </script>
+  </body>
+</html>
