@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Klaster 1 - Manajemen</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Select2 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      body {
+        background: #f0f4f5;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .logo {
+        max-height: 100px;
+      }
+      .table-responsive {
+        max-height: 75vh;
+        overflow: auto;
+      }
+      .table th {
+        background-color: #198754;
+        color: white;
+        font-size: 0.72rem;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .table td {
+        font-size: 0.72rem;
+        vertical-align: middle;
+      }
+      .table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      .table thead tr:nth-child(2) th {
+        top: 36px;
+        z-index: 1;
+      }
+      .bulan-input {
+        width: 45px;
+        font-size: 0.72rem;
+        text-align: center;
+      }
+      .updated {
+        background-color: #d1e7dd !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
+      <div class="card shadow">
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <img
+              src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
+              class="logo mb-2"
+              alt="Logo"
+            />
+            <h3 class="fw-bold">Detail Program Klaster 1: Manajemen</h3>
+          </div>
+
+          <div
+            class="d-flex justify-content-between align-items-center mb-3 mt-3"
+          >
+            <a href="index.html" class="btn btn-success shadow">⬅️ Kembali</a>
+            <div class="d-flex flex-column text-end">
+              <label for="programFilter" class="form-label fw-bold mb-1"
+                >Filter Program:</label
+              >
+              <select
+                id="programFilter"
+                class="select2"
+                style="min-width: 250px"
+              >
+                <option value="all">🔍 Semua Program</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-striped bg-gradient"
+              id="programTable"
+            >
+              <thead>
+                <tr>
+                  <th rowspan="2">No</th>
+                  <th rowspan="2" style="min-width: 100px">Jenis Variabel</th>
+                  <th rowspan="2" style="min-width: 250px">
+                    Definisi Operasional
+                  </th>
+                  <th rowspan="2">0</th>
+                  <th rowspan="2">4</th>
+                  <th rowspan="2">7</th>
+                  <th rowspan="2">10</th>
+                  <th rowspan="2">Target</th>
+                  <th rowspan="2">Capaian</th>
+                  <th rowspan="2">Ketercapaian</th>
+                  <th colspan="12" class="text-center">
+                    Capaian Kegiatan Program
+                  </th>
+                </tr>
+                <tr class="text-center">
+                  <th>Jan</th>
+                  <th>Feb</th>
+                  <th>Mar</th>
+                  <th>Apr</th>
+                  <th>Mei</th>
+                  <th>Juni</th>
+                  <th>Juli</th>
+                  <th>Agst</th>
+                  <th>Sept</th>
+                  <th>Okt</th>
+                  <th>Nov</th>
+                  <th>Des</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <td colspan="22" class="text-center">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+      const endpoint =
+        "https://script.google.com/macros/s/AKfycbzg84-rK9Grl_7-89tbqoXR_H5CSXyBcd45sE4zwEXSxn_DIxwP-ERWu2GaH6lDC9-S/exec";
+      let grouped = {};
+
+      fetch(endpoint)
+        .then((res) => res.json())
+        .then((data) => {
+          const programFilter = document.getElementById("programFilter");
+          const klaster1Data = data.filter((item) =>
+            item.Program?.toLowerCase().startsWith("1.")
+          );
+          grouped = {};
+
+          klaster1Data.forEach((row) => {
+            const program = row.Program || "Lainnya";
+            if (!grouped[program]) grouped[program] = [];
+            grouped[program].push(row);
+          });
+
+          Object.keys(grouped).forEach((program) => {
+            const option = document.createElement("option");
+            option.value = program;
+            option.textContent = program;
+            programFilter.appendChild(option);
+          });
+
+          // Init Select2 and bind change event
+          $(".select2")
+            .select2({
+              theme: "bootstrap-5",
+              width: "resolve",
+            })
+            .on("change", function () {
+              renderTable(this.value);
+            });
+
+          renderTable("all");
+        })
+        .catch((error) => {
+          document.getElementById("tableBody").innerHTML = `
+          <tr><td colspan="22" class="text-danger text-center">Gagal memuat data.</td></tr>`;
+          console.error("Fetch error:", error);
+        });
+
+      function renderTable(selectedProgram) {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+        let index = 1;
+        const programs =
+          selectedProgram === "all" ? Object.keys(grouped) : [selectedProgram];
+
+        programs.forEach((program) => {
+          const rows = grouped[program];
+
+          tableBody.innerHTML += `<tr style="background-color:#d1e7dd">
+          <td colspan="22"><strong>📌 ${program}</strong></td></tr>`;
+
+          rows.forEach((row) => {
+            const rowId = row["No"];
+            tableBody.innerHTML += `<tr data-id="${rowId}">
+            <td>${index++}</td>
+            <td>${row["Jenis Variabel"] || "-"}</td>
+            <td>${row["Definisi Operasional"] || "-"}</td>
+            <td>${row["0"] || "-"}</td>
+            <td>${row["4"] || "-"}</td>
+            <td>${row["7"] || "-"}</td>
+            <td>${row["10"] || "-"}</td>
+            <td>${row["Target Nilai Kinerja"] || "-"}</td>
+            <td>${row["Capaian"] || "-"}</td>
+            <td>${row["Ketercapaian"] || "-"}</td>
+            ${renderEditableCell("Jan", rowId, row["Jan"])}
+            ${renderEditableCell("Feb", rowId, row["Feb"])}
+            ${renderEditableCell("Mar", rowId, row["Mar"])}
+            ${renderEditableCell("Apr", rowId, row["Apr"])}
+            ${renderEditableCell("Mei", rowId, row["Mei"])}
+            ${renderEditableCell("Juni", rowId, row["Juni"])}
+            ${renderEditableCell("Juli", rowId, row["Juli"])}
+            ${renderEditableCell("Agst", rowId, row["Agst"])}
+            ${renderEditableCell("Sept", rowId, row["Sept"])}
+            ${renderEditableCell("Okt", rowId, row["Okt"])}
+            ${renderEditableCell("Nov", rowId, row["Nov"])}
+            ${renderEditableCell("Des", rowId, row["Des"])}
+          </tr>`;
+          });
+        });
+
+        if (index === 1) {
+          tableBody.innerHTML = `<tr><td colspan="22" class="text-center">Tidak ada data.</td></tr>`;
+        }
+
+        // Event blur untuk input bulan
+        $(".bulan-input")
+          .off("blur")
+          .on("blur", function () {
+            const input = $(this);
+            const id = input.data("id");
+            const bulan = input.data("bulan");
+            const nilaiBaru = input.val().trim();
+            const nilaiLama = input.data("old");
+
+            if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
+
+            if (!/^\d+$/.test(nilaiBaru)) {
+              Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
+              input.val(nilaiLama);
+              return;
+            }
+
+            Swal.fire({
+              title: "Menyimpan...",
+              text: "Sedang mengupdate data...",
+              allowOutsideClick: false,
+              didOpen: () => Swal.showLoading(),
+            });
+
+            const url = `${endpoint}?action=update&id=${encodeURIComponent(
+              id
+            )}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(
+              nilaiBaru
+            )}`;
+
+            fetch(url)
+              .then((res) => res.json())
+              .then((res) => {
+                Swal.close();
+                if (res.success) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Berhasil diperbarui",
+                    timer: 1200,
+                    showConfirmButton: false,
+                  });
+                  input.data("old", nilaiBaru);
+                  input.addClass("updated");
+                } else {
+                  Swal.fire("Gagal", res.message || "Gagal update", "error");
+                  input.val(nilaiLama);
+                }
+              })
+              .catch((err) => {
+                Swal.close();
+                Swal.fire(
+                  "Gagal",
+                  err.message || "Kesalahan jaringan",
+                  "error"
+                );
+                input.val(nilaiLama);
+              });
+          });
+      }
+
+      function renderEditableCell(bulan, id, value) {
+        return `<td class="text-center">
+        <input type="text" class="form-control form-control-sm bulan-input"
+          data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
+          value="${value || ""}" />
+      </td>`;
+      }
+    </script>
+  </body>
+</html>

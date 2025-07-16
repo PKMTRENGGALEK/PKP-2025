@@ -1,140 +1,205 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PKP Puskesmas</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <style>
-    body { background: #f9fafa; font-family: 'Segoe UI', sans-serif; }
-    .menu-card {
-      transition: 0.2s; border: none; border-radius: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05); background: white; height: 100%; cursor: pointer;
-    }
-    .menu-card:hover {
-      transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    .menu-icon { font-size: 1.8rem; color: #198754; }
-    .card-title { font-size: 0.9rem; font-weight: 600; }
-    .search-input, .category-select { max-width: 420px; margin: auto; }
-    .logo {
-      max-height:120px;
-    }
-  </style>
-</head>
-<body>
-<div class="container py-4">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PKP Puskesmas</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f9fafa;
+        font-family: "Segoe UI", sans-serif;
+        animation: fadeIn 0.8s ease-in;
+      }
 
-  <!-- Logo + Title -->
-  <div class="text-center mb-3">
-    <img src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png" alt="Logo Puskesmas" class="logo mb-2"/>
-    <h2 class="fw-bold">PKP PUSKESMAS TRENGGALEK 2025</h2>
-  </div>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-  <!-- Search + Filter -->
-  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-4">
-    <input type="text" id="searchBox" class="form-control form-control-lg shadow-sm search-input" placeholder="🔍 Cari program...">
-    <select id="categoryFilter" class="form-select category-select shadow-sm">
-      <option value="all">🔁 Semua Klaster</option>
-      <option value="klaster1">🩺 Klaster 1: UKP</option>
-      <option value="klaster2">🌍 Klaster 2: UKM</option>
-      <option value="klaster3">🔬 Klaster 3: Pendukung</option>
-      <option value="klaster4">📊 Klaster 4: Manajemen</option>
-      <option value="lintas">🌐 Lintas Klaster</option>
-    </select>
-  </div>
+      .menu-card {
+        transition: 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        background: white;
+        height: 100%;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeInCard 0.5s ease forwards;
+      }
 
-   <!-- Program Cards -->
-  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4" id="menuContainer">
-    <!-- Klaster 1: UKP -->
-    <div class="col" data-category="klaster1"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">👶</div><div class="card-title">Kesehatan Anak</div></div></div>
-    <div class="col" data-category="klaster1"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🤰</div><div class="card-title">Kesehatan Ibu</div></div></div>
-    <div class="col" data-category="klaster1"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🦷</div><div class="card-title">Kesehatan Gigi & Mulut</div></div></div>
-    <div class="col" data-category="klaster1"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧠</div><div class="card-title">Kesehatan Jiwa</div></div></div>
-    <div class="col" data-category="klaster1"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">💉</div><div class="card-title">Pelayanan Imunisasi</div></div></div>
+      .menu-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
 
-    <!-- Klaster 2: UKM -->
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📢</div><div class="card-title">Promosi Kesehatan</div></div></div>
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🍃</div><div class="card-title">Kesehatan Lingkungan</div></div></div>
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧑‍🏫</div><div class="card-title">UKS & Kesehatan Sekolah</div></div></div>
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧬</div><div class="card-title">Kesehatan Reproduksi Remaja</div></div></div>
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🚭</div><div class="card-title">Pengendalian Penyakit</div></div></div>
-    <div class="col" data-category="klaster2"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧓</div><div class="card-title">Kesehatan Lansia</div></div></div>
+      @keyframes fadeInCard {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    <!-- Klaster 3: Pendukung -->
-    <div class="col" data-category="klaster3"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧪</div><div class="card-title">Laboratorium</div></div></div>
-    <div class="col" data-category="klaster3"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">💊</div><div class="card-title">Kefarmasian</div></div></div>
-    <div class="col" data-category="klaster3"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📦</div><div class="card-title">Manajemen Obat</div></div></div>
-    <div class="col" data-category="klaster3"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧼</div><div class="card-title">Sanitasi Total</div></div></div>
+      .menu-icon {
+        font-size: 2rem;
+        color: #198754;
+      }
 
-    <!-- Klaster 4: Manajemen -->
-    <div class="col" data-category="klaster4"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🏥</div><div class="card-title">Manajemen Puskesmas</div></div></div>
-    <div class="col" data-category="klaster4"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📊</div><div class="card-title">Perencanaan & Evaluasi</div></div></div>
-    <div class="col" data-category="klaster4"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📈</div><div class="card-title">Monitoring Program</div></div></div>
-    <div class="col" data-category="klaster4"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📁</div><div class="card-title">Administrasi Umum</div></div></div>
+      .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+      }
 
-    <!-- Lintas Klaster -->
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🍎</div><div class="card-title">Program Gizi</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">👨‍👩‍👧</div><div class="card-title">KB & Keluarga Sejahtera</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🛟</div><div class="card-title">Kesiapsiagaan Bencana</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🏃‍♀️</div><div class="card-title">Penyakit Tidak Menular (PTM)</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">📖</div><div class="card-title">Pelatihan & SDM</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🗂️</div><div class="card-title">Sistem Informasi Puskesmas</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🧾</div><div class="card-title">Pelaporan Program</div></div></div>
-    <div class="col" data-category="lintas"><div class="card menu-card text-center p-3"><div class="menu-icon mb-2">🔗</div><div class="card-title">Kolaborasi Lintas Sektor</div></div></div>
+      .logo {
+        max-height: 250px;
+      }
 
-  </div>
-
-</div>
-
-<!-- Modal Detail Program -->
-<div class="modal fade" id="programModal" tabindex="-1" aria-labelledby="programModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow-lg rounded-4">
-      <div class="modal-header">
-        <h5 class="modal-title" id="programModalLabel">Detail Program</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      .modal-content {
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <div class="text-center mb-3">
+        <img
+          src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
+          alt="Logo Puskesmas"
+          class="logo mb-2"
+        />
+        <h2 class="fw-bold">PKP PUSKESMAS TRENGGALEK 2025</h2>
       </div>
-      <div class="modal-body">
-        <p><strong>Nama Program:</strong> <span id="modalProgramName"></span></p>
-        <p><strong>Klaster:</strong> <span id="modalProgramKlaster"></span></p>
-        <p><strong>Deskripsi:</strong> <em>Detail program akan dimasukkan di sini.</em></p>
+
+      <div
+        class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4 mt-4"
+        id="menuContainer"
+      >
+        <div class="col">
+          <div
+            class="card menu-card text-center p-3"
+            data-klaster="Klaster 1 Manajemen"
+            data-programs='[
+              "1.1 Manajemen Inti Puskesmas",
+              "1.2 Manajemen Arsip",
+              "1.3 Manajemen Sumber Daya Manusia",
+              "1.4.1 Manajemen Sarana dan Prasarana",
+              "1.4.2 Manajemen Perbekalan Kesehatan",
+              "1.5.1 Manajemen Mutu",
+              "1.5.2 Pencegahan dan Pengendalian Infeksi (PPI)",
+              "1.5.3 Manajemen Risiko",
+              "1.5.4 Manajemen Fasilitas dan Keselamatan (MFK)",
+              "1.5.5 Keselamatan dan Kesehatan Kerja (K3)",
+              "1.5.6 Audit Internal",
+              "1.6 Manajemen Keuangan dan Aset atau Barang Milik Daerah",
+              "1.7 Manajemen Sistem Informasi Digital",
+              "1.8 Manajemen Jejaring",
+              "1.8.1 Jejaring berbasis wilayah administratif",
+              "1.8.1.1 Pelayanan Kesehatan Tradisional",
+              "1.8.1.2 Keselamatan dan Kesehatan Kerja (K3)",
+              "1.8.2 Jejaring berbasis satuan pendidikan",
+              "1.8.2.1 Napza",
+              "1.8.2.2 Kebugaran",
+              "1.8.3 Jejaring berbasis tempat kerja",
+              "1.8.4 Jejaring Sistem Rujukan",
+              "1.8.5 Jejaring Lintas Sektor",
+              "1.9 Manajemen Pemberdayaan Masyarakat",
+              "1.10.1 Manajemen Farmasi",
+              "1.10.2 Manajemen Labkesmas",
+              "1.10.3 Manajemen Gawat Darurat",
+              "1.10.4 Manajemen Rawat Inap",
+              "1.10.5 Manajemen Pelayanan Kesehatan Gigi dan Mulut"
+            ]'
+          >
+            <div class="menu-icon mb-2">🏥</div>
+            <div class="card-title">Klaster 1: Manajemen</div>
+          </div>
+        </div>
+        <!-- Tambahkan Klaster lainnya di sini -->
+        <div class="col">
+          <div
+            class="card menu-card text-center p-3"
+            data-klaster="Klaster 2 Ibu dan Anak"
+            data-programs='[
+              "PELAYANAN KIA",
+              "KESEHATAN ANAK USIA SEKOLAH DAN REMAJA"
+            ]'>
+            <div class="menu-icon mb-2">🤱</div>
+            <div class="card-title">Klaster 2: Ibu dan Anak</div>
+          </div>
+        </div>
+        
+    </div>
+
+    <div
+      class="modal fade"
+      id="programModal"
+      tabindex="-1"
+      aria-labelledby="programModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content shadow-lg rounded-4">
+          <div class="modal-header">
+            <h5 class="modal-title" id="programModalLabel">Detail Klaster</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Tutup"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>Klaster:</strong> <span id="modalProgramKlaster"></span>
+            </p>
+            <div class="row g-3" id="programGrid"></div>
+          </div>
+          <div class="modal-footer">
+            <a href="klaster1.html" class="btn btn-success">➡️ Lihat Detail</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Script -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Filter search + kategori
-  const searchBox = document.getElementById('searchBox');
-  const categoryFilter = document.getElementById('categoryFilter');
-  const cards = document.querySelectorAll('#menuContainer .col');
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const programModal = new bootstrap.Modal(
+        document.getElementById("programModal")
+      );
 
-  function filterCards() {
-    const query = searchBox.value.toLowerCase();
-    const category = categoryFilter.value;
-    cards.forEach(col => {
-      const title = col.querySelector('.card-title').textContent.toLowerCase();
-      const matchText = title.includes(query);
-      const matchCat = category === 'all' || col.dataset.category === category;
-      col.style.display = (matchText && matchCat) ? 'block' : 'none';
-    });
-  }
+      document.querySelectorAll(".menu-card").forEach((card, i) => {
+        card.style.animationDelay = `${i * 0.05}s`;
+        card.addEventListener("click", () => {
+          const klaster = card.dataset.klaster;
+          const programs = JSON.parse(card.dataset.programs);
 
-  searchBox.addEventListener('input', filterCards);
-  categoryFilter.addEventListener('change', filterCards);
+          document.getElementById("modalProgramKlaster").innerText = klaster;
+          const grid = document.getElementById("programGrid");
+          grid.innerHTML = programs
+            .map(
+              (item) => `
+              <div class="col-6 col-md-4">
+                <div class="border rounded p-2 bg-light">
+                  <span class="me-2">📌</span>${item}
+                </div>
+              </div>`
+            )
+            .join("");
 
-  // Modal detail program
-  const programModal = new bootstrap.Modal(document.getElementById('programModal'));
-  document.querySelectorAll('.menu-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.getElementById('modalProgramName').innerText = card.dataset.title;
-      document.getElementById('modalProgramKlaster').innerText = card.dataset.klaster;
-      programModal.show();
-    });
-  });
-</script>
-</body>
+          programModal.show();
+        });
+      });
+    </script>
+  </body>
 </html>
