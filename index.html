@@ -1,205 +1,596 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PKP Puskesmas</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background: #f9fafa;
-        font-family: "Segoe UI", sans-serif;
-        animation: fadeIn 0.8s ease-in;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PKP 2025 Puskesmas Trenggalek</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+      font-family: 'Segoe UI', sans-serif;
+      padding-top: 80px;
+    }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .navbar {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
 
-      .menu-card {
-        transition: 0.3s ease;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        background: white;
-        height: 100%;
-        cursor: pointer;
-        opacity: 0;
-        transform: translateY(10px);
-        animation: fadeInCard 0.5s ease forwards;
-      }
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #2e7d32;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
 
-      .menu-card:hover {
-        transform: translateY(-5px) scale(1.01);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      }
+    .custom-card {
+      background: #fff;
+      border: 2px solid #ff6f00;
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-      @keyframes fadeInCard {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .custom-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 28px rgba(0, 128, 0, 0.2);
+    }
 
-      .menu-icon {
-        font-size: 2rem;
-        color: #198754;
-      }
+    .custom-card .card-number {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      background-color: #ff6f00;
+      color: #fff;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 0 12px 12px 0;
+      font-size: 1rem;
+    }
 
-      .card-title {
-        font-size: 1rem;
-        font-weight: 600;
-      }
+    .custom-card h5 {
+      margin-top: 1.2rem;
+      font-weight: 700;
+      color: #2e7d32;
+    }
 
-      .logo {
-        max-height: 250px;
-      }
+    .table-bordered td, .table-bordered th {
+      background-color: #fdfdfd;
+    }
 
-      .modal-content {
-        border-radius: 20px;
+    .btn-outline-success {
+      border-radius: 8px;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      padding: 1.2rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .custom-card {
+        margin-bottom: 1.5rem;
       }
-    </style>
-  </head>
-  <body>
-    <div class="container py-4">
-      <div class="text-center mb-3">
-        <img
-          src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
-          alt="Logo Puskesmas"
-          class="logo mb-2"
-        />
-        <h2 class="fw-bold">PKP PUSKESMAS TRENGGALEK 2025</h2>
+      .section-title {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-success" href="#">PKP 2025 Puskesmas Trenggalek</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="section-title">Indikator & Program Puskesmas</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+      <!-- Card 1 -->
+      <div class="col">
+        <div class="custom-card">
+          <div class="card-number">01</div>
+          <h5>Indikator Kinerja Utama</h5>
+          <button type="button" class="btn btn-outline-success btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#modalCard1">
+            Tampilkan Daftar
+          </button>
+        </div>
       </div>
 
-      <div
-        class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-4 mt-4"
-        id="menuContainer"
-      >
-        <div class="col">
-          <div
-            class="card menu-card text-center p-3"
-            data-klaster="Klaster 1 Manajemen"
-            data-programs='[
-              "1.1 Manajemen Inti Puskesmas",
-              "1.2 Manajemen Arsip",
-              "1.3 Manajemen Sumber Daya Manusia",
-              "1.4.1 Manajemen Sarana dan Prasarana",
-              "1.4.2 Manajemen Perbekalan Kesehatan",
-              "1.5.1 Manajemen Mutu",
-              "1.5.2 Pencegahan dan Pengendalian Infeksi (PPI)",
-              "1.5.3 Manajemen Risiko",
-              "1.5.4 Manajemen Fasilitas dan Keselamatan (MFK)",
-              "1.5.5 Keselamatan dan Kesehatan Kerja (K3)",
-              "1.5.6 Audit Internal",
-              "1.6 Manajemen Keuangan dan Aset atau Barang Milik Daerah",
-              "1.7 Manajemen Sistem Informasi Digital",
-              "1.8 Manajemen Jejaring",
-              "1.8.1 Jejaring berbasis wilayah administratif",
-              "1.8.1.1 Pelayanan Kesehatan Tradisional",
-              "1.8.1.2 Keselamatan dan Kesehatan Kerja (K3)",
-              "1.8.2 Jejaring berbasis satuan pendidikan",
-              "1.8.2.1 Napza",
-              "1.8.2.2 Kebugaran",
-              "1.8.3 Jejaring berbasis tempat kerja",
-              "1.8.4 Jejaring Sistem Rujukan",
-              "1.8.5 Jejaring Lintas Sektor",
-              "1.9 Manajemen Pemberdayaan Masyarakat",
-              "1.10.1 Manajemen Farmasi",
-              "1.10.2 Manajemen Labkesmas",
-              "1.10.3 Manajemen Gawat Darurat",
-              "1.10.4 Manajemen Rawat Inap",
-              "1.10.5 Manajemen Pelayanan Kesehatan Gigi dan Mulut"
-            ]'
-          >
-            <div class="menu-icon mb-2">🏥</div>
-            <div class="card-title">Klaster 1: Manajemen</div>
-          </div>
-        </div>
-        <!-- Tambahkan Klaster lainnya di sini -->
-        <div class="col">
-          <div
-            class="card menu-card text-center p-3"
-            data-klaster="Klaster 2 Ibu dan Anak"
-            data-programs='[
-              "PELAYANAN KIA",
-              "KESEHATAN ANAK USIA SEKOLAH DAN REMAJA"
-            ]'>
-            <div class="menu-icon mb-2">🤱</div>
-            <div class="card-title">Klaster 2: Ibu dan Anak</div>
-          </div>
-        </div>
-        
-    </div>
-
-    <div
-      class="modal fade"
-      id="programModal"
-      tabindex="-1"
-      aria-labelledby="programModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content shadow-lg rounded-4">
-          <div class="modal-header">
-            <h5 class="modal-title" id="programModalLabel">Detail Klaster</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Tutup"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p>
-              <strong>Klaster:</strong> <span id="modalProgramKlaster"></span>
-            </p>
-            <div class="row g-3" id="programGrid"></div>
-          </div>
-          <div class="modal-footer">
-            <a href="klaster1.html" class="btn btn-success">➡️ Lihat Detail</a>
-          </div>
+      <!-- Card 2 -->
+      <div class="col">
+        <div class="custom-card" style="border-color: #4caf50;">
+          <div class="card-number">02</div>
+          <h5>Klaster Manajemen</h5>
+          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#manajemenModal">
+            Lihat Tabel Klaster
+          </button>
         </div>
       </div>
+
+      <!-- Card 3 -->
+      <div class="col">
+        <div class="custom-card" style="border-color: #00796b;">
+          <div class="card-number">03</div>
+          <h5>Program / Kegiatan</h5>
+          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#programModal">
+            Lihat Tabel Program
+          </button>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      const programModal = new bootstrap.Modal(
-        document.getElementById("programModal")
-      );
+  <!-- Include all your modals here (modalCard1, manajemenModal, programModal) -->
+  <!-- Disarankan: Pindahkan semua modal ke bagian paling bawah sebelum footer -->
 
-      document.querySelectorAll(".menu-card").forEach((card, i) => {
-        card.style.animationDelay = `${i * 0.05}s`;
-        card.addEventListener("click", () => {
-          const klaster = card.dataset.klaster;
-          const programs = JSON.parse(card.dataset.programs);
+  <!-- Footer -->
+  <footer class="fixed-bottom">
+    &copy; 2025 Puskesmas Trenggalek. All rights reserved.
+  </footer>
 
-          document.getElementById("modalProgramKlaster").innerText = klaster;
-          const grid = document.getElementById("programGrid");
-          grid.innerHTML = programs
-            .map(
-              (item) => `
-              <div class="col-6 col-md-4">
-                <div class="border rounded p-2 bg-light">
-                  <span class="me-2">📌</span>${item}
-                </div>
-              </div>`
-            )
-            .join("");
-
-          programModal.show();
-        });
-      });
-    </script>
-  </body>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
+
+<!-- Modal Program / Kegiatan -->
+<div class="modal fade" id="programModal" tabindex="-1" aria-labelledby="programModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="programModalLabel">Tabel Program / Kegiatan</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" >
+        <div class="table-responsive">
+          <!-- Tabel isi dari langkah sebelumnya -->
+          <table class="table table-bordered table-sm align-middle small text-center">
+            <thead class="table-light">
+             <tr>
+                <th class="text-start" style="min-width: 250px;">Program/Kegiatan</th>
+                <th >Klaster 2</th>
+                <th >Klaster 3</th>
+                <th >Klaster 4</th>
+                <th style="width: 100px;">Lintas Klaster</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="text-start">Kesehatan Ibu dan Anak</td><td style="background:#2196f3;color:white">13</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">Kesehatan Apras - AUS</td><td style="background:#2196f3;color:white">6</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">Gizi</td><td style="background:#2196f3;color:white">12</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">Kesehatan Jiwa</td><td style="background:#2196f3;color:white">6</td><td style="background:#4caf50;color:white">8</td><td></td><td></td></tr>
+              <tr><td class="text-start">Kesehatan Tradisional</td><td style="background:#2196f3;color:white">5</td><td style="background:#4caf50;color:white">2</td><td></td><td></td></tr>
+              <tr><td class="text-start">Gigi dan Mulut</td><td style="background:#2196f3;color:white">4</td><td style="background:#4caf50;color:white">3</td><td></td><td style="background:#9e9d24;color:white">4</td></tr>
+              <tr><td class="text-start">P2P TBC</td><td style="background:#2196f3;color:white">5</td><td style="background:#4caf50;color:white">2</td><td style="background:#9c27b0;color:white">4</td><td></td></tr>
+              <tr><td class="text-start">P2P Hepatitis</td><td style="background:#2196f3;color:white">2</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P Imunisasi</td><td style="background:#2196f3;color:white">7</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P Diare</td><td style="background:#2196f3;color:white">3</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P ISPA</td><td style="background:#2196f3;color:white">2</td><td></td><td style="background:#9c27b0;color:white">1</td><td></td></tr>
+              <tr><td class="text-start">P2P Kusta</td><td style="background:#2196f3;color:white">2</td><td></td><td style="background:#9c27b0;color:white">3</td><td></td></tr>
+              <tr><td class="text-start">P2P HIV/AIDS</td><td style="background:#2196f3;color:white">2</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P PTM-Bekti</td><td></td><td style="background:#4caf50;color:white">9</td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P PTM-Linda</td><td></td><td style="background:#4caf50;color:white">3</td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P PTM-Panji</td><td></td><td style="background:#4caf50;color:white">8</td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P PTM-Lilik.S</td><td></td><td style="background:#4caf50;color:white">4</td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P PTM-Paryati</td><td></td><td style="background:#4caf50;color:white">2</td><td></td><td></td></tr>
+              <tr><td class="text-start">P2P Surveilans</td><td></td><td></td><td style="background:#9c27b0;color:white">3</td><td></td></tr>
+              <tr><td class="text-start">P2P Malaria</td><td></td><td></td><td style="background:#9c27b0;color:white">4</td><td></td></tr>
+              <tr><td class="text-start">P2P Rabies</td><td></td><td></td><td style="background:#9c27b0;color:white">2</td><td></td></tr>
+              <tr><td class="text-start">P2P DBD</td><td></td><td></td><td style="background:#9c27b0;color:white">2</td><td></td></tr>
+              <tr><td class="text-start">KTAR</td><td style="background:#2196f3;color:white">4</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">Kespro</td><td></td><td style="background:#4caf50;color:white">7</td><td></td><td></td></tr>
+              <tr><td class="text-start">Lansia</td><td></td><td style="background:#4caf50;color:white">1</td><td></td><td></td></tr>
+              <tr><td class="text-start">Kesling</td><td></td><td></td><td style="background:#9c27b0;color:white">18</td><td></td></tr>
+              <tr><td class="text-start">Gawat Darurat</td><td></td><td></td><td></td><td style="background:#795548;color:white">6</td></tr>
+              <tr><td class="text-start">Kefarmasian</td><td></td><td></td><td></td><td style="background:#795548;color:white">17</td></tr>
+              <tr><td class="text-start">Laboratorium</td><td></td><td></td><td></td><td style="background:#795548;color:white">3</td></tr>
+              <tr><td class="text-start">Ranap</td><td></td><td></td><td></td><td style="background:#795548;color:white">1</td></tr>
+              <tr><td class="text-start">PK2</td><td></td><td></td><td></td><td style="background:#795548;color:white">3</td></tr>
+              <tr><td class="text-start">Akupresur</td><td></td><td></td><td></td><td style="background:#795548;color:white">1</td></tr>
+              <tr><td class="text-start">PKG-Bayi</td><td style="background:#2196f3;color:white">1</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">PKG-Balita</td><td style="background:#2196f3;color:white">1</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">PKG-AUS</td><td style="background:#2196f3;color:white">1</td><td></td><td></td><td></td></tr>
+              <tr><td class="text-start">PKG-Dewasa</td><td></td><td style="background:#4caf50;color:white">1</td><td></td><td></td></tr>
+              <tr><td class="text-start">PKG-Lansia</td><td></td><td style="background:#4caf50;color:white">1</td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Klaster Manajemen -->
+<div class="modal fade" id="manajemenModal" tabindex="-1" aria-labelledby="manajemenModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="manajemenModalLabel">Tabel Klaster Manajemen</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" >
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm small">
+          <thead class="table-light">
+            <tr>
+              <th style="min-width: 200px;">Klaster Manajemen</th>
+              <th class="text-center" style="width: 250px;"><a 
+                  href="klaster1.html?program=semua"
+                  class="badge bg-primary decoration-none ms-2"
+                >Lihat Data</a>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Manajemen Inti Puskesmas</td>
+              <td class="text-center">
+                <span class="fw-bold">6</span>
+                <a 
+                  href="klaster1.html?program=1.1.Manajemen Inti Puskesmas" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Manajemen Arsip</td>
+              <td class="text-center">
+                <span class="fw-bold">3</span>
+                <a 
+                  href="klaster1.html?program=1.2. Manajemen Arsip" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Manajemen SDM</td>
+              <td class="text-center">
+                <span class="fw-bold">5</span>
+                <a 
+                  href="klaster1.html?program=1.3. Manajemen Sumber Daya Manusia" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Manajemen Sarpras</td>
+              <td class="text-center">
+                <span class="fw-bold">5</span>
+                <a 
+                  href="klaster1.html?program=1.4.1 Manajemen Sarana dan Prasarana" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Manajemen Perbekalan Kesehatan</td>
+              <td class="text-center">
+                <span class="fw-bold">3</span>
+                <a 
+                  href="klaster1.html?program=1.4.2 Manajemen Perbekalan Kesehatan" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Manajemen Mutu</td>
+              <td class="text-center">
+                <span class="fw-bold">7</span>
+                <a 
+                  href="klaster1.html?program=1.5.1 Manajemen Mutu" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+             <tr>
+              <td>PPI</td>
+              <td class="text-center">
+                <span class="fw-bold">3</span>
+                <a 
+                  href="klaster1.html?program=1.5.2 Pencegahan dan Pengendalian Infeksi (PPI)" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+             <tr>
+              <td>Manajemen Risiko</td>
+              <td class="text-center">
+                <span class="fw-bold">4</span>
+                <a 
+                  href="klaster1.html?program=1.5.3 Manajemen Risiko" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>MFK</td>
+              <td class="text-center">
+                <span class="fw-bold">4</span>
+                <a 
+                  href="klaster1.html?program=1.5.4 Manajemen Fasilitas dan Keselamatan (MFK)" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+            <tr>
+              <td>K3</td>
+              <td class="text-center">
+                <span class="fw-bold">3</span>
+                <a 
+                  href="klaster1.html?program=1.5.5 Keselamatan dan Kesehatan Kerja (K3)" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Audit Internal</td>
+              <td class="text-center">
+                <span class="fw-bold">4</span>
+                <a 
+                  href="klaster1.html?program=1.5.6 Audit Internal" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+              <tr>
+              <td>Keuangan & Aset</td>
+              <td class="text-center">
+                <span class="fw-bold">5</span>
+                <a 
+                  href="klaster1.html?program=1.6. Manajemen Keuangan dan Aset atau Barang Milik Daerah" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+             <tr>
+              <td>Sistem Informasi</td>
+              <td class="text-center">
+                <span class="fw-bold">3</span>
+                <a 
+                  href="klaster1.html?program=1.7. Manajemen Sistem Informasi Digital" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+               <tr>
+              <td>Jejaring Wilayah (Tradisional)</td>
+              <td class="text-center">
+                <span class="fw-bold">5</span>
+                <a 
+                  href="klaster1.html?program=1.8.1.1 Pelayanan Kesehatan Tradisional" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>
+               <tr>
+              <td>Keselamatan dan Kesehatan Kerja (K3)</td>
+              <td class="text-center">
+                <span class="fw-bold">5</span>
+                <a 
+                  href="klaster1.html?program=1.8.1.2 Keselamatan dan Kesehatan Kerja (K3)" 
+                  class="badge bg-success text-decoration-none ms-2"
+                >
+                  Lihat Data
+                </a>
+              </td>
+              </tr>           
+              <tr>
+                <td>Jejaring berbasis satuan pendidikan - Napza</td>
+                <td class="text-center">
+                  <span class="fw-bold">1</span>
+                  <a 
+                    href="klaster1.html?program=1.8.2.1 Napza" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Jejaring berbasis satuan pendidikan - Kebugaran</td>
+                <td class="text-center">
+                  <span class="fw-bold">1</span>
+                  <a 
+                    href="klaster1.html?program=1.8.2.2 Kebugaran" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Jejaring berbasis tempat kerja</td>
+                <td class="text-center">
+                  <span class="fw-bold">3</span>
+                  <a 
+                    href="klaster1.html?program=1.8.3 Jejaring berbasis tempat kerja" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Jejaring Sistem Rujukan</td>
+                <td class="text-center">
+                  <span class="fw-bold">1</span>
+                  <a 
+                    href="klaster1.html?program=1.8.4 Jejaring Sistem Rujukan" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Jejaring Lintas Sektor</td>
+                <td class="text-center">
+                  <span class="fw-bold">1</span>
+                  <a 
+                    href="klaster1.html?program=1.8.5 Jejaring Lintas Sektor" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Pemberdayaan Masyarakat</td>
+                <td class="text-center">
+                  <span class="fw-bold">16</span>
+                  <a 
+                    href="klaster1.html?program=1.9. Manajemen Pemberdayaan Masyarakat" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Farmasi</td>
+                <td class="text-center">
+                  <span class="fw-bold">5</span>
+                  <a 
+                    href="klaster1.html?program=1.10.1 Manajemen Farmasi" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Labkesmas</td>
+                <td class="text-center">
+                  <span class="fw-bold">6</span>
+                  <a 
+                    href="klaster1.html?program=1.10.2 Manajemen Labkesmas" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Gawat Darurat</td>
+                <td class="text-center">
+                  <span class="fw-bold">3</span>
+                  <a 
+                    href="klaster1.html?program=1.10.3 Manajemen Gawat Darurat" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Rawat Inap</td>
+                <td class="text-center">
+                  <span class="fw-bold">3</span>
+                  <a 
+                    href="klaster1.html?program=1.10.4 Manajemen Rawat Inap" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manajemen Pelayanan Kesehatan Gigi dan Mulut</td>
+                <td class="text-center">
+                  <span class="fw-bold">1</span>
+                  <a 
+                    href="klaster1.html?program=1.10.5 Manajemen Pelayanan Kesehatan Gigi dan Mulut" 
+                    class="badge bg-success text-decoration-none ms-2"
+                  >
+                    Lihat Data
+                  </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Card 01 -->
+<div class="modal fade" id="modalCard1" tabindex="-1" aria-labelledby="modalCard1Label" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalCard1Label">Indikator Kinerja Utama</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body small">
+        <ul>
+          <li>Pemenuhan obat essensial sesuai standar</li>
+          <li>Kepatuhan identifikasi pasien</li>
+          <li>Kepatuhan penggunaan APD</li>
+          <li>Kepatuhan kebersihan tangan (KKT)</li>
+          <li>Keberhasilan pengobatan TB (SO)</li>
+          <li>Survei Kepuasan Masyarakat</li>
+          <li>Pelayanan Ibu Hamil & Bersalin</li>
+          <li>Pelayanan Bayi & Balita</li>
+          <li>Pelayanan Usia Sekolah & Produktif</li>
+          <li>Pelayanan Usia Lanjut</li>
+          <li>Hipertensi, Diabetes, Jiwa</li>
+          <li>Deteksi TBC & HIV</li>
+          <li>Tindak Lanjut Pengaduan</li>
+          <li>Survey Persepsi Anti Korupsi</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
