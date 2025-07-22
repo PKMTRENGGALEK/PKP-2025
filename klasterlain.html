@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Klaster</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Select2 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      body {
+        background: #f0f4f5;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .logo {
+        max-height: 100px;
+      }
+      .table-responsive {
+        max-height: 75vh;
+        overflow: auto;
+      }
+      .table th {
+        background-color: #198754;
+        color: white;
+        font-size: 0.72rem;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .table td {
+        font-size: 0.72rem;
+        vertical-align: middle;
+      }
+      .table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      .table thead tr:nth-child(2) th {
+        top: 36px;
+        z-index: 1;
+      }
+      .bulan-input {
+        width: 45px;
+        font-size: 0.72rem;
+        text-align: center;
+      }
+      .updated {
+        background-color: #d1e7dd !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <!-- <img
+          src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
+          alt="Logo"
+          style="max-height: 80px"
+          class="mb-2"
+        /> -->
+            <h4 class="fw-bold mb-0">Detail Program</h4>
+          </div>
+
+          <div class="d-flex justify-content-start mb-3">
+            <a href="index.html" class="btn btn-outline-success shadow-sm">
+              ⬅️ Kembali
+            </a>
+          </div>
+
+          <div class="table-responsive" style="font-size: 11px">
+            <table
+              class="table table-bordered table-striped align-middle"
+              id="programTable"
+            >
+              <thead class="table-success text-center align-middle">
+                <tr>
+                  <th rowspan="2">No</th>
+                  <th rowspan="2" style="min-width: 120px">Kegiatan</th>
+                  <th rowspan="2" style="min-width: 250px">Indikator Kerja</th>
+                  <th rowspan="2">"Target Tahun 2025 (dalam %)"</th>
+                  <th rowspan="2">Satuan Sasaran</th>
+                  <th rowspan="2">Total Sasaran</th>
+                  <th rowspan="2">Target Sasaran</th>
+                  <th rowspan="2">Pencapaian (dalam satuan sasaran)</th>
+                  <th rowspan="2">% Cakupan Rill</th>
+                  <th rowspan="2">Ketercapaian Target Tahun N</th>
+                  <th colspan="12">Capaian Kegiatan Program</th>
+                  <th rowspan="2">Analisa Akar Penyebab Masalah</th>
+                  <th rowspan="2">Rencana Tindak lanjut</th>
+                </tr>
+                <tr class="text-center">
+                  <th>Jan</th>
+                  <th>Feb</th>
+                  <th>Mar</th>
+                  <th>Apr</th>
+                  <th>Mei</th>
+                  <th>Juni</th>
+                  <th>Juli</th>
+                  <th>Agst</th>
+                  <th>Sept</th>
+                  <th>Okt</th>
+                  <th>Nov</th>
+                  <th>Des</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <td colspan="25" class="text-center">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+      const endpoint =
+        "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
+
+      const tableBody = document.getElementById("tableBody");
+
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      function renderEditableCell(bulan, id, value) {
+        return `<td class="text-center">
+            <input type="text" class="form-control form-control-sm bulan-input"
+              data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
+              value="${value || ""}" />
+          </td>`;
+      }
+
+      function bindInputEvents() {
+        $(".bulan-input")
+          .off("blur")
+          .on("blur", function () {
+            const input = $(this);
+            const id = input.data("id");
+            const bulan = input.data("bulan");
+            const nilaiBaru = input.val().trim();
+            const nilaiLama = input.data("old");
+
+            if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
+            if (!/^\d+$/.test(nilaiBaru)) {
+              Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
+              input.val(nilaiLama);
+              return;
+            }
+
+            Swal.fire({
+              title: "Menyimpan...",
+              text: "Sedang mengupdate data...",
+              allowOutsideClick: false,
+              didOpen: () => Swal.showLoading(),
+            });
+
+            const url = `${endpoint}?action=update&id=${encodeURIComponent(
+              id
+            )}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(
+              nilaiBaru
+            )}`;
+
+            fetch(url)
+              .then((res) => res.json())
+              .then((res) => {
+                Swal.close();
+                if (res.success) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Berhasil diperbarui",
+                    timer: 1200,
+                    showConfirmButton: false,
+                  });
+                  input.data("old", nilaiBaru);
+                  input.addClass("updated");
+                } else {
+                  Swal.fire("Gagal", res.message || "Gagal update", "error");
+                  input.val(nilaiLama);
+                }
+              })
+              .catch((err) => {
+                Swal.close();
+                Swal.fire(
+                  "Gagal",
+                  err.message || "Kesalahan jaringan",
+                  "error"
+                );
+                input.val(nilaiLama);
+              });
+          });
+      }
+
+      function renderTable(rows, selectedKategori) {
+        const fragment = document.createDocumentFragment();
+        let index = 1;
+
+        const headerRow = document.createElement("tr");
+        headerRow.style.backgroundColor = "#d1e7dd";
+        headerRow.innerHTML = `<td colspan="25"><strong>📌 ${selectedKategori}</strong></td>`;
+        fragment.appendChild(headerRow);
+
+        const bulanKeys = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Juni",
+          "Juli",
+          "Agst",
+          "Sept",
+          "Okt",
+          "Nov",
+          "Des",
+        ];
+
+        for (const row of rows) {
+          const rowId = row["No"];
+          const tr = document.createElement("tr");
+          tr.dataset.id = rowId;
+
+          let html = `<td>${index++}</td>`;
+          html += `<td>${row["Kegiatan"] || "-"}</td>`;
+          html += `<td>${row["Indikator Kerja"] || "-"}</td>`;
+          html += `<td>${row["Target Tahun 2025 (dalam %)"] || "-"}</td>`;
+          html += `<td>${row["Satuan Sasaran"] || "-"}</td>`;
+          html += `<td>${row["Total Sasaran"] || "-"}</td>`;
+          html += `<td>${row["Target Sasaran"] || "-"}</td>`;
+          html += `<td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>`;
+          html += `<td>${row["% Cakupan Rill"] || "-"}</td>`;
+          html += `<td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
+
+          for (const bulan of bulanKeys) {
+            html += renderEditableCell(bulan, rowId, row[bulan]);
+          }
+
+          html += `<td>${row["Analisa Akar Penyebab Masalah"] || "-"}</td>`;
+          html += `<td>${row["Rencana Tindak lanjut"] || "-"}</td>`;
+
+          tr.innerHTML = html;
+          fragment.appendChild(tr);
+        }
+
+        tableBody.innerHTML = ""; // Clear
+        tableBody.appendChild(fragment);
+        bindInputEvents();
+      }
+
+      function loadData() {
+        const selectedFromURL = getQueryParam("kategori");
+
+        if (!selectedFromURL) {
+          tableBody.innerHTML = `<tr><td colspan="25" class="text-center text-muted">Parameter <code>?kategori=</code> diperlukan.</td></tr>`;
+          return;
+        }
+
+        tableBody.innerHTML = `
+            <tr><td colspan="25" class="text-center py-4">
+              <div class="spinner-border text-success" role="status"></div>
+              <div class="mt-2 text-success fw-semibold">Memuat data...</div>
+            </td></tr>`;
+
+        fetch(endpoint)
+          .then((res) => res.json())
+          .then((data) => {
+            const filtered = data.filter(
+              (item) => item.kategori === selectedFromURL
+            );
+
+            if (filtered.length === 0) {
+              tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Kategori <strong>${selectedFromURL}</strong> tidak ditemukan.</td></tr>`;
+              return;
+            }
+
+            renderTable(filtered, selectedFromURL);
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+            tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
+          });
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
