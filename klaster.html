@@ -134,7 +134,7 @@
               <thead class="table-success text-center align-middle">
                 <tr>
                   <th rowspan="2">No</th>
-                  <th rowspan="2" style="min-width: 80px">Klaster</th>
+                  <th rowspan="2" style="min-width: 80px">Program</th>
                   <th rowspan="2" style="min-width: 120px">Kegiatan</th>
                   <th rowspan="2" style="min-width: 250px">Indikator Kerja</th>
                   <th rowspan="2">Target Tahun 2025 (dalam %)</th>
@@ -300,7 +300,7 @@ function updateDerivedColumns(row) {
   // Grouping by Induk > Sub
   const grouped = {};
   rows.forEach((row) => {
-    const induk = row["Induk"] || "Lainnya";
+    const induk = row["Klaster"] || "Lainnya";
     const sub = row["Sub"] || "Lainnya";
     if (!grouped[induk]) grouped[induk] = {};
     if (!grouped[induk][sub]) grouped[induk][sub] = [];
@@ -335,17 +335,17 @@ function updateDerivedColumns(row) {
         tr.dataset.id = rowId;
 
         let html = `<td>${index++}</td>`;
-        html += `<td>${row["Klaster"] || "-"}</td>`;
+        html += `<td>${row["kategori"] || "-"}</td>`;
         html += `<td>${row["Kegiatan"] || "-"}</td>`;
         html += `<td>${row["Indikator Kerja"] || "-"}</td>`;
         const targetValue = parseFloat(row["Target 2025"]);
         html += `<td>${isNaN(targetValue) ? "-" : Math.round(targetValue * 100) + "%"}</td>`;
         html += `<td>${row["Satuan Sasaran"] || "-"}</td>`;
-       html += `<td class="text-center">
-  <input type="text" class="form-control form-control-sm bulan-input"
-    data-field="Total Sasaran" data-id="${rowId}" data-old="${row["Total Sasaran"] || ""}"
-    value="${row["Total Sasaran"] || ""}" />
-</td>`;
+        html += `<td class="text-center">
+            <input type="text" class="form-control form-control-sm bulan-input"
+                data-field="Total Sasaran" data-id="${rowId}" data-old="${row["Total Sasaran"] || ""}"
+                value="${row["Total Sasaran"] || ""}" />
+            </td>`;
 
         html += `<td>${row["Target Sasaran"] || "-"}</td>`;
         html += `<td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>`;
@@ -370,40 +370,39 @@ function updateDerivedColumns(row) {
   bindInputEvents();
 }
 
+        function loadData() {
+  const selectedKlaster = getQueryParam("klaster");
 
-      function loadData() {
-        const selectedFromURL = getQueryParam("kategori");
+  if (!selectedKlaster) {
+    tableBody.innerHTML = `<tr><td colspan="25" class="text-center text-muted">Parameter <code>?klaster=</code> diperlukan.</td></tr>`;
+    return;
+  }
 
-        if (!selectedFromURL) {
-          tableBody.innerHTML = `<tr><td colspan="25" class="text-center text-muted">Parameter <code>?kategori=</code> diperlukan.</td></tr>`;
-          return;
-        }
+  tableBody.innerHTML = `
+      <tr><td colspan="25" class="text-center py-4">
+        <div class="spinner-border text-success" role="status"></div>
+        <div class="mt-2 text-success fw-semibold">Memuat data...</div>
+      </td></tr>`;
 
-        tableBody.innerHTML = `
-            <tr><td colspan="25" class="text-center py-4">
-              <div class="spinner-border text-success" role="status"></div>
-              <div class="mt-2 text-success fw-semibold">Memuat data...</div>
-            </td></tr>`;
+  fetch(endpoint)
+    .then((res) => res.json())
+    .then((data) => {
+      const filtered = data.filter(
+        (item) => item.Klaster === selectedKlaster
+      );
 
-        fetch(endpoint)
-          .then((res) => res.json())
-          .then((data) => {
-            const filtered = data.filter(
-              (item) => item.kategori === selectedFromURL
-            );
-
-            if (filtered.length === 0) {
-              tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Kategori <strong>${selectedFromURL}</strong> tidak ditemukan.</td></tr>`;
-              return;
-            }
-
-            renderTable(filtered, selectedFromURL);
-          })
-          .catch((error) => {
-            console.error("Fetch error:", error);
-            tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
-          });
+      if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Klaster <strong>${selectedKlaster}</strong> tidak ditemukan.</td></tr>`;
+        return;
       }
+
+      renderTable(filtered, selectedKlaster);
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+      tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
+    });
+}
 
       loadData();
     </script>
