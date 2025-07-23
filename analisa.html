@@ -155,8 +155,8 @@
           <label for="bulanSelect" class="form-label fw-bold">Pilih Bulan:</label>
           <select
             id="bulanSelect"
-            class="form-select-sm select2"
-            style="max-width: 200px"
+              class="form-select form-select-sm"
+              style="max-width: 200px"
           >
             <option value="Juli">Semua Bulan</option>
             <option value="Jan">Januari</option>
@@ -179,8 +179,8 @@
           <label for="kategoriSelect" class="form-label fw-bold">Pilih Kategori:</label>
           <select
             id="kategoriSelect"
-            class="form-select select2"
-            style="max-width: 300px"
+              class="form-select form-select-sm"
+              style="max-width: 300px"
           >
             <option value="Semua">Semua kategori</option>
             <!-- Kategori lainnya akan ditambahkan lewat JavaScript -->
@@ -245,12 +245,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
-      $(document).ready(function() {
-  $('.select2').select2({
-    dropdownAutoWidth: false,
-    width: '100%' // penting!
-  });
-});
+    
       const endpoint =
         "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
 
