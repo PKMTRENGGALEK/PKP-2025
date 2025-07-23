@@ -20,6 +20,7 @@
       href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -442,7 +443,7 @@ const rtlMap = {
             const RTLBulanIni = row[kolomRTL] || "";
 
            let gap = "-";
-          let tren = "➡️";
+          let tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
           let trenClass = "";
 
           // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
@@ -457,10 +458,10 @@ const rtlMap = {
           if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
             const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
             if (selisihBulan > 0) {
-              tren = "⬆️";
+              tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
               trenClass = "bg-success text-white";
             } else if (selisihBulan < 0) {
-              tren = "⬇️";
+              tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
               trenClass = "bg-danger text-white";
             }
           }
