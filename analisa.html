@@ -146,6 +146,11 @@
               <option value="Des">Desember</option>
             </select>
           </div>
+          <div class="text-end mt-3">
+            <button class="btn btn-success" id="simpanMasalah">
+              Simpan Perubahan
+            </button>
+          </div>
 
           <div class="table-responsive" style="font-size: 11px">
             <table
@@ -244,7 +249,7 @@
           .then((res) => res.json())
           .then((data) => {
             originalData = data;
-            renderTable(originalData, selectedBulan);
+            renderTable(data, selectedBulan);
           })
           .catch((err) => {
             document.getElementById("tableBody").innerHTML =
@@ -268,18 +273,14 @@
         const labelBulan = labelMap[bulanIniKey];
         const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
 
-        // Ubah header bulan dinamis
         document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
           bulanLaluKey ? labelMap[bulanLaluKey] : "-";
         document.querySelectorAll("thead tr:nth-child(2) th")[1].innerText =
           labelMap[bulanIniKey];
 
-        // Ubah header target dinamis
         document.getElementById(
           "targetHeader"
         ).innerText = `% Target s/d Bulan ${labelBulan}`;
-
-        // Ubah header cakupan kumulatif dinamis
         document.getElementById("cakupanBulan").innerText = labelBulan;
 
         let grouped = {};
@@ -297,32 +298,18 @@
           const program = rowsInSub[0].Induk || "";
 
           rows += `
-            <tr>
-              <td colspan="11" class="fw-bold text-danger" style="background-color: #f8d7da;">
-                ${program}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="11" class="fw-semibold text-primary" style="background-color: #e2e3f3;">
-                ${sub}
-              </td>
-            </tr>
+            <tr><td colspan="11" class="fw-bold text-danger" style="background-color: #f8d7da;">${program}</td></tr>
+            <tr><td colspan="11" class="fw-semibold text-primary" style="background-color: #e2e3f3;">${sub}</td></tr>
           `;
 
           rowsInSub.forEach((row) => {
             const indikator = row["Indikator Kerja"] || "-";
             const bulanIniVal = parseFloat(row[bulanIniKey]);
-            let bulanLaluVal;
-
-            if (bulan === "Jan") {
-              bulanLaluVal = 0;
-            } else {
-              bulanLaluVal = bulanLaluKey ? parseFloat(row[bulanLaluKey]) : NaN;
-            }
-
+            const bulanLaluVal = bulanLaluKey
+              ? parseFloat(row[bulanLaluKey])
+              : 0;
             const targetTahun = parseFloat(row["Target 2025"]) || 0;
 
-            // Hitung target s/d bulan ini dalam persen
             const targetSD = targetTahun
               ? (
                   (((targetTahun / 12) * (idx + 1)) / targetTahun) *
@@ -330,7 +317,6 @@
                 ).toFixed(2)
               : "-";
 
-            // Hitung kumulatif pencapaian s/d bulan ini
             let totalCapaian = 0;
             for (let i = 0; i <= idx; i++) {
               const val = parseFloat(row[bulanKeys[i]]);
@@ -338,7 +324,7 @@
             }
 
             const cakupanSD = targetTahun
-              ? ((totalCapaian / targetTahun) * 100).toFixed(2)
+              ? (totalCapaian / targetTahun).toFixed(2)
               : "-";
 
             const masalahBulanIni = row[kolomMasalah] || "";
@@ -361,10 +347,9 @@
               }
             }
 
-            // --- GRADE LOGIC ---
+            // GRADE
             let grade = "-";
-            let gradeDesc = "";
-            let gradeClass = ""; // ini untuk kelas warna
+            let gradeClass = "";
 
             if (
               !isNaN(bulanIniVal) &&
@@ -380,63 +365,71 @@
 
               if ((capaianNaik || capaianSama) && kumulatifCukup) {
                 grade = "BIRU";
-                gradeDesc =
-                  "Capaian Bulan ini lebih besar dari atau sama dengan bulan lalu dan kumulatif di atas target";
-                gradeClass = "bg-biru";
+                gradeClass = "bg-primary text-white";
               } else if (capaianTurun && kumulatifCukup) {
                 grade = "HIJAU";
-                gradeDesc =
-                  "Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif di atas target";
-                gradeClass = "bg-hijau";
+                gradeClass = "bg-success text-white";
               } else if (capaianNaik && !kumulatifCukup) {
                 grade = "KUNING";
-                gradeDesc =
-                  "Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif di bawah target";
-                gradeClass = "bg-kuning";
+                gradeClass = "bg-warning text-dark";
               } else if ((capaianTurun || capaianSama) && !kumulatifCukup) {
                 grade = "MERAH";
-                gradeDesc =
-                  "Capaian Bulan ini lebih kecil dari atau sama dengan bulan lalu dan kumulatif di bawah target";
-                gradeClass = "bg-merah";
+                gradeClass = "bg-danger text-white";
               }
             }
 
             rows += `
-
               <tr>
                 <td class="text-center">${counter++}</td>
-                <td class="indikator-col text-wrap" style="max-width: 300px;" title="${indikator}">
-                  ${indikator}
-                </td>
+                <td class="indikator-col text-wrap" style="max-width: 300px;" title="${indikator}">${indikator}</td>
                 <td>${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
                 <td>${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
                 <td>${targetSD}</td>
                 <td>${cakupanSD}</td>
                 <td class="text-center">${gap}</td>
                 <td class="text-center ${trenClass}">${tren}</td>
-                <td class="${gradeClass}">${grade}</td>
+                <td class="${gradeClass} text-center fw-semibold">${grade}</td>
                 <td>
-                  <textarea class="form-control form-control-sm" rows="2" style="min-width: 200px">
-      ${masalahBulanIni}</textarea>
+                  <textarea class="form-control form-control-sm masalah-textarea"
+                    rows="2"
+                    data-id="${row["No"]}"
+                    data-bulan="${kolomMasalah}">${masalahBulanIni}</textarea>
                 </td>
-              </tr>
-            `;
+              </tr>`;
           });
         }
 
         tbody.innerHTML = rows;
+
+        // Add listener to textareas
+        document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
+          textarea.addEventListener("change", async function () {
+            const id = this.dataset.id;
+            const bulan = this.dataset.bulan;
+            const nilai = this.value;
+
+            if (id && bulan) {
+              try {
+                const res = await fetch(
+                  `${endpoint}?action=update&id=${encodeURIComponent(
+                    id
+                  )}&bulan=${encodeURIComponent(
+                    bulan
+                  )}&nilai=${encodeURIComponent(nilai)}`
+                );
+                const result = await res.json();
+                if (!result.success) {
+                  alert("Gagal memperbarui data: " + result.message);
+                }
+              } catch (err) {
+                console.error("Update error:", err);
+                alert("Terjadi kesalahan saat menyimpan data.");
+              }
+            }
+          });
+        });
       }
-      function getGrade(capaianBulanIni, capaianBulanLalu, kumulatif, target) {
-        const diAtasTarget = kumulatif >= target;
-        if (capaianBulanIni > capaianBulanLalu && diAtasTarget) return "biru";
-        if (capaianBulanIni === capaianBulanLalu && diAtasTarget) return "biru";
-        if (capaianBulanIni < capaianBulanLalu && diAtasTarget) return "hijau";
-        if (capaianBulanIni > capaianBulanLalu && !diAtasTarget)
-          return "kuning";
-        if (capaianBulanIni <= capaianBulanLalu && !diAtasTarget)
-          return "merah";
-        return ""; // fallback
-      }
+
       document
         .getElementById("bulanSelect")
         .addEventListener("change", function () {
@@ -445,6 +438,82 @@
             selectedBulan = bulan;
             renderTable(originalData, bulan);
           }
+        });
+    </script>
+
+    <script>
+      document
+        .getElementById("simpanMasalah")
+        .addEventListener("click", function () {
+          const textareas = document.querySelectorAll(".masalah-textarea");
+          const updates = [];
+
+          const bulanDipilih = document.getElementById("bulanSelect").value;
+          const labelBulan = labelMap[bulanDipilih];
+          const kolomMasalahDipilih = masalahMap[labelBulan];
+
+          textareas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
+
+            if (kolomBulan !== kolomMasalahDipilih) return; // ⛔ skip jika bukan bulan dipilih
+
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
+
+          if (updates.length === 0) {
+            Swal.fire(
+              "Tidak ada data yang diubah untuk bulan ini.",
+              "",
+              "info"
+            );
+            return;
+          }
+
+          Swal.fire({
+            title: "Menyimpan data...",
+            text: "Mohon tunggu sebentar.",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading(),
+          });
+
+          const promises = updates.map((item) => {
+            const url = `${endpoint}?action=updateMasalah&id=${encodeURIComponent(
+              item.id
+            )}&bulan=${encodeURIComponent(
+              item.bulan
+            )}&nilai=${encodeURIComponent(item.nilai)}`;
+
+            return fetch(url)
+              .then((res) => res.json())
+              .catch((err) => {
+                console.error("Gagal update masalah:", err);
+                return { success: false };
+              });
+          });
+
+          Promise.all(promises).then((results) => {
+            const gagal = results.filter((r) => !r.success);
+            Swal.close();
+
+            if (gagal.length > 0) {
+              Swal.fire(
+                "Beberapa data gagal disimpan",
+                `${gagal.length} baris tidak tersimpan.`,
+                "warning"
+              );
+            } else {
+              Swal.fire({
+                icon: "success",
+                title: "Data bulan ini berhasil disimpan!",
+                timer: 1500,
+                showConfirmButton: false,
+              });
+            }
+          });
         });
     </script>
   </body>
