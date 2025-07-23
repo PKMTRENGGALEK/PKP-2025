@@ -186,6 +186,7 @@
                   <th rowspan="2"> Masalah</th>
                   <th rowspan="2"> Analisa Penyebab Masalah</th>
                   <th rowspan="2"> Rencana Tindak Lanjut</th>
+                  <th rowspan="2"> Hasil Tindak Lanjut</th>
                 </tr>
                 <tr>
                   <th>Bulan Lalu</th>
@@ -287,6 +288,20 @@ const rtlMap = {
   November: "RTL_Nov",
   Desember: "RTL_Des",
 };
+      const hasilMap = {
+  Januari: "Hasil_Jan",
+  Februari: "Hasil_Feb",
+  Maret: "Hasil_Mar",
+  April: "Hasil_Apr",
+  Mei: "Hasil_Mei",
+  Juni: "Hasil_Jun",
+  Juli: "Hasil_Jul",
+  Agustus: "Hasil_Agus",
+  September: "Hasil_Sep",
+  Oktober: "Hasil_Okt",
+  November: "Hasil_Nop",
+  Desember: "Hasil_Des",
+};
 
 
       window.onload = function () {
@@ -376,8 +391,8 @@ const rtlMap = {
           const program = rowsInSub[0].Induk || "";
 
           rows += `
-            <tr><td colspan="12" class="fw-bold text-danger" style="background-color: #f8d7da;">${program}</td></tr>
-            <tr><td colspan="12" class="fw-semibold text-primary" style="background-color: #e2e3f3;">${sub}</td></tr>
+            <tr><td colspan="13" class="fw-bold text-danger" style="background-color: #f8d7da;">${program}</td></tr>
+            <tr><td colspan="13" class="fw-semibold text-primary" style="background-color: #e2e3f3;">${sub}</td></tr>
           `;
 
           rowsInSub.forEach((row) => {
@@ -493,6 +508,12 @@ const rtlMap = {
                     data-id="${row["No"]}"
                     data-bulan="${kolomRTL}">${RTLBulanIni}</textarea>
                 </td>
+                <td>
+                  <textarea class="form-control form-control-sm hasil-textarea"
+                    rows="2"
+                    data-id="${row["No"]}"
+                    data-bulan="Hasil_${bulanIniKey}">${row["Hasil_" + bulanIniKey] || ""}</textarea>
+                </td>
 
               </tr>`;
           });
@@ -574,6 +595,31 @@ document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
     }
   });
 });
+document.querySelectorAll(".hasil-textarea").forEach((textarea) => {
+  textarea.addEventListener("change", async function () {
+    const id = this.dataset.id;
+    const bulan = this.dataset.bulan;
+    const nilai = this.value;
+
+    if (id && bulan) {
+      try {
+        const res = await fetch(
+          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(
+            bulan
+          )}&nilai=${encodeURIComponent(nilai)}`
+        );
+        const result = await res.json();
+        if (!result.success) {
+          alert("Gagal memperbarui data Hasil: " + result.message);
+        }
+      } catch (err) {
+        console.error("Update error (Hasil):", err);
+        alert("Terjadi kesalahan saat menyimpan data Hasil.");
+      }
+    }
+  });
+});
+
 
 }
 
@@ -602,6 +648,7 @@ document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
     const textareas = document.querySelectorAll(".masalah-textarea");
     const analisaAreas = document.querySelectorAll(".analisa-textarea");
     const rtlAreas = document.querySelectorAll(".rtl-textarea"); // Tambahan untuk RTL
+    const hasilAreas = document.querySelectorAll(".hasil-textarea");
 
     const updates = [];
 
@@ -649,6 +696,18 @@ document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
         updates.push({ id, bulan: kolomBulan, nilai });
       }
     });
+// Hasil
+hasilAreas.forEach((textarea) => {
+  const id = textarea.getAttribute("data-id");
+  const kolomBulan = textarea.getAttribute("data-bulan");
+
+  if (kolomBulan !== hasilMap[labelBulan]) return;
+
+  const nilai = textarea.value.trim();
+  if (id && kolomBulan && nilai !== "") {
+    updates.push({ id, bulan: kolomBulan, nilai });
+  }
+});
 
     if (updates.length === 0) {
       Swal.fire("Tidak ada data yang diubah untuk bulan ini.", "", "info");
