@@ -183,13 +183,28 @@
 
       const tableBody = document.getElementById("tableBody");
 
+      const bulanKeys = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agst",
+        "Sept",
+        "Okt",
+        "Nov",
+        "Des",
+      ];
+
       function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+        return new URLSearchParams(window.location.search).get(param);
       }
 
       function renderEditableCell(bulan, id, value) {
-        return `<td class="text-center">
+        return `
+          <td class="text-center">
             <input type="text" class="form-control form-control-sm bulan-input"
               data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
               value="${value || ""}" />
@@ -242,15 +257,12 @@
                   input.data("old", nilaiBaru);
                   input.addClass("updated");
 
-                  // 🔁 Perbarui tampilan langsung jika perlu
                   const row = document.querySelector(`tr[data-id="${id}"]`);
-                  if (row) {
-                    if (
-                      field === "Total Sasaran" ||
-                      bulanKeys.includes(field)
-                    ) {
-                      updateDerivedColumns(row);
-                    }
+                  if (
+                    row &&
+                    (field === "Total Sasaran" || bulanKeys.includes(field))
+                  ) {
+                    updateDerivedColumns(row);
                   }
                 } else {
                   Swal.fire("Gagal", res.message || "Gagal update", "error");
@@ -268,6 +280,7 @@
               });
           });
       }
+
       function updateDerivedColumns(row) {
         const bulanInputs = row.querySelectorAll("input[data-bulan]");
         let totalBulan = 0;
@@ -284,8 +297,8 @@
           ? parseInt(totalSasaranInput.value)
           : 0;
 
-        const cakupanCell = row.cells[9]; // Kolom ke-10 = % Cakupan Rill
-        const capaianCell = row.cells[10]; // Kolom ke-11 = Ketercapaian Target Tahun N
+        const cakupanCell = row.cells[9];
+        const capaianCell = row.cells[10];
 
         if (cakupanCell && totalSasaran) {
           const cakupan = ((totalBulan / totalSasaran) * 100).toFixed(2) + "%";
@@ -295,7 +308,7 @@
         if (capaianCell && totalSasaran) {
           const targetTahun = parseFloat(
             row.cells[4].textContent.replace("%", "")
-          ); // Target %
+          );
           const realisasi = (totalBulan / totalSasaran) * 100;
           const status =
             realisasi >= targetTahun ? "Tercapai" : "Belum Tercapai";
@@ -305,22 +318,7 @@
 
       function renderTable(rows, selectedKategori) {
         const fragment = document.createDocumentFragment();
-        const bulanKeys = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "Mei",
-          "Juni",
-          "Juli",
-          "Agst",
-          "Sept",
-          "Okt",
-          "Nov",
-          "Des",
-        ];
 
-        // Grouping by Induk > Sub
         const grouped = {};
         rows.forEach((row) => {
           const induk = row["Induk"] || "Lainnya";
@@ -332,61 +330,49 @@
 
         let index = 1;
 
-        // Kategori header
-        // const headerRow = document.createElement("tr");
-        // headerRow.style.backgroundColor = "#d1e7dd";
-        // headerRow.innerHTML = `<td colspan="30"><strong>📌 ${selectedKategori}</strong></td>`;
-        // fragment.appendChild(headerRow);
-
-        // Loop kelompok Induk > Sub
         for (const induk in grouped) {
           const indukRow = document.createElement("tr");
           indukRow.style.backgroundColor = "#f8d7da";
-          indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger"> ${induk}</td>`;
+          indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger">${induk}</td>`;
           fragment.appendChild(indukRow);
 
           for (const sub in grouped[induk]) {
             const subRow = document.createElement("tr");
             subRow.style.backgroundColor = "#cff4fc";
-            subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3"> ${sub}</td>`;
+            subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3">${sub}</td>`;
             fragment.appendChild(subRow);
 
-            // Render baris kegiatan
             for (const row of grouped[induk][sub]) {
               const rowId = row["No"];
               const tr = document.createElement("tr");
               tr.dataset.id = rowId;
 
-              let html = `<td>${index++}</td>`;
-              html += `<td>${row["Klaster"] || "-"}</td>`;
-              html += `<td>${row["Kegiatan"] || "-"}</td>`;
-              html += `<td>${row["Indikator Kerja"] || "-"}</td>`;
-              const targetValue = parseFloat(row["Target 2025"]);
-              html += `<td>${
-                isNaN(targetValue) ? "-" : Math.round(targetValue * 100) + "%"
-              }</td>`;
-              html += `<td>${row["Satuan Sasaran"] || "-"}</td>`;
-              html += `<td class="text-center">
-  <input type="text" class="form-control form-control-sm bulan-input"
-    data-field="Total Sasaran" data-id="${rowId}" data-old="${
+              let html = `
+                <td>${index++}</td>
+                <td>${row["Klaster"] || "-"}</td>
+                <td>${row["Kegiatan"] || "-"}</td>
+                <td>${row["Indikator Kerja"] || "-"}</td>
+                <td>${
+                  isNaN(parseFloat(row["Target 2025"]))
+                    ? "-"
+                    : Math.round(parseFloat(row["Target 2025"]) * 100) + "%"
+                }</td>
+                <td>${row["Satuan Sasaran"] || "-"}</td>
+                <td class="text-center">
+                  <input type="text" class="form-control form-control-sm bulan-input"
+                    data-field="Total Sasaran" data-id="${rowId}" data-old="${
                 row["Total Sasaran"] || ""
               }"
-    value="${row["Total Sasaran"] || ""}" />
-</td>`;
-
-              html += `<td>${row["Target Sasaran"] || "-"}</td>`;
-              html += `<td>${
-                row["Pencapaian (dalam satuan sasaran)"] || "-"
-              }</td>`;
-              html += `<td>${row["% Cakupan Rill"] || "-"}</td>`;
-              html += `<td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
+                    value="${row["Total Sasaran"] || ""}" />
+                </td>
+                <td>${row["Target Sasaran"] || "-"}</td>
+                <td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>
+                <td>${row["% Cakupan Rill"] || "-"}</td>
+                <td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
 
               for (const bulan of bulanKeys) {
                 html += renderEditableCell(bulan, rowId, row[bulan]);
               }
-
-              // html += `<td>${row["Analisa Akar Penyebab Masalah"] || "-"}</td>`;
-              // html += `<td>${row["Rencana Tindak lanjut"] || "-"}</td>`;
 
               tr.innerHTML = html;
               fragment.appendChild(tr);
@@ -394,7 +380,7 @@
           }
         }
 
-        tableBody.innerHTML = ""; // Clear
+        tableBody.innerHTML = "";
         tableBody.appendChild(fragment);
         bindInputEvents();
       }
@@ -408,10 +394,10 @@
         }
 
         tableBody.innerHTML = `
-            <tr><td colspan="25" class="text-center py-4">
-              <div class="spinner-border text-success" role="status"></div>
-              <div class="mt-2 text-success fw-semibold">Memuat data...</div>
-            </td></tr>`;
+          <tr><td colspan="25" class="text-center py-4">
+            <div class="spinner-border text-success" role="status"></div>
+            <div class="mt-2 text-success fw-semibold">Memuat data...</div>
+          </td></tr>`;
 
         fetch(endpoint)
           .then((res) => res.json())
@@ -433,6 +419,7 @@
           });
       }
 
+      // Load data on page load
       loadData();
     </script>
   </body>
