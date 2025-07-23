@@ -99,6 +99,10 @@
             <a href="index.html" class="btn btn-outline-success shadow-sm">
               ⬅️ Kembali
             </a>
+            <a id="analisaLink" href="#" class="btn btn-outline-danger shadow-sm">
+                Analisa
+              </a>
+
           </div>
           <div class="text-end mt-3 mb-2">
 
@@ -411,6 +415,10 @@
             tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
           });
       }
+      const kategoriParam = getQueryParam("kategori");
+if (kategoriParam) {
+  document.getElementById("analisaLink").href = `analisa_program.html?kategori=${encodeURIComponent(kategoriParam)}`;
+}
 
       // Load data on page load
       loadData();
