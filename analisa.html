@@ -183,7 +183,8 @@
                   <th rowspan="2" id="kesenjangan">% Kesenjangan</th>
                   <th rowspan="2" id="Tren">TREN</th>
                   <th rowspan="2">GRADE</th>
-                  <th rowspan="2">Analisa Masalah</th>
+                  <th rowspan="2"> Masalah</th>
+                  <th rowspan="2"> Analisa Masalah</th>
                 </tr>
                 <tr>
                   <th>Bulan Lalu</th>
@@ -257,6 +258,20 @@
         November: "Masalah_Nov",
         Desember: "Masalah_Des",
       };
+      const analisaMap = {
+  Januari: "Analisa_masalah_jan",
+  Februari: "Analisa_Masalah_Feb",
+  Maret: "Analisa_Masalah_Mar",
+  April: "Analisa_Masalah_Apr",
+  Mei: "Analisa_Masalah_Mei",
+  Juni: "Analisa_Masalah_Jun",
+  Juli: "Analisa_Masalah_Jul",
+  Agustus: "Analisa_Masalah_Agu",
+  September: "Analisa_Masalah_Sep",
+  Oktober: "Analisa_Masalah_Okt",
+  November: "Analisa_Masalah_Nov",
+  Desember: "Analisa_Masalah_Des",
+};
 
       window.onload = function () {
         fetch(endpoint)
@@ -308,6 +323,7 @@
         const bulanLaluKey = bulanKeys[idx - 1] || null;
         const labelBulan = labelMap[bulanIniKey];
         const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
+        const kolomAnalisa = analisaMap[labelBulan] || "Analisa_masalah_jan";
 
         document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
           bulanLaluKey ? labelMap[bulanLaluKey] : "-";
@@ -373,23 +389,32 @@
               : "-";
 
             const masalahBulanIni = row[kolomMasalah] || "";
+            const analisaBulanIni = row[kolomAnalisa] || "";
 
-            let gap = "-";
-            let tren = "➡️";
-            let trenClass = "";
+           let gap = "-";
+          let tren = "➡️";
+          let trenClass = "";
 
-            if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
-              const selisih = (bulanIniVal - bulanLaluVal).toFixed(2);
-              gap = `${selisih > 0 ? "+" : ""}${selisih}`;
+          // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
+          if (!isNaN(parseFloat(cakupanSD)) && !isNaN(parseFloat(targetSD))) {
+            const selisihGap = (
+              parseFloat(cakupanSD) - parseFloat(targetSD)
+            ).toFixed(2);
+            gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+          }
 
-              if (selisih > 0) {
-                tren = "⬆️";
-                trenClass = "bg-success text-white";
-              } else if (selisih < 0) {
-                tren = "⬇️";
-                trenClass = "bg-danger text-white";
-              }
+          // Tetap hitung tren seperti sebelumnya
+          if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+            const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+            if (selisihBulan > 0) {
+              tren = "⬆️";
+              trenClass = "bg-success text-white";
+            } else if (selisihBulan < 0) {
+              tren = "⬇️";
+              trenClass = "bg-danger text-white";
             }
+          }
+
 
             let grade = "-";
             let gradeClass = "";
@@ -438,6 +463,13 @@
                     data-id="${row["No"]}"
                     data-bulan="${kolomMasalah}">${masalahBulanIni}</textarea>
                 </td>
+                <td>
+                  <textarea class="form-control form-control-sm analisa-textarea"
+                    rows="2"
+                    data-id="${row["No"]}"
+                    data-bulan="${kolomAnalisa}">${analisaBulanIni}</textarea>
+                </td>
+
               </tr>`;
           });
         }
@@ -445,31 +477,56 @@
         tbody.innerHTML = rows;
 
         document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
-          textarea.addEventListener("change", async function () {
-            const id = this.dataset.id;
-            const bulan = this.dataset.bulan;
-            const nilai = this.value;
+              textarea.addEventListener("change", async function () {
+                const id = this.dataset.id;
+                const bulan = this.dataset.bulan;
+                const nilai = this.value;
 
-            if (id && bulan) {
-              try {
-                const res = await fetch(
-                  `${endpoint}?action=update&id=${encodeURIComponent(
-                    id
-                  )}&bulan=${encodeURIComponent(
-                    bulan
-                  )}&nilai=${encodeURIComponent(nilai)}`
-                );
-                const result = await res.json();
-                if (!result.success) {
-                  alert("Gagal memperbarui data: " + result.message);
+                if (id && bulan) {
+                  try {
+                    const res = await fetch(
+                      `${endpoint}?action=update&id=${encodeURIComponent(
+                        id
+                      )}&bulan=${encodeURIComponent(
+                        bulan
+                      )}&nilai=${encodeURIComponent(nilai)}`
+                    );
+                    const result = await res.json();
+                    if (!result.success) {
+                      alert("Gagal memperbarui data: " + result.message);
+                    }
+                  } catch (err) {
+                    console.error("Update error:", err);
+                    alert("Terjadi kesalahan saat menyimpan data.");
+                  }
                 }
-              } catch (err) {
-                console.error("Update error:", err);
-                alert("Terjadi kesalahan saat menyimpan data.");
-              }
+              });
+            });
+      document.querySelectorAll(".analisa-textarea").forEach((textarea) => {
+      textarea.addEventListener("change", async function () {
+        const id = this.dataset.id;
+        const bulan = this.dataset.bulan;
+        const nilai = this.value;
+
+        if (id && bulan) {
+          try {
+            const res = await fetch(
+              `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(
+                bulan
+              )}&nilai=${encodeURIComponent(nilai)}`
+            );
+            const result = await res.json();
+            if (!result.success) {
+              alert("Gagal memperbarui data: " + result.message);
             }
-          });
-        });
+          } catch (err) {
+            console.error("Update error (analisa):", err);
+            alert("Terjadi kesalahan saat menyimpan data Analisa Masalah.");
+          }
+        }
+      });
+});
+
       }
 
       // 🔸 Ganti bulan
@@ -497,17 +554,31 @@
         .getElementById("simpanMasalah")
         .addEventListener("click", function () {
           const textareas = document.querySelectorAll(".masalah-textarea");
+          const analisaAreas = document.querySelectorAll(".analisa-textarea");
+
           const updates = [];
 
           const bulanDipilih = document.getElementById("bulanSelect").value;
           const labelBulan = labelMap[bulanDipilih];
           const kolomMasalahDipilih = masalahMap[labelBulan];
+          const kolomAnalisaDipilih = analisaMap[labelBulan];
 
           textareas.forEach((textarea) => {
             const id = textarea.getAttribute("data-id");
             const kolomBulan = textarea.getAttribute("data-bulan");
 
             if (kolomBulan !== kolomMasalahDipilih) return; // ⛔ skip jika bukan bulan dipilih
+
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
+          analisaAreas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
+
+            if (kolomBulan !== kolomAnalisaDipilih) return;
 
             const nilai = textarea.value.trim();
             if (id && kolomBulan && nilai !== "") {
