@@ -146,6 +146,20 @@
               <option value="Des">Desember</option>
             </select>
           </div>
+          <!-- Filter kategori -->
+          <div class="mb-3">
+            <label for="kategoriSelect" class="form-label fw-bold"
+              >Pilih kategori:</label
+            >
+            <select
+              id="kategoriSelect"
+              class="form-select form-select-sm"
+              style="max-width: 300px"
+            >
+              <option value="Semua">Semua kategori</option>
+            </select>
+          </div>
+
           <div class="text-end mt-3">
             <button class="btn btn-success" id="simpanMasalah">
               Simpan Perubahan
@@ -196,6 +210,8 @@
         "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
 
       let originalData = [];
+      let selectedBulan = "Juli";
+      let selectedkategori = "Semua";
 
       const bulanKeys = [
         "Jan",
@@ -242,14 +258,34 @@
         Desember: "Masalah_Des",
       };
 
-      let selectedBulan = "Juli";
-
       window.onload = function () {
         fetch(endpoint)
           .then((res) => res.json())
           .then((data) => {
             originalData = data;
-            renderTable(data, selectedBulan);
+            fetch(endpoint)
+              .then((res) => res.json())
+              .then((data) => {
+                originalData = data;
+
+                console.log("Contoh data:", data[0]); // ⬅️ Tambahkan ini untuk lihat struktur field
+
+                // Buat dropdown kategori
+                const kategoriSet = new Set(
+                  data.map((item) => item.kategori || "Tanpa kategori")
+                );
+
+                const kategoriSelect =
+                  document.getElementById("kategoriSelect");
+                kategoriSet.forEach((kategori) => {
+                  const opt = document.createElement("option");
+                  opt.value = kategori;
+                  opt.textContent = kategori;
+                  kategoriSelect.appendChild(opt);
+                });
+
+                renderTable(data, selectedBulan);
+              });
           })
           .catch((err) => {
             document.getElementById("tableBody").innerHTML =
@@ -283,8 +319,17 @@
         ).innerText = `% Target s/d Bulan ${labelBulan}`;
         document.getElementById("cakupanBulan").innerText = labelBulan;
 
+        // 🔹 Filter berdasarkan kategori
+        const filtered =
+          selectedkategori === "Semua"
+            ? data
+            : data.filter(
+                (d) => (d.kategori || "Tanpa kategori") === selectedkategori
+              );
+
+        // 🔹 Grouping berdasarkan Sub
         let grouped = {};
-        data.forEach((row) => {
+        filtered.forEach((row) => {
           const sub = row.Sub || "Tanpa Sub";
           if (!grouped[sub]) grouped[sub] = [];
           grouped[sub].push(row);
@@ -329,7 +374,6 @@
 
             const masalahBulanIni = row[kolomMasalah] || "";
 
-            // GAP & TREN
             let gap = "-";
             let tren = "➡️";
             let trenClass = "";
@@ -347,7 +391,6 @@
               }
             }
 
-            // GRADE
             let grade = "-";
             let gradeClass = "";
 
@@ -401,7 +444,6 @@
 
         tbody.innerHTML = rows;
 
-        // Add listener to textareas
         document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
           textarea.addEventListener("change", async function () {
             const id = this.dataset.id;
@@ -430,14 +472,23 @@
         });
       }
 
+      // 🔸 Ganti bulan
       document
         .getElementById("bulanSelect")
         .addEventListener("change", function () {
           const bulan = this.value;
           if (bulanKeys.includes(bulan)) {
             selectedBulan = bulan;
-            renderTable(originalData, bulan);
+            renderTable(originalData, selectedBulan);
           }
+        });
+
+      // 🔸 Ganti kategori
+      document
+        .getElementById("kategoriSelect")
+        .addEventListener("change", function () {
+          selectedkategori = this.value;
+          renderTable(originalData, selectedBulan);
         });
     </script>
 
