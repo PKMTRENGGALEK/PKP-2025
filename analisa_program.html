@@ -207,6 +207,31 @@
               </tbody>
             </table>
           </div>
+          <div class="mb-3 mt-2">
+  <h6 class="fw-bold">Keterangan Warna Grade:</h6>
+  <ul class="list-unstyled" style="font-size: 10px;">
+    <li>
+      <span class="badge bg-primary text-white">BIRU</span> :
+      jika <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu dan kumulatif di atas target
+    </li>
+    <li class="mt-2">
+      <span class="badge bg-light text-dark border border-dark">PUTIH</span> :
+      jika <strong>Capaian Bulan ini sama</strong> dengan bulan lalu dan kumulatif di atas target
+    </li>
+    <li class="mt-2">
+      <span class="badge bg-success text-white">HIJAU</span> :
+      jika <strong>Capaian Bulan ini lebih kecil</strong> dari bulan lalu dan kumulatif di atas target
+    </li>
+    <li class="mt-2">
+      <span class="badge bg-warning text-dark">KUNING</span> :
+      jika <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu dan kumulatif di bawah target
+    </li>
+    <li class="mt-2">
+      <span class="badge bg-danger text-white">MERAH</span> :
+      jika <strong>Capaian Bulan ini lebih kecil</strong> atau sama dengan bulan lalu dan kumulatif di bawah target
+    </li>
+  </ul>
+</div>
         </div>
       </div>
     </div>
@@ -479,23 +504,24 @@ const rtlMap = {
               const capaianNaik = bulanIniVal > bulanLaluVal;
               const capaianTurun = bulanIniVal < bulanLaluVal;
               const capaianSama = bulanIniVal === bulanLaluVal;
-              const kumulatifCukup =
-                parseFloat(cakupanSD) >= parseFloat(targetSD);
 
-              if ((capaianNaik || capaianSama) && kumulatifCukup) {
+              const selisihCakupan = parseFloat(cakupanSD) - parseFloat(targetSD);
+
+              if ((capaianNaik || capaianSama) && selisihCakupan >= 0) {
                 grade = "";
                 gradeClass = "bg-primary text-white";
-              } else if (capaianTurun && kumulatifCukup) {
+              } else if (capaianTurun && selisihCakupan >= 0) {
                 grade = "";
                 gradeClass = "bg-success text-white";
-              } else if (capaianNaik && !kumulatifCukup) {
+              } else if (capaianNaik && selisihCakupan < 0) {
                 grade = "";
                 gradeClass = "bg-warning text-dark";
-              } else if ((capaianTurun || capaianSama) && !kumulatifCukup) {
+              } else if ((capaianTurun || capaianSama) && selisihCakupan < 0) {
                 grade = "";
                 gradeClass = "bg-danger text-white";
               }
             }
+
 
             rows += `
               <tr>
