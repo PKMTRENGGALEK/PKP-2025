@@ -80,11 +80,12 @@
       }
       th.indikator-col,
       td.indikator-col {
-        max-width: 200px; /* Ubah sesuai kebutuhan, misalnya 150px */
+        max-width: 700px; /* Ubah sesuai kebutuhan, misalnya 150px */
         white-space: normal;
         word-wrap: break-word;
         word-break: break-word;
       }
+    
 
       .bg-biru {
         background-color: #2196f3;
@@ -111,7 +112,7 @@
         <div class="card-body">
           <div class="text-center mb-4">
             <h4 class="fw-bold mb-0">
-              IDENTIFIKASI MASALAH HASIL CAPAIAN UKM TAHUN 2025
+              IDENTIFIKASI DAN ANALISA MASALAH HASIL CAPAIAN PKP TAHUN 2025
             </h4>
           </div>
 
@@ -160,33 +161,38 @@
             </select>
           </div>
 
-          <div class="text-end mt-3">
+          <div class="text-end mt-3 mb-2">
             <button class="btn btn-success" id="simpanMasalah">
               Simpan Perubahan
             </button>
           </div>
 
-          <div class="table-responsive" style="font-size: 11px">
+          <!-- <div class="table-responsive" style="font-size: 11px">
             <table
               class="table table-bordered table-striped align-middle"
               id="programTable"
-            >
+            > -->
+        <div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover align-middle text-nowrap" id="programTable">
+    <!-- thead dan tbody kamu -->
+
               <thead class="table-success text-center align-middle">
                 <tr>
                   <th rowspan="2">No</th>
-                  <th rowspan="2" class="indikator-col">Indikator Kerja</th>
+                  <th rowspan="2" width="300px">Indikator Kerja</th>
                   <th colspan="2">Bulan</th>
-                  <th rowspan="2" id="targetHeader">% Target s/d Bulan ...</th>
-                  <th rowspan="2">
+                  <th rowspan="2" id="targetHeader" width="70px" class="text-wrap">% Target s/d Bulan ...</th>
+                  <th rowspan="2" width="70px" class="text-wrap">
                     % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
                   </th>
-                  <th rowspan="2" id="kesenjangan">% Kesenjangan</th>
-                  <th rowspan="2" id="Tren">TREN</th>
-                  <th rowspan="2">GRADE</th>
-                  <th rowspan="2"> Masalah</th>
-                  <th rowspan="2"> Analisa Penyebab Masalah</th>
-                  <th rowspan="2"> Rencana Tindak Lanjut</th>
-                  <th rowspan="2"> Hasil Tindak Lanjut</th>
+                  <th rowspan="2" id="kesenjangan" width="60px" class="text-wrap">% Kesenjangan</th>
+                  <th rowspan="2" id="Tren" width="70px" class="text-wrap">TREN</th>
+                  <th rowspan="2" width="30px">Grade</th>
+                   <!-- Empat kolom besar dengan lebar sama -->
+                  <th rowspan="2" width="220px" class="text-wrap">Masalah</th>
+                  <th rowspan="2" width="220px" class="text-wrap">Analisa Penyebab Masalah</th>
+                  <th rowspan="2" width="220px" class="text-wrap">Rencana Tindak Lanjut</th>
+                  <th rowspan="2" width="220px" class="text-wrap">Hasil Tindak Lanjut</th>
                 </tr>
                 <tr>
                   <th>Bulan Lalu</th>
@@ -465,16 +471,16 @@ const rtlMap = {
                 parseFloat(cakupanSD) >= parseFloat(targetSD);
 
               if ((capaianNaik || capaianSama) && kumulatifCukup) {
-                grade = "BIRU";
+                grade = "";
                 gradeClass = "bg-primary text-white";
               } else if (capaianTurun && kumulatifCukup) {
-                grade = "HIJAU";
+                grade = "";
                 gradeClass = "bg-success text-white";
               } else if (capaianNaik && !kumulatifCukup) {
-                grade = "KUNING";
+                grade = "";
                 gradeClass = "bg-warning text-dark";
               } else if ((capaianTurun || capaianSama) && !kumulatifCukup) {
-                grade = "MERAH";
+                grade = "";
                 gradeClass = "bg-danger text-white";
               }
             }
@@ -482,11 +488,11 @@ const rtlMap = {
             rows += `
               <tr>
                 <td class="text-center">${counter++}</td>
-                <td class="indikator-col text-wrap" style="max-width: 300px;" title="${indikator}">${indikator}</td>
-                <td>${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
-                <td>${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
-                <td>${targetSD}</td>
-                <td>${cakupanSD}</td>
+                <td class="text-wrap "  title="${indikator}">${indikator}</td>
+                <td class="text-wrap text-center">${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
+                <td class="text-wrap text-center">${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
+                <td class="text-wrap text-center">${targetSD}</td>
+                <td class="text-wrap text-center">${cakupanSD}</td>
                 <td class="text-center">${gap}</td>
                 <td class="text-center ${trenClass}">${tren}</td>
                 <td class="${gradeClass} text-center fw-semibold">${grade}</td>

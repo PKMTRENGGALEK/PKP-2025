@@ -25,83 +25,60 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
       body {
-        background: #f0f4f5;
-        font-family: "Segoe UI", sans-serif;
-      }
+          background: #f0f4f5;
+          font-family: "Segoe UI", sans-serif;
+        }
 
-      .logo {
-        max-height: 100px;
-      }
+        .logo {
+          max-height: 100px;
+        }
 
-      .table-responsive {
-        max-height: 75vh;
-        overflow: auto;
-      }
+        .table-responsive {
+          max-height: 75vh;
+          overflow: auto;
+          position: relative;
+        }
 
-      .table th,
-      .table thead th {
-        background-color: #198754 !important;
-        color: white !important;
-        font-size: 0.72rem;
-        text-align: center;
-        vertical-align: middle;
-      }
+        table {
+          width: max-content;
+          border-collapse: collapse;
+        }
 
-      .table td {
-        font-size: 0.72rem;
-        vertical-align: middle;
-      }
+        .table th,
+        .table td {
+          white-space: nowrap;
+          vertical-align: middle;
+          font-size: 0.72rem;
+        }
 
-      /* Sticky thead rows */
-      .table thead tr:nth-child(1) th {
-        position: sticky;
-        top: 0;
-        z-index: 3;
-      }
+        /* Sticky header baris 1 */
+        .table thead tr:nth-child(1) th {
+          position: sticky;
+          top: 0;
+          background-color: #198754 !important;
+          color: white !important;
+          z-index: 3;
+        }
 
-      .table thead tr:nth-child(2) th {
-        position: sticky;
-        top: 36px; /* Sesuaikan dengan tinggi baris 1 */
-        z-index: 2;
-      }
+        /* Sticky header baris 2 (bulan) */
+        .table thead tr:nth-child(2) th {
+          position: sticky;
+          top: 34px; /* Sesuaikan sesuai tinggi header baris 1 */
+          background-color: #198754 !important;
+          color: white !important;
+          z-index: 2;
+        }
 
-      .bulan-input {
-        width: 45px;
-        font-size: 0.72rem;
-        text-align: center;
-      }
+        .bulan-input {
+          width: 45px;
+          font-size: 0.72rem;
+          text-align: center;
+        }
 
-      .updated {
-        background-color: #d1e7dd !important;
-      }
-      .table-responsive {
-        position: relative;
-        max-height: 75vh;
-        overflow: auto;
-      }
+        .updated {
+          background-color: #d1e7dd !important;
+        }
 
-      /* Header baris pertama */
-      .table thead tr:nth-child(1) th {
-        position: sticky;
-        top: 0;
-        background-color: #198754 !important;
-        z-index: 3;
-      }
-
-      /* Header baris kedua */
-      .table thead tr:nth-child(2) th {
-        position: sticky;
-        top: 38px; /* pastikan sesuai dengan height baris pertama */
-        background-color: #198754 !important;
-        z-index: 2;
-      }
-      .table th,
-      .table td {
-        white-space: nowrap;
-      }
-      .table thead tr:nth-child(2) th {
-        top: 34px; /* atau 32px, eksperimen untuk pas */
-      }
     </style>
   </head>
   <body>
@@ -123,6 +100,12 @@
               ⬅️ Kembali
             </a>
           </div>
+          <div class="text-end mt-3 mb-2">
+
+            <button id="btnSimpanSemua" class="btn btn-outline-success ms-2 shadow-sm mb-2">
+              💾 Simpan Semua Perubahan
+            </button>
+          </div>
 
           <div class="table-responsive" style="font-size: 11px">
             <table
@@ -132,16 +115,16 @@
               <thead class="table-success text-center align-middle">
                 <tr>
                   <th rowspan="2">No</th>
-                  <th rowspan="2" style="min-width: 80px">Klaster</th>
-                  <th rowspan="2" style="min-width: 120px">Kegiatan</th>
-                  <th rowspan="2" style="min-width: 250px">Indikator Kerja</th>
-                  <th rowspan="2">Target Tahun 2025 (dalam %)</th>
+                  <th rowspan="2" width="60px" >Klaster</th>
+                  <th rowspan="2" width="90px" >Kegiatan</th>
+                  <th rowspan="2" width="90px">Indikator Kerja</th>
+                  <th rowspan="2" width="80px" class="text-wrap">Target Tahun 2025 (dalam %)</th>
                   <th rowspan="2">Satuan Sasaran</th>
-                  <th rowspan="2">Total Sasaran</th>
-                  <th rowspan="2">Target Sasaran</th>
-                  <th rowspan="2">Pencapaian (dalam satuan sasaran)</th>
-                  <th rowspan="2">% Cakupan Rill</th>
-                  <th rowspan="2">Ketercapaian Target Tahun N</th>
+                  <th rowspan="2" width="80px" class="text-wrap">Total Sasaran</th>
+                  <th rowspan="2" width="80px" class="text-wrap">Target Sasaran</th>
+                  <th rowspan="2" width="80px" class="text-wrap">Pencapaian (dalam satuan sasaran)</th>
+                  <th rowspan="2" width="80px" class="text-wrap">% Cakupan Rill</th>
+                  <th rowspan="2" width="80px" class="text-wrap">Ketercapaian Target Tahun N</th>
                   <th colspan="12">Capaian Kegiatan Program</th>
                   <!-- <th rowspan="2">Analisa Akar Penyebab Masalah</th>
                   <th rowspan="2">Rencana Tindak lanjut</th> -->
@@ -212,74 +195,84 @@
       }
 
       function bindInputEvents() {
-        $(".bulan-input")
-          .off("blur")
-          .on("blur", function () {
-            const input = $(this);
-            const id = input.data("id");
-            const field = input.data("field") || input.data("bulan");
-            const nilaiBaru = input.val().trim();
-            const nilaiLama = input.data("old");
+          $("#btnSimpanSemua").off("click").on("click", function () {
+            const inputs = document.querySelectorAll(".bulan-input");
+            const updates = [];
 
-            if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
+            inputs.forEach((input) => {
+              const nilaiBaru = input.value.trim();
+              const nilaiLama = input.dataset.old;
+              const id = input.dataset.id;
+              const field = input.dataset.field || input.dataset.bulan;
 
-            if (!/^\d+$/.test(nilaiBaru)) {
-              Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
-              input.val(nilaiLama);
+              if (nilaiBaru !== nilaiLama && /^\d+$/.test(nilaiBaru)) {
+                updates.push({
+                  id,
+                  field,
+                  value: nilaiBaru,
+                  input,
+                });
+              }
+            });
+
+            if (updates.length === 0) {
+              Swal.fire("Tidak ada perubahan", "Silakan ubah nilai terlebih dahulu.", "info");
               return;
             }
 
             Swal.fire({
               title: "Menyimpan...",
-              text: "Sedang mengupdate data...",
+              text: "Menyimpan semua perubahan...",
               allowOutsideClick: false,
               didOpen: () => Swal.showLoading(),
             });
 
-            const url = `${endpoint}?action=update&id=${encodeURIComponent(
-              id
-            )}&field=${encodeURIComponent(field)}&nilai=${encodeURIComponent(
-              nilaiBaru
-            )}`;
+            let successCount = 0;
 
-            fetch(url)
-              .then((res) => res.json())
-              .then((res) => {
+            const updateNext = () => {
+              if (updates.length === 0) {
                 Swal.close();
-                if (res.success) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "Berhasil diperbarui",
-                    timer: 1200,
-                    showConfirmButton: false,
-                  });
+                Swal.fire({
+                  icon: "success",
+                  title: `${successCount} data berhasil disimpan`,
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                return;
+              }
 
-                  input.data("old", nilaiBaru);
-                  input.addClass("updated");
+              const { id, field, value, input } = updates.shift();
 
-                  const row = document.querySelector(`tr[data-id="${id}"]`);
-                  if (
-                    row &&
-                    (field === "Total Sasaran" || bulanKeys.includes(field))
-                  ) {
-                    updateDerivedColumns(row);
+              const url = `${endpoint}?action=update&id=${encodeURIComponent(id)}&field=${encodeURIComponent(field)}&nilai=${encodeURIComponent(value)}`;
+
+              fetch(url)
+                .then((res) => res.json())
+                .then((res) => {
+                  if (res.success) {
+                    input.dataset.old = value;
+                    input.classList.add("updated");
+                    successCount++;
+
+                    const row = document.querySelector(`tr[data-id="${id}"]`);
+                    if (row && (field === "Total Sasaran" || bulanKeys.includes(field))) {
+                      updateDerivedColumns(row);
+                    }
+                  } else {
+                    input.value = input.dataset.old;
                   }
-                } else {
-                  Swal.fire("Gagal", res.message || "Gagal update", "error");
-                  input.val(nilaiLama);
-                }
-              })
-              .catch((err) => {
-                Swal.close();
-                Swal.fire(
-                  "Gagal",
-                  err.message || "Kesalahan jaringan",
-                  "error"
-                );
-                input.val(nilaiLama);
-              });
+                })
+                .catch(() => {
+                  input.value = input.dataset.old;
+                })
+                .finally(() => {
+                  updateNext();
+                });
+            };
+
+            updateNext();
           });
-      }
+        }
+
 
       function updateDerivedColumns(row) {
         const bulanInputs = row.querySelectorAll("input[data-bulan]");

@@ -56,6 +56,7 @@
         top: 36px;
         z-index: 1;
       }
+      
       .bulan-input {
         width: 45px;
         font-size: 0.72rem;
@@ -80,11 +81,15 @@
             <h4 class="fw-bold mb-0">Detail Program Klaster 1: Manajemen</h4>
           </div>
 
-          <div class="d-flex justify-content-start mb-3">
-            <a href="index.html" class="btn btn-outline-success shadow-sm">
-              ⬅️ Kembali
-            </a>
-          </div>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+  <a href="index.html" class="btn btn-outline-success shadow-sm">
+    ⬅️ Kembali
+  </a>
+  <button id="saveAllBtn" class="btn btn-success shadow-sm">
+    💾 Simpan Semua
+  </button>
+</div>
+
 
           <div class="table-responsive" style="font-size: 11px">
             <table
@@ -108,23 +113,14 @@
                   <th colspan="12">Capaian Kegiatan Program</th>
                 </tr>
                 <tr class="text-center">
-                  <th>Jan</th>
-                  <th>Feb</th>
-                  <th>Mar</th>
-                  <th>Apr</th>
-                  <th>Mei</th>
-                  <th>Juni</th>
-                  <th>Juli</th>
-                  <th>Agst</th>
-                  <th>Sept</th>
-                  <th>Okt</th>
-                  <th>Nov</th>
-                  <th>Des</th>
+                  <th>Triwulan I</th>
+                  <th>Triwulan II</th>
+                  <th>Triwulan III</th>
                 </tr>
               </thead>
               <tbody id="tableBody">
                 <tr>
-                  <td colspan="22" class="text-center">Memuat data...</td>
+                  <td colspan="13" class="text-center">Memuat data...</td>
                 </tr>
               </tbody>
             </table>
@@ -138,282 +134,245 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-      const endpoint =
-        "https://script.google.com/macros/s/AKfycbzg84-rK9Grl_7-89tbqoXR_H5CSXyBcd45sE4zwEXSxn_DIxwP-ERWu2GaH6lDC9-S/exec";
-      let grouped = {};
+   <script>
+  const endpoint =
+    "https://script.google.com/macros/s/AKfycbzg84-rK9Grl_7-89tbqoXR_H5CSXyBcd45sE4zwEXSxn_DIxwP-ERWu2GaH6lDC9-S/exec";
+  let grouped = {};
 
-      function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  function loadData() {
+    fetch(endpoint)
+      .then((res) => res.json())
+      .then((data) => {
+        const selectedFromURL = getQueryParam("program");
+        if (!selectedFromURL) {
+          document.getElementById("tableBody").innerHTML = `
+            <tr><td colspan="13" class="text-center text-muted">Tidak ada data ditampilkan. Parameter <code>?program=</code> diperlukan.</td></tr>`;
+          return;
+        }
+
+        const klaster1Data = data.filter((item) =>
+          item.Program?.toLowerCase().startsWith("1.")
+        );
+
+        grouped = {};
+        klaster1Data.forEach((row) => {
+          const program = row.Program || "Lainnya";
+          if (!grouped[program]) grouped[program] = [];
+          grouped[program].push(row);
+        });
+
+        if (!grouped[selectedFromURL]) {
+          document.getElementById("tableBody").innerHTML = `
+            <tr><td colspan="13" class="text-danger text-center">Program <strong>${selectedFromURL}</strong> tidak ditemukan.</td></tr>`;
+          return;
+        }
+
+        renderTable(selectedFromURL);
+      })
+      .catch((error) => {
+        document.getElementById("tableBody").innerHTML = `
+          <tr><td colspan="13" class="text-danger text-center">Gagal memuat data.</td></tr>`;
+        console.error("Fetch error:", error);
+      });
+  }
+
+  function renderTable(selectedProgram) {
+    const tableBody = document.getElementById("tableBody");
+
+    tableBody.innerHTML = `
+      <tr id="loadingRow">
+        <td colspan="13" class="text-center py-4">
+          <div class="spinner-border text-success" role="status"></div>
+          <div class="mt-2 text-success fw-semibold">Memuat data...</div>
+        </td>
+      </tr>`;
+
+    setTimeout(() => {
+      let index = 1;
+      const rows = grouped[selectedProgram];
+      if (!rows || rows.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="13" class="text-center">Tidak ada data.</td></tr>`;
+        return;
       }
 
-      function loadData() {
-        fetch(endpoint)
-          .then((res) => res.json())
-          .then((data) => {
-            const selectedFromURL = getQueryParam("program");
-            if (!selectedFromURL) {
-              document.getElementById("tableBody").innerHTML = `
-                <tr><td colspan="22" class="text-center text-muted">Tidak ada data ditampilkan. Parameter <code>?program=</code> diperlukan.</td></tr>`;
-              return;
-            }
+      tableBody.innerHTML = `<tr style="background-color:#d1e7dd">
+        <td colspan="13"><strong>📌 ${selectedProgram}</strong></td></tr>`;
 
-            const klaster1Data = data.filter((item) =>
-              item.Program?.toLowerCase().startsWith("1.")
+      const jenisMap = {};
+      rows.forEach((row, i) => {
+        const jenis = row["Jenis Variabel"] || "-";
+        if (!jenisMap[jenis]) {
+          jenisMap[jenis] = { startIndex: i, count: 1 };
+        } else {
+          jenisMap[jenis].count++;
+        }
+      });
+
+      rows.forEach((row, i) => {
+        const rowId = row["No"];
+        const jenis = row["Jenis Variabel"] || "-";
+        const jenisInfo = jenisMap[jenis];
+        const isFirstRow = jenisInfo.startIndex === i;
+
+        let html = `<tr data-id="${rowId}">`;
+        html += `<td>${index++}</td>`;
+        if (isFirstRow) {
+          html += `<td rowspan="${jenisInfo.count}">${jenis}</td>`;
+        }
+
+        const capaianMax = hitungMax(row);
+        const target = row["Target Nilai Kinerja"];
+        const ketercapaian = hitungKetercapaian(capaianMax, target);
+
+        html += `
+          <td>${row["Definisi Operasional"] || "-"}</td>
+          <td>${row["0"] || "-"}</td>
+          <td>${row["4"] || "-"}</td>
+          <td>${row["7"] || "-"}</td>
+          <td>${row["10"] || "-"}</td>
+          <td>${target || "-"}</td>
+          <td class="capaian">${capaianMax}</td>
+          <td class="ketercapaian">${ketercapaian}</td>
+          ${renderEditableCell("Triwulan I", rowId, row["Triwulan I"])}
+          ${renderEditableCell("Triwulan II", rowId, row["Triwulan II"])}
+          ${renderEditableCell("Triwulan III", rowId, row["Triwulan III"])}
+        </tr>`;
+
+        tableBody.innerHTML += html;
+
+        const url = `${endpoint}?action=updateCapaian&id=${encodeURIComponent(
+          rowId
+        )}&value=${encodeURIComponent(capaianMax)}`;
+        fetch(url).catch((err) =>
+          console.error("Gagal update capaian:", err)
+        );
+      });
+
+      // Tandai perubahan input
+      $(".bulan-input").on("input", function () {
+        const input = $(this);
+        const nilaiBaru = input.val().trim();
+        const nilaiLama = input.data("old");
+
+        if (nilaiBaru !== nilaiLama) {
+          input.addClass("updated");
+        } else {
+          input.removeClass("updated");
+        }
+      });
+    }, 300);
+  }
+
+  function hitungMax(row) {
+    const bulan = ["Triwulan I", "Triwulan II", "Triwulan III"];
+    const angka = bulan
+      .map((b) => parseFloat(row[b]))
+      .filter((n) => !isNaN(n));
+    return angka.length > 0 ? Math.max(...angka) : "-";
+  }
+
+  function hitungKetercapaian(capaian, target) {
+    const cap = parseFloat(capaian);
+    const tar = parseFloat(target);
+    if (isNaN(cap) || isNaN(tar) || tar === 0) return "-";
+    const persen = (cap / tar) * 100;
+    return persen.toFixed(1) + "%";
+  }
+
+  function renderEditableCell(bulan, id, value) {
+    return `<td class="text-center">
+      <input type="text" class="form-control form-control-sm bulan-input"
+        data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
+        value="${value || ""}" />
+    </td>`;
+  }
+
+  function saveAllData() {
+    const inputs = $(".bulan-input.updated");
+    if (inputs.length === 0) {
+      Swal.fire("Tidak ada perubahan", "Belum ada data yang diubah.", "info");
+      return;
+    }
+
+    Swal.fire({
+      title: "Menyimpan semua...",
+      html: `<div class="text-start">Menyimpan <b>${inputs.length}</b> perubahan...</div>`,
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    let promises = [];
+
+    inputs.each(function () {
+      const input = $(this);
+      const id = input.data("id");
+      const bulan = input.data("bulan");
+      const nilai = input.val().trim();
+
+      if (!/^\d+$/.test(nilai)) {
+        Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
+        return;
+      }
+
+      const url = `${endpoint}?action=update&id=${encodeURIComponent(
+        id
+      )}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(nilai)}`;
+
+      const promise = fetch(url)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            input.removeClass("updated").data("old", nilai);
+
+            const tr = input.closest("tr");
+            const bulanKeys = ["Triwulan I", "Triwulan II", "Triwulan III"];
+            const nilaiBulan = bulanKeys.map((b) =>
+              parseFloat(tr.find(`[data-bulan="${b}"]`).val()) || 0
+            );
+            const capaianBaru = Math.max(...nilaiBulan);
+
+            const capaianURL = `${endpoint}?action=updateCapaian&id=${encodeURIComponent(
+              id
+            )}&value=${encodeURIComponent(capaianBaru)}`;
+            fetch(capaianURL).catch((err) =>
+              console.error("Gagal update capaian max:", err)
             );
 
-            grouped = {};
-            klaster1Data.forEach((row) => {
-              const program = row.Program || "Lainnya";
-              if (!grouped[program]) grouped[program] = [];
-              grouped[program].push(row);
-            });
-
-            if (!grouped[selectedFromURL]) {
-              document.getElementById("tableBody").innerHTML = `
-                <tr><td colspan="22" class="text-danger text-center">Program <strong>${selectedFromURL}</strong> tidak ditemukan.</td></tr>`;
-              return;
-            }
-
-            renderTable(selectedFromURL);
-          })
-          .catch((error) => {
-            document.getElementById("tableBody").innerHTML = `
-              <tr><td colspan="22" class="text-danger text-center">Gagal memuat data.</td></tr>`;
-            console.error("Fetch error:", error);
-          });
-      }
-
-      function renderTable(selectedProgram) {
-        const tableBody = document.getElementById("tableBody");
-
-        // Tampilkan spinner loading
-        tableBody.innerHTML = `
-          <tr id="loadingRow">
-            <td colspan="22" class="text-center py-4">
-              <div class="spinner-border text-success" role="status"></div>
-              <div class="mt-2 text-success fw-semibold">Memuat data...</div>
-            </td>
-          </tr>`;
-
-        setTimeout(() => {
-          let index = 1;
-          const rows = grouped[selectedProgram];
-
-          if (!rows || rows.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="22" class="text-center">Tidak ada data.</td></tr>`;
-            return;
+            tr.find(".capaian").text(capaianBaru);
+            const target = parseFloat(tr.find("td:nth-child(8)").text()) || 0;
+            const ketercapaian =
+              target === 0 ? "-" : ((capaianBaru / target) * 100).toFixed(1) + "%";
+            tr.find(".ketercapaian").text(ketercapaian);
+          } else {
+            throw new Error("Gagal menyimpan: " + res.message);
           }
+        });
 
-          // Bersihkan spinner setelah data ada
-          tableBody.innerHTML = "";
+      promises.push(promise);
+    });
 
-          // Tambahkan judul program
-          tableBody.innerHTML += `<tr style="background-color:#d1e7dd">
-            <td colspan="22"><strong>📌 ${selectedProgram}</strong></td></tr>`;
+    Promise.all(promises)
+      .then(() => {
+        Swal.close();
+        Swal.fire("Berhasil", "Semua perubahan berhasil disimpan.", "success");
+      })
+      .catch((err) => {
+        Swal.close();
+        Swal.fire("Gagal", err.message || "Gagal menyimpan sebagian data", "error");
+      });
+  }
 
-          const jenisMap = {};
-          rows.forEach((row, i) => {
-            const jenis = row["Jenis Variabel"] || "-";
-            if (!jenisMap[jenis]) {
-              jenisMap[jenis] = { startIndex: i, count: 1 };
-            } else {
-              jenisMap[jenis].count++;
-            }
-          });
+  $(document).ready(function () {
+    $("#saveAllBtn").on("click", saveAllData);
+  });
 
-          rows.forEach((row, i) => {
-            const rowId = row["No"];
-            const jenis = row["Jenis Variabel"] || "-";
-            const jenisInfo = jenisMap[jenis];
-            const isFirstRow = jenisInfo.startIndex === i;
+  loadData();
+</script>
 
-            let html = `<tr data-id="${rowId}">`;
-            html += `<td>${index++}</td>`;
-            if (isFirstRow) {
-              html += `<td rowspan="${jenisInfo.count}">${jenis}</td>`;
-            }
-
-            const capaianMax = hitungMax(row);
-            const target = row["Target Nilai Kinerja"];
-            const ketercapaian = hitungKetercapaian(capaianMax, target);
-
-            html += `
-              <td>${row["Definisi Operasional"] || "-"}</td>
-              <td>${row["0"] || "-"}</td>
-              <td>${row["4"] || "-"}</td>
-              <td>${row["7"] || "-"}</td>
-              <td>${row["10"] || "-"}</td>
-              <td>${target || "-"}</td>
-              <td class="capaian">${capaianMax}</td>
-              <td class="ketercapaian">${ketercapaian}</td>
-              ${renderEditableCell("Jan", rowId, row["Jan"])}
-              ${renderEditableCell("Feb", rowId, row["Feb"])}
-              ${renderEditableCell("Mar", rowId, row["Mar"])}
-              ${renderEditableCell("Apr", rowId, row["Apr"])}
-              ${renderEditableCell("Mei", rowId, row["Mei"])}
-              ${renderEditableCell("Juni", rowId, row["Juni"])}
-              ${renderEditableCell("Juli", rowId, row["Juli"])}
-              ${renderEditableCell("Agst", rowId, row["Agst"])}
-              ${renderEditableCell("Sept", rowId, row["Sept"])}
-              ${renderEditableCell("Okt", rowId, row["Okt"])}
-              ${renderEditableCell("Nov", rowId, row["Nov"])}
-              ${renderEditableCell("Des", rowId, row["Des"])}
-            </tr>`;
-
-            tableBody.innerHTML += html;
-
-            // Update nilai capaian ke spreadsheet
-            const url = `${endpoint}?action=updateCapaian&id=${encodeURIComponent(
-              rowId
-            )}&value=${encodeURIComponent(capaianMax)}`;
-            fetch(url).catch((err) =>
-              console.error("Gagal update capaian:", err)
-            );
-          });
-
-          // Bind input listeners (blur) seperti yang sudah kamu punya
-          $(".bulan-input")
-            .off("blur")
-            .on("blur", function () {
-              // ... listener logic tetap sama
-              const input = $(this);
-              const id = input.data("id");
-              const bulan = input.data("bulan");
-              const nilaiBaru = input.val().trim();
-              const nilaiLama = input.data("old");
-
-              if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
-              if (!/^\d+$/.test(nilaiBaru)) {
-                Swal.fire(
-                  "Input tidak valid",
-                  "Masukkan angka saja.",
-                  "warning"
-                );
-                input.val(nilaiLama);
-                return;
-              }
-
-              Swal.fire({
-                title: "Menyimpan...",
-                text: "Sedang mengupdate data...",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading(),
-              });
-
-              const url = `${endpoint}?action=update&id=${encodeURIComponent(
-                id
-              )}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(
-                nilaiBaru
-              )}`;
-
-              fetch(url)
-                .then((res) => res.json())
-                .then((res) => {
-                  Swal.close();
-                  if (res.success) {
-                    Swal.fire({
-                      icon: "success",
-                      title: "Berhasil diperbarui",
-                      timer: 1200,
-                      showConfirmButton: false,
-                    });
-                    input.data("old", nilaiBaru);
-                    input.addClass("updated");
-
-                    const tr = input.closest("tr");
-                    const bulanKeys = [
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "Mei",
-                      "Juni",
-                      "Juli",
-                      "Agst",
-                      "Sept",
-                      "Okt",
-                      "Nov",
-                      "Des",
-                    ];
-                    const nilaiBulan = bulanKeys.map((b) => {
-                      return (
-                        parseFloat(tr.find(`[data-bulan="${b}"]`).val()) || 0
-                      );
-                    });
-                    const capaianBaru = Math.max(...nilaiBulan);
-
-                    const capaianURL = `${endpoint}?action=updateCapaian&id=${encodeURIComponent(
-                      id
-                    )}&value=${encodeURIComponent(capaianBaru)}`;
-                    fetch(capaianURL).catch((err) =>
-                      console.error("Gagal update capaian max:", err)
-                    );
-
-                    tr.find(".capaian").text(capaianBaru);
-                    const target =
-                      parseFloat(tr.find("td:nth-child(8)").text()) || 0;
-                    const ketercapaianBaru =
-                      target === 0
-                        ? "-"
-                        : ((capaianBaru / target) * 100).toFixed(1) + "%";
-                    tr.find(".ketercapaian").text(ketercapaianBaru);
-                  } else {
-                    Swal.fire("Gagal", res.message || "Gagal update", "error");
-                    input.val(nilaiLama);
-                  }
-                })
-                .catch((err) => {
-                  Swal.close();
-                  Swal.fire(
-                    "Gagal",
-                    err.message || "Kesalahan jaringan",
-                    "error"
-                  );
-                  input.val(nilaiLama);
-                });
-            });
-        }, 300); // Delay kecil agar spinner sempat muncul
-      }
-
-      function hitungMax(row) {
-        const bulan = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "Mei",
-          "Juni",
-          "Juli",
-          "Agst",
-          "Sept",
-          "Okt",
-          "Nov",
-          "Des",
-        ];
-        const angka = bulan
-          .map((b) => parseFloat(row[b]))
-          .filter((n) => !isNaN(n));
-        return angka.length > 0 ? Math.max(...angka) : "-";
-      }
-      function hitungKetercapaian(capaian, target) {
-        const cap = parseFloat(capaian);
-        const tar = parseFloat(target);
-        if (isNaN(cap) || isNaN(tar) || tar === 0) return "-";
-        const persen = (cap / tar) * 100;
-        return persen.toFixed(1) + "%";
-      }
-
-      function renderEditableCell(bulan, id, value) {
-        return `<td class="text-center">
-          <input type="text" class="form-control form-control-sm bulan-input"
-            data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
-            value="${value || ""}" />
-        </td>`;
-      }
-
-      loadData();
-    </script>
   </body>
 </html>
