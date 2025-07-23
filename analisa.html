@@ -34,6 +34,32 @@
       .logo {
         max-height: 100px;
       }
+      /* Fix tinggi input Select2 agar sesuai dengan form-select-sm Bootstrap */
+    .select2-container--default .select2-selection--single {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+  border: 1px solid #ced4da;
+}
+
+.select2-container {
+  width: 100% !important;
+  max-width: 300px; /* batasi lebar maksimum */
+  min-width: 150px; /* lebar minimum agar tidak terlalu kecil */
+}
+
+.select2-dropdown {
+  font-size: 0.875rem;
+  max-width: 300px;
+}
+
+.select2-selection__rendered {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
       .table-responsive {
         position: relative;
@@ -123,48 +149,49 @@
             >
           </div>
 
-          <div class="mb-3">
-            <label for="bulanSelect" class="form-label fw-bold"
-              >Pilih Bulan:</label
-            >
-            <select
-              id="bulanSelect"
-              class="form-select form-select-sm"
-              style="max-width: 200px"
-            >
-              <option value="Juli">Semua Bulan</option>
-              <!-- default tampil semua bulan dengan bulan ini = "Juli" -->
-              <option value="Jan">Januari</option>
-              <option value="Feb">Februari</option>
-              <option value="Mar">Maret</option>
-              <option value="Apr">April</option>
-              <option value="Mei">Mei</option>
-              <option value="Juni">Juni</option>
-              <option value="Juli">Juli</option>
-              <option value="Agst">Agustus</option>
-              <option value="Sept">September</option>
-              <option value="Okt">Oktober</option>
-              <option value="Nov">November</option>
-              <option value="Des">Desember</option>
-            </select>
-          </div>
-          <!-- Filter kategori -->
-          <div class="mb-3">
-            <label for="kategoriSelect" class="form-label fw-bold"
-              >Pilih kategori:</label
-            >
-            <select
-              id="kategoriSelect"
-              class="form-select form-select-sm"
-              style="max-width: 300px"
-            >
-              <option value="Semua">Semua kategori</option>
-            </select>
-          </div>
+      <div class="row align-items-end mb-3">
+        <!-- Pilih Bulan -->
+        <div class="col-md-3 col-sm-6 mb-2">
+          <label for="bulanSelect" class="form-label fw-bold">Pilih Bulan:</label>
+          <select
+            id="bulanSelect"
+            class="form-select-sm select2"
+            style="max-width: 200px"
+          >
+            <option value="Juli">Semua Bulan</option>
+            <option value="Jan">Januari</option>
+            <option value="Feb">Februari</option>
+            <option value="Mar">Maret</option>
+            <option value="Apr">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agst">Agustus</option>
+            <option value="Sept">September</option>
+            <option value="Okt">Oktober</option>
+            <option value="Nov">November</option>
+            <option value="Des">Desember</option>
+          </select>
+        </div>
 
+        <!-- Pilih Kategori -->
+        <div class="col-md-4 col-sm-6 mb-2">
+          <label for="kategoriSelect" class="form-label fw-bold">Pilih Kategori:</label>
+          <select
+            id="kategoriSelect"
+            class="form-select select2"
+            style="max-width: 300px"
+          >
+            <option value="Semua">Semua kategori</option>
+            <!-- Kategori lainnya akan ditambahkan lewat JavaScript -->
+          </select>
+        </div>
+      </div>
+
+      
           <div class="text-end mt-3 mb-2">
-            <button class="btn btn-success" id="simpanMasalah">
-              Simpan Perubahan
+            <button class="btn btn-outline-success btn-sm shadow" id="simpanMasalah">
+              💽 Simpan Perubahan
             </button>
           </div>
 
@@ -214,8 +241,16 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
+      $(document).ready(function() {
+  $('.select2').select2({
+    dropdownAutoWidth: false,
+    width: '100%' // penting!
+  });
+});
       const endpoint =
         "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
 
