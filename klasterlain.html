@@ -120,7 +120,7 @@
                 <tr>
                   <th rowspan="2">No</th>
                   <th rowspan="2" width="60px" >Klaster</th>
-                  <th rowspan="2" width="90px" >Kegiatan</th>
+                  <th rowspan="2" style="width:80px;" >Kegiatan</th>
                   <th rowspan="2" width="90px">Indikator Kerja</th>
                   <th rowspan="2" width="80px" class="text-wrap">Target Tahun 2025 (dalam %)</th>
                   <th rowspan="2">Satuan Sasaran</th>
@@ -167,7 +167,7 @@
     <script>
       const endpoint =
         "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
-
+      let rows = []; // ✅ Tambahkan ini
       const tableBody = document.getElementById("tableBody");
 
       const bulanKeys = [
@@ -277,7 +277,7 @@
           });
         }
 
-
+        
       function updateDerivedColumns(row) {
         const bulanInputs = row.querySelectorAll("input[data-bulan]");
         let totalBulan = 0;
@@ -347,8 +347,19 @@
               let html = `
                 <td>${index++}</td>
                 <td>${row["Klaster"] || "-"}</td>
-                <td>${row["Kegiatan"] || "-"}</td>
-                <td>${row["Indikator Kerja"] || "-"}</td>
+                <td width="60px">${row["Kegiatan"] || "-"}</td>
+                <td>
+        <div class="d-flex justify-content-between align-items-start flex-column h-100">
+          <div>${row["Indikator Kerja"] || "-"}</div>
+          <div class="mt-1 ms-auto">
+            <button class="btn btn-xs btn-outline-secondary btn-sm py-0 px-1 me-1 show-info-btn" data-type="DO" data-id="${row["No"]}">DO</button>
+            <button class="btn btn-xs btn-outline-info btn-sm py-0 px-1 show-info-btn" data-type="Cara Penghitungan" data-id="${row["No"]}">Cara</button>
+          </div>
+        </div>
+      </td>
+
+
+
                 <td>${
                   isNaN(parseFloat(row["Target 2025"]))
                     ? "-"
@@ -399,6 +410,7 @@
         fetch(endpoint)
           .then((res) => res.json())
           .then((data) => {
+            rows = data; // ✅ simpan semua data
             const filtered = data.filter(
               (item) => item.kategori === selectedFromURL
             );
@@ -423,5 +435,45 @@ if (kategoriParam) {
       // Load data on page load
       loadData();
     </script>
+
+   
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT: letakkan di bawah semua konten -->
+<script>
+ document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("show-info-btn")) {
+    const type = e.target.dataset.type;
+    const id = e.target.dataset.id;
+
+    const row = rows.find((r) => String(r["No"]) === String(id)); // <= Perbaikan disini
+
+    if (!row) return;
+
+    const content = type === "DO" ? row["DO"] : row["Cara Penghitungan"];
+    document.getElementById("modalContent").innerHTML = content || "<em>Belum ada data</em>";
+    document.getElementById("infoModalLabel").textContent = `${type} - No ${id}`;
+
+    const modal = new bootstrap.Modal(document.getElementById("infoModal"));
+    modal.show();
+  }
+});
+
+</script>
+
+
   </body>
 </html>
