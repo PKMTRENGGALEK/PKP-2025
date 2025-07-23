@@ -1,367 +1,351 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Detail Klaster</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Klaster</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Select2 -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <style>
-    body {
-      background: #f0f4f5;
-      font-family: "Segoe UI", sans-serif;
-    }
+    <style>
+      body {
+        background: #f0f4f5;
+        font-family: "Segoe UI", sans-serif;
+      }
 
-    .logo {
-      max-height: 100px;
-    }
+      .logo {
+        max-height: 100px;
+      }
 
-    .table-responsive {
-      position: relative;
-      max-height: 75vh;
-      overflow: auto;
-    }
+      .table-responsive {
+        position: relative;
+        max-height: 75vh;
+        overflow: auto;
+      }
 
-    .table th, .table thead th {
-      background-color: #198754 !important;
-      color: white !important;
-      font-size: 0.72rem;
-      text-align: center;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
+      .table th,
+      .table thead th {
+        background-color: #198754 !important;
+        color: white !important;
+        font-size: 0.72rem;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
 
-    .table td {
-      font-size: 0.72rem;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
+      .table td {
+        font-size: 0.72rem;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
 
-    /* Sticky headers */
-    .table thead tr:nth-child(1) th {
-      position: sticky;
-      top: 0;
-      z-index: 3;
-    }
+      /* Sticky headers */
+      .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+      }
 
-    .table thead tr:nth-child(2) th {
-      position: sticky;
-      top: 34px;
-      z-index: 2;
-    }
+      .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 34px;
+        z-index: 2;
+      }
 
-    .bulan-input {
-      width: 45px;
-      font-size: 0.72rem;
-      text-align: center;
-    }
+      .bulan-input {
+        width: 45px;
+        font-size: 0.72rem;
+        text-align: center;
+      }
 
-    .updated {
-      background-color: #d1e7dd !important;
-    }
-  </style>
-</head>
+      .updated {
+        background-color: #d1e7dd !important;
+      }
+      th.indikator-col,
+      td.indikator-col {
+        max-width: 200px; /* Ubah sesuai kebutuhan, misalnya 150px */
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-word;
+      }
+    </style>
+  </head>
 
-<body>
-  <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
-    <div class="card shadow-sm border-0">
-      <div class="card-body">
-        <div class="text-center mb-4">
-          <h4 class="fw-bold mb-0">Detail Program</h4>
-        </div>
+  <body>
+    <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <h4 class="fw-bold mb-0">
+              IDENTIFIKASI MASALAH HASIL CAPAIAN UKM TAHUN 2025
+            </h4>
+          </div>
 
-        <div class="d-flex justify-content-start mb-3">
-          <a href="index.html" class="btn btn-outline-success shadow-sm">⬅️ Kembali</a>
-        </div>
+          <div class="d-flex justify-content-start mb-3">
+            <a href="index.html" class="btn btn-outline-success shadow-sm"
+              >⬅️ Kembali</a
+            >
+          </div>
 
-        <div class="mb-3">
-          <label for="bulanSelect" class="form-label fw-bold">Pilih Bulan:</label>
-          <select id="bulanSelect" class="form-select form-select-sm" style="max-width: 200px;">
-            <option value="all">Semua Bulan</option>
-            <option value="Jan">Januari</option>
-            <option value="Feb">Februari</option>
-            <option value="Mar">Maret</option>
-            <option value="Apr">April</option>
-            <option value="Mei">Mei</option>
-            <option value="Juni">Juni</option>
-            <option value="Juli">Juli</option>
-            <option value="Agst">Agustus</option>
-            <option value="Sept">September</option>
-            <option value="Okt">Oktober</option>
-            <option value="Nov">November</option>
-            <option value="Des">Desember</option>
-          </select>
-        </div>
+          <div class="mb-3">
+            <label for="bulanSelect" class="form-label fw-bold"
+              >Pilih Bulan:</label
+            >
+            <select
+              id="bulanSelect"
+              class="form-select form-select-sm"
+              style="max-width: 200px"
+            >
+              <option value="Juli">Semua Bulan</option>
+              <!-- default tampil semua bulan dengan bulan ini = "Juli" -->
+              <option value="Jan">Januari</option>
+              <option value="Feb">Februari</option>
+              <option value="Mar">Maret</option>
+              <option value="Apr">April</option>
+              <option value="Mei">Mei</option>
+              <option value="Juni">Juni</option>
+              <option value="Juli">Juli</option>
+              <option value="Agst">Agustus</option>
+              <option value="Sept">September</option>
+              <option value="Okt">Oktober</option>
+              <option value="Nov">November</option>
+              <option value="Des">Desember</option>
+            </select>
+          </div>
 
-        <div class="table-responsive" style="font-size: 11px">
-          <table class="table table-bordered table-striped align-middle" id="programTable">
-            <thead class="table-success text-center align-middle">
-              <tr>
-                <th rowspan="2">No</th>
-                <th rowspan="2" style="min-width: 80px">Program</th>
-                <th rowspan="2" style="min-width: 120px">Kegiatan</th>
-                <th rowspan="2" style="min-width: 250px">Indikator Kerja</th>
-                <th rowspan="2">Target Tahun 2025 (dalam %)</th>
-                <th rowspan="2">Satuan Sasaran</th>
-                <th rowspan="2">Total Sasaran</th>
-                <th rowspan="2">Target Sasaran</th>
-                <th rowspan="2">Pencapaian (dalam satuan sasaran)</th>
-                <th rowspan="2">% Cakupan Rill</th>
-                <th rowspan="2">Ketercapaian Target Tahun N</th>
-                <th colspan="12" id="labelCapaian">Capaian Kegiatan Program</th>
-              </tr>
-              <tr class="text-center">
-                <th data-bulan="Jan">Jan</th>
-                <th data-bulan="Feb">Feb</th>
-                <th data-bulan="Mar">Mar</th>
-                <th data-bulan="Apr">Apr</th>
-                <th data-bulan="Mei">Mei</th>
-                <th data-bulan="Juni">Juni</th>
-                <th data-bulan="Juli">Juli</th>
-                <th data-bulan="Agst">Agst</th>
-                <th data-bulan="Sept">Sept</th>
-                <th data-bulan="Okt">Okt</th>
-                <th data-bulan="Nov">Nov</th>
-                <th data-bulan="Des">Des</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <tr>
-                <td colspan="25" class="text-center">Memuat data...</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive" style="font-size: 11px">
+            <table
+              class="table table-bordered table-striped align-middle"
+              id="programTable"
+            >
+              <thead class="table-success text-center align-middle">
+                <tr>
+                  <th rowspan="2">No</th>
+                  <th rowspan="2" class="indikator-col">Indikator Kerja</th>
+                  <th colspan="2">Bulan</th>
+                  <th rowspan="2">% Target s/d Bulan ....</th>
+                  <th rowspan="2">% % CAKUPAN s/d Bulan .....</th>
+                  <th rowspan="2" id="kesenjangan">% Kesenjangan</th>
+                  <th rowspan="2" id="Tren">TREN</th>
+                  <th rowspan="2">Analisa Masalah</th>
+                </tr>
+                <tr>
+                  <th>Bulan Lalu</th>
+                  <th>Bulan Ini</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <td colspan="25" class="text-center">Memuat data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+      const endpoint =
+        "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
 
-<script>
-  const endpoint = "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
+      let originalData = [];
 
-  const tableBody = document.getElementById("tableBody");
-  const bulanKeys = ["Jan", "Feb", "Mar", "Apr", "Mei", "Juni", "Juli", "Agst", "Sept", "Okt", "Nov", "Des"];
+      const bulanKeys = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agst",
+        "Sept",
+        "Okt",
+        "Nov",
+        "Des",
+      ];
 
-  function renderEditableCell(bulan, id, value) {
-    return `
-      <td class="text-center" data-bulan="${bulan}">
-        <input type="text" class="form-control form-control-sm bulan-input"
-               data-bulan="${bulan}" data-id="${id}" data-old="${value || ""}"
-               value="${value || ""}" />
-      </td>`;
-  }
+      const labelMap = {
+        Jan: "Januari",
+        Feb: "Februari",
+        Mar: "Maret",
+        Apr: "April",
+        Mei: "Mei",
+        Juni: "Juni",
+        Juli: "Juli",
+        Agst: "Agustus",
+        Sept: "September",
+        Okt: "Oktober",
+        Nov: "November",
+        Des: "Desember",
+      };
 
-  function bindInputEvents() {
-    $(".bulan-input").off("blur").on("blur", function () {
-      const input = $(this);
-      const id = input.data("id");
-      const field = input.data("field") || input.data("bulan");
-      const nilaiBaru = input.val().trim();
-      const nilaiLama = input.data("old");
+      const masalahMap = {
+        Januari: "Masalah_Jan",
+        Februari: "Masalah_Feb",
+        Maret: "Masalah_Mar",
+        April: "Masalah_Apr",
+        Mei: "Masalah_Mei",
+        Juni: "Masalah_Jun",
+        Juli: "Masalah_Jul",
+        Agustus: "Masalah_Agu",
+        September: "Masalah_Sep",
+        Oktober: "Masalah_Okt",
+        November: "Masalah_Nov",
+        Desember: "Masalah_Des",
+      };
 
-      if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
+      let selectedBulan = "Juli";
 
-      if (!/^\d+$/.test(nilaiBaru)) {
-        Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
-        input.val(nilaiLama);
-        return;
-      }
+      window.onload = function () {
+        fetch(endpoint)
+          .then((res) => res.json())
+          .then((data) => {
+            originalData = data;
+            renderTable(originalData, selectedBulan);
+          })
+          .catch((err) => {
+            document.getElementById("tableBody").innerHTML =
+              "<tr><td colspan='25' class='text-center text-danger'>Gagal memuat data</td></tr>";
+            console.error("Fetch error:", err);
+          });
+      };
 
-      Swal.fire({
-        title: "Menyimpan...",
-        text: "Sedang mengupdate data...",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
+      function renderTable(data, bulan) {
+        const tbody = document.getElementById("tableBody");
 
-      const url = `${endpoint}?action=update&id=${encodeURIComponent(id)}&field=${encodeURIComponent(field)}&nilai=${encodeURIComponent(nilaiBaru)}`;
-
-      fetch(url)
-        .then(res => res.json())
-        .then(res => {
-          Swal.close();
-          if (res.success) {
-            Swal.fire({
-              icon: "success",
-              title: "Berhasil diperbarui",
-              timer: 1200,
-              showConfirmButton: false,
-            });
-
-            input.data("old", nilaiBaru);
-            input.addClass("updated");
-
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row && (field === "Total Sasaran" || bulanKeys.includes(field))) {
-              updateDerivedColumns(row);
-            }
-          } else {
-            Swal.fire("Gagal", res.message || "Gagal update", "error");
-            input.val(nilaiLama);
-          }
-        })
-        .catch(err => {
-          Swal.close();
-          Swal.fire("Gagal", err.message || "Kesalahan jaringan", "error");
-          input.val(nilaiLama);
-        });
-    });
-  }
-
-  function updateDerivedColumns(row) {
-    const bulanInputs = row.querySelectorAll('input[data-bulan]');
-    let totalBulan = 0;
-
-    bulanInputs.forEach(input => {
-      const val = parseInt(input.value);
-      if (!isNaN(val)) totalBulan += val;
-    });
-
-    const totalSasaranInput = row.querySelector('input[data-field="Total Sasaran"]');
-    const totalSasaran = totalSasaranInput ? parseInt(totalSasaranInput.value) : 0;
-
-    const cakupanCell = row.cells[9];
-    const capaianCell = row.cells[10];
-
-    if (cakupanCell && totalSasaran) {
-      const cakupan = ((totalBulan / totalSasaran) * 100).toFixed(2) + "%";
-      cakupanCell.textContent = cakupan;
-    }
-
-    if (capaianCell && totalSasaran) {
-      const targetTahun = parseFloat(row.cells[4].textContent.replace("%", ""));
-      const realisasi = (totalBulan / totalSasaran) * 100;
-      const status = realisasi >= targetTahun ? "Tercapai" : "Belum Tercapai";
-      capaianCell.textContent = status;
-    }
-  }
-
-  function renderTable(rows) {
-    const fragment = document.createDocumentFragment();
-    const grouped = {};
-
-    rows.forEach(row => {
-      const induk = row["Klaster"] || "Lainnya";
-      const sub = row["Sub"] || "Lainnya";
-      grouped[induk] = grouped[induk] || {};
-      grouped[induk][sub] = grouped[induk][sub] || [];
-      grouped[induk][sub].push(row);
-    });
-
-    let index = 1;
-
-    for (const induk in grouped) {
-      const indukRow = document.createElement("tr");
-      indukRow.style.backgroundColor = "#f8d7da";
-      indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger">${induk}</td>`;
-      fragment.appendChild(indukRow);
-
-      for (const sub in grouped[induk]) {
-        const subRow = document.createElement("tr");
-        subRow.style.backgroundColor = "#cff4fc";
-        subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3">${sub}</td>`;
-        fragment.appendChild(subRow);
-
-        for (const row of grouped[induk][sub]) {
-          const rowId = row["No"];
-          const tr = document.createElement("tr");
-          tr.dataset.id = rowId;
-
-          let html = `
-            <td>${index++}</td>
-            <td>${row["kategori"] || "-"}</td>
-            <td>${row["Kegiatan"] || "-"}</td>
-            <td>${row["Indikator Kerja"] || "-"}</td>`;
-
-          const targetValue = parseFloat(row["Target 2025"]);
-          html += `<td>${isNaN(targetValue) ? "-" : Math.round(targetValue * 100) + "%"}</td>`;
-
-          html += `
-            <td>${row["Satuan Sasaran"] || "-"}</td>
-            <td class="text-center">
-              <input type="text" class="form-control form-control-sm bulan-input"
-                     data-field="Total Sasaran" data-id="${rowId}" data-old="${row["Total Sasaran"] || ""}"
-                     value="${row["Total Sasaran"] || ""}" />
-            </td>
-            <td>${row["Target Sasaran"] || "-"}</td>
-            <td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>
-            <td>${row["% Cakupan Rill"] || "-"}</td>
-            <td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
-
-          for (const bulan of bulanKeys) {
-            html += renderEditableCell(bulan, rowId, row[bulan]);
-          }
-
-          tr.innerHTML = html;
-          fragment.appendChild(tr);
+        if (!data || data.length === 0) {
+          tbody.innerHTML =
+            "<tr><td colspan='25' class='text-center'>Tidak ada data tersedia.</td></tr>";
+          return;
         }
+
+        const idx = bulanKeys.indexOf(bulan);
+        const bulanIniKey = bulanKeys[idx];
+        const bulanLaluKey = bulanKeys[idx - 1] || null;
+
+        // Header kolom bulan
+        document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
+          bulanLaluKey ? labelMap[bulanLaluKey] : "-";
+        document.querySelectorAll("thead tr:nth-child(2) th")[1].innerText =
+          labelMap[bulanIniKey];
+
+        const labelBulan = labelMap[bulanIniKey];
+        const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
+
+        let grouped = {};
+        data.forEach((row) => {
+          const sub = row.Sub || "Tanpa Sub";
+          if (!grouped[sub]) grouped[sub] = [];
+          grouped[sub].push(row);
+        });
+
+        let rows = "";
+        let counter = 1;
+
+        for (let sub in grouped) {
+          const rowsInSub = grouped[sub];
+          const program = rowsInSub[0].Induk || "";
+
+          rows += `
+            <tr>
+              <td colspan="9" class="fw-bold text-danger" style="background-color: #f8d7da;">
+                ${program}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="9" class="fw-semibold text-primary" style="background-color: #e2e3f3;">
+                ${sub}
+              </td>
+            </tr>
+          `;
+
+          rowsInSub.forEach((row) => {
+            const indikator = row["Indikator Kerja"] || "-";
+            const bulanIniVal = parseFloat(row[bulanIniKey]);
+            let bulanLaluVal;
+
+            // Jika bulan Januari, anggap bulan sebelumnya = 0
+            if (bulan === "Jan") {
+              bulanLaluVal = 0;
+            } else {
+              bulanLaluVal = bulanLaluKey ? parseFloat(row[bulanLaluKey]) : NaN;
+            }
+
+            const targetSD = row["Ketercapaian Target Tahun N"] || "-";
+            const capaianSD = row["% Cakupan Rill"] || "-";
+            const masalahBulanIni = row[kolomMasalah] || "";
+
+            // GAP dan TREN
+            let gap = "-";
+            let tren = "➡️";
+            let trenClass = "";
+
+            if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+              const selisih = (bulanIniVal - bulanLaluVal).toFixed(2);
+              gap = `${selisih > 0 ? "+" : ""}${selisih}`;
+
+              if (selisih > 0) {
+                tren = "⬆️";
+                trenClass = "bg-success text-white";
+              } else if (selisih < 0) {
+                tren = "⬇️";
+                trenClass = "bg-danger text-white";
+              }
+            }
+
+            rows += `
+              <tr>
+                <td class="text-center">${counter++}</td>
+                <td class="indikator-col text-wrap" style="max-width: 300px;" title="${indikator}">
+                  ${indikator}
+                </td>
+                <td>${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
+                <td>${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
+                <td>${targetSD}</td>
+                <td>${capaianSD}</td>
+                <td class="text-center">${gap}</td>
+                <td class="text-center ${trenClass}">${tren}</td>
+                <td><textarea class="form-control form-control-sm" rows="2" style="min-width: 200px">${masalahBulanIni}</textarea></td>
+              </tr>
+            `;
+          });
+        }
+
+        tbody.innerHTML = rows;
       }
-    }
 
-    tableBody.innerHTML = "";
-    tableBody.appendChild(fragment);
-    bindInputEvents();
-
-    // Setelah render, sembunyikan bulan selain Januari
-    applyBulanFilter("Jan");
-    document.getElementById("bulanSelect").value = "Jan";
-  }
-
-  function loadData() {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="25" class="text-center py-4">
-          <div class="spinner-border text-success" role="status"></div>
-          <div class="mt-2 text-success fw-semibold">Memuat data...</div>
-        </td>
-      </tr>`;
-
-    fetch(endpoint)
-      .then(res => res.json())
-      .then(data => renderTable(data))
-      .catch(error => {
-        console.error("Fetch error:", error);
-        tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
-      });
-  }
-
-  function applyBulanFilter(selectedBulan) {
-    document.querySelectorAll("td[data-bulan], th[data-bulan]").forEach(cell => {
-      const bulan = cell.getAttribute("data-bulan");
-      cell.style.display = (selectedBulan === "all" || bulan === selectedBulan) ? "" : "none";
-    });
-
-    const labelCapaian = document.getElementById("labelCapaian");
-    if (labelCapaian) {
-      labelCapaian.colSpan = selectedBulan === "all" ? 12 : 1;
-    }
-  }
-
-  // Event dropdown filter
-  document.getElementById("bulanSelect").addEventListener("change", function () {
-    applyBulanFilter(this.value);
-  });
-
-  // Inisialisasi saat halaman dimuat
-  loadData();
-</script>
-
-
-
+      document
+        .getElementById("bulanSelect")
+        .addEventListener("change", function () {
+          const bulan = this.value;
+          if (bulanKeys.includes(bulan)) {
+            selectedBulan = bulan;
+            renderTable(originalData, bulan);
+          }
+        });
+    </script>
   </body>
 </html>
