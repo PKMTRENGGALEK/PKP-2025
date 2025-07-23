@@ -85,6 +85,24 @@
         word-wrap: break-word;
         word-break: break-word;
       }
+
+      .grade-cell {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+      }
+      .grade-biru {
+        background-color: #007bff;
+      } /* Biru */
+      .grade-hijau {
+        background-color: #28a745;
+      } /* Hijau */
+      .grade-kuning {
+        background-color: #ffc107;
+      } /* Kuning */
+      .grade-merah {
+        background-color: #dc3545;
+      } /* Merah */
     </style>
   </head>
 
@@ -146,6 +164,7 @@
                   </th>
                   <th rowspan="2" id="kesenjangan">% Kesenjangan</th>
                   <th rowspan="2" id="Tren">TREN</th>
+                  <th rowspan="2">GRADE</th>
                   <th rowspan="2">Analisa Masalah</th>
                 </tr>
                 <tr>
@@ -280,12 +299,12 @@
 
           rows += `
             <tr>
-              <td colspan="10" class="fw-bold text-danger" style="background-color: #f8d7da;">
+              <td colspan="11" class="fw-bold text-danger" style="background-color: #f8d7da;">
                 ${program}
               </td>
             </tr>
             <tr>
-              <td colspan="10" class="fw-semibold text-primary" style="background-color: #e2e3f3;">
+              <td colspan="11" class="fw-semibold text-primary" style="background-color: #e2e3f3;">
                 ${sub}
               </td>
             </tr>
@@ -323,9 +342,9 @@
               ? ((totalCapaian / targetTahun) * 100).toFixed(2)
               : "-";
 
-            const capaianSD = row["% Cakupan Rill"] || "-";
             const masalahBulanIni = row[kolomMasalah] || "";
 
+            // GAP & TREN
             let gap = "-";
             let tren = "➡️";
             let trenClass = "";
@@ -343,7 +362,37 @@
               }
             }
 
+            // --- GRADE LOGIC ---
+            let grade = "-";
+            if (
+              !isNaN(bulanIniVal) &&
+              !isNaN(bulanLaluVal) &&
+              !isNaN(cakupanSD) &&
+              !isNaN(targetSD)
+            ) {
+              const capaianNaik = bulanIniVal > bulanLaluVal;
+              const capaianTurun = bulanIniVal < bulanLaluVal;
+              const capaianSama = bulanIniVal === bulanLaluVal;
+              const kumulatifCukup =
+                parseFloat(cakupanSD) >= parseFloat(targetSD);
+
+              if ((capaianNaik || capaianSama) && kumulatifCukup) {
+                grade =
+                  "BIRU : jika Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif diatas target atau";
+              } else if (capaianTurun && kumulatifCukup) {
+                grade =
+                  "HIJAU : jika Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif diatas target";
+              } else if (capaianNaik && !kumulatifCukup) {
+                grade =
+                  "KUNING : jika Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif dibawah target";
+              } else if ((capaianTurun || capaianSama) && !kumulatifCukup) {
+                grade =
+                  "MERAH : jika Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif dibawah target atau";
+              }
+            }
+
             rows += `
+
               <tr>
                 <td class="text-center">${counter++}</td>
                 <td class="indikator-col text-wrap" style="max-width: 300px;" title="${indikator}">
@@ -355,11 +404,11 @@
                 <td>${cakupanSD}</td>
                 <td class="text-center">${gap}</td>
                 <td class="text-center ${trenClass}">${tren}</td>
+                <td class="text-center">${grade}</td>
                 <td>
                   <textarea class="form-control form-control-sm" rows="2" style="min-width: 200px">
-    ${masalahBulanIni}</textarea>
+      ${masalahBulanIni}</textarea>
                 </td>
-                
               </tr>
             `;
           });
@@ -367,7 +416,17 @@
 
         tbody.innerHTML = rows;
       }
-
+      function getGrade(capaianBulanIni, capaianBulanLalu, kumulatif, target) {
+        const diAtasTarget = kumulatif >= target;
+        if (capaianBulanIni > capaianBulanLalu && diAtasTarget) return "biru";
+        if (capaianBulanIni === capaianBulanLalu && diAtasTarget) return "biru";
+        if (capaianBulanIni < capaianBulanLalu && diAtasTarget) return "hijau";
+        if (capaianBulanIni > capaianBulanLalu && !diAtasTarget)
+          return "kuning";
+        if (capaianBulanIni <= capaianBulanLalu && !diAtasTarget)
+          return "merah";
+        return ""; // fallback
+      }
       document
         .getElementById("bulanSelect")
         .addEventListener("change", function () {
