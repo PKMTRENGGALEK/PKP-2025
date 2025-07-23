@@ -86,23 +86,22 @@
         word-break: break-word;
       }
 
-      .grade-cell {
-        width: 40px;
-        height: 40px;
-        border-radius: 6px;
+      .bg-biru {
+        background-color: #2196f3;
+        color: white;
       }
-      .grade-biru {
-        background-color: #007bff;
-      } /* Biru */
-      .grade-hijau {
-        background-color: #28a745;
-      } /* Hijau */
-      .grade-kuning {
-        background-color: #ffc107;
-      } /* Kuning */
-      .grade-merah {
-        background-color: #dc3545;
-      } /* Merah */
+      .bg-hijau {
+        background-color: #4caf50;
+        color: white;
+      }
+      .bg-kuning {
+        background-color: #ffeb3b;
+        color: black;
+      }
+      .bg-merah {
+        background-color: #f44336;
+        color: white;
+      }
     </style>
   </head>
 
@@ -364,6 +363,9 @@
 
             // --- GRADE LOGIC ---
             let grade = "-";
+            let gradeDesc = "";
+            let gradeClass = ""; // ini untuk kelas warna
+
             if (
               !isNaN(bulanIniVal) &&
               !isNaN(bulanLaluVal) &&
@@ -377,17 +379,25 @@
                 parseFloat(cakupanSD) >= parseFloat(targetSD);
 
               if ((capaianNaik || capaianSama) && kumulatifCukup) {
-                grade =
-                  "BIRU : jika Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif diatas target atau";
+                grade = "BIRU";
+                gradeDesc =
+                  "Capaian Bulan ini lebih besar dari atau sama dengan bulan lalu dan kumulatif di atas target";
+                gradeClass = "bg-biru";
               } else if (capaianTurun && kumulatifCukup) {
-                grade =
-                  "HIJAU : jika Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif diatas target";
+                grade = "HIJAU";
+                gradeDesc =
+                  "Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif di atas target";
+                gradeClass = "bg-hijau";
               } else if (capaianNaik && !kumulatifCukup) {
-                grade =
-                  "KUNING : jika Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif dibawah target";
+                grade = "KUNING";
+                gradeDesc =
+                  "Capaian Bulan ini lebih besar dari bulan lalu dan kumulatif di bawah target";
+                gradeClass = "bg-kuning";
               } else if ((capaianTurun || capaianSama) && !kumulatifCukup) {
-                grade =
-                  "MERAH : jika Capaian Bulan ini lebih kecil dari bulan lalu dan kumulatif dibawah target atau";
+                grade = "MERAH";
+                gradeDesc =
+                  "Capaian Bulan ini lebih kecil dari atau sama dengan bulan lalu dan kumulatif di bawah target";
+                gradeClass = "bg-merah";
               }
             }
 
@@ -404,7 +414,7 @@
                 <td>${cakupanSD}</td>
                 <td class="text-center">${gap}</td>
                 <td class="text-center ${trenClass}">${tren}</td>
-                <td class="text-center">${grade}</td>
+                <td class="${gradeClass}">${grade}</td>
                 <td>
                   <textarea class="form-control form-control-sm" rows="2" style="min-width: 200px">
       ${masalahBulanIni}</textarea>
