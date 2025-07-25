@@ -241,9 +241,12 @@
                   title: `${successCount} data berhasil disimpan`,
                   showConfirmButton: false,
                   timer: 1500,
+                }).then(() => {
+                  location.reload(); // reload halaman setelah notifikasi
                 });
                 return;
               }
+
 
               const { id, field, value, input } = updates.shift();
 
