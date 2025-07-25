@@ -318,7 +318,8 @@
               let html = `
         <td>${index++}</td>
         <td width="60px">${row["Indikator Utama"] || "-"}</td>
-        <td width="60px">${row["Target Tahunan"] || "-"}</td>
+        <td width="60px">${row["Target Tahunan"] != null ? (row["Target Tahunan"] * 100).toFixed(0) + "%" : "-"}</td>
+
         <td width="60px">${row["Sasaran Tahunan"] || "-"}</td>
         <td>${row["Sasaran Bulanan"] || "-"}</td>`;
 
