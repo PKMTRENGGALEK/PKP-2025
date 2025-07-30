@@ -24,13 +24,24 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
       body {
         background: #f0f4f5;
         font-family: "Segoe UI", sans-serif;
       }
+      @media print {
+    #ttd-section {
+      display: block;
+      page-break-before: always; /* jika ingin pindah ke halaman baru */
+    }
+  }
 
+  @media screen {
+    #ttd-section {
+      display: none;
+    }
+  }
       .logo {
         max-height: 100px;
       }
@@ -167,13 +178,18 @@
               Simpan Perubahan
             </button>
           </div>
-
+          <div class="text-end mb-3">
+  <button id="btnPrint" class="btn btn-danger">
+    🖨️ Cetak PDF
+  </button>
+</div>
           <!-- <div class="table-responsive" style="font-size: 11px">
             <table
               class="table table-bordered table-striped align-middle"
               id="programTable"
             > -->
-        <div class="table-responsive">
+<div id="printArea"></div>
+  <div class="table-responsive">
   <table class="table table-bordered table-striped table-hover align-middle text-nowrap" id="programTable">
     <!-- thead dan tbody kamu -->
 
@@ -206,7 +222,22 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+            <div id="ttd-section" class="mt-5">
+              <div class="row text-center" style="font-size: 0.9rem;">
+                <div class="col-6">
+                  <p class="mb-5">Pelaksana,</p>
+                  <br><br><br>
+                  <p class="fw-bold text-decoration-underline">..........................................</p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-5">Mengetahui,<br>Penanggung Jawab</p>
+                  <br><br><br>
+                  <p class="fw-bold text-decoration-underline">..........................................</p>
+                </div>
+              </div>
+            </div>
+    </div>
+</div>
           <div class="mb-3 mt-2">
   <h6 class="fw-bold">Keterangan Warna Grade:</h6>
   <ul class="list-unstyled" style="font-size: 10px;">
@@ -799,6 +830,35 @@ hasilAreas.forEach((textarea) => {
     });
   });
 
+</script>
+<script>
+  document.getElementById("btnPrint").addEventListener("click", function () {
+    const printContent = document.createElement("div");
+
+    const tableClone = document.querySelector(".table-responsive").cloneNode(true);
+    const ttdClone = document.getElementById("ttd-section").cloneNode(true);
+
+    printContent.appendChild(tableClone);
+    printContent.appendChild(ttdClone);
+
+    const opt = {
+      margin: 0.5,
+      filename: `Analisa_PKP_${new Date().toISOString().split("T")[0]}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+      },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "landscape",
+      },
+    };
+
+    html2pdf().set(opt).from(printContent).save();
+  });
 </script>
 
   </body>
