@@ -5,21 +5,67 @@
   <title>Login dengan Google</title>
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
 
   <style>
-    #content { display: none; text-align: center; }
-    #loginDiv { text-align: center; margin-top: 50px; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #a8e063, #56ab2f);
+      color: #333;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #loginDiv, #content {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+
+    #loginDiv img {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    #content {
+      display: none;
+    }
+
+    .bg-illustration {
+      position: absolute;
+      top: -50px;
+      right: -60px;
+      width: 200px;
+      opacity: 0.2;
+    }
   </style>
 </head>
 <body>
   <div id="loginDiv">
+    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Ilustrasi Kesehatan" />
     <h2>Login untuk mengakses PKP 2025</h2>
+
     <div id="g_id_onload"
          data-client_id="159159886422-e3ccfmj01e46qc5rtmubk21fhe3ocjam.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
          data-auto_prompt="false">
     </div>
     <div class="g_id_signin" data-type="standard"></div>
+
+    <img class="bg-illustration" src="https://cdn.dribbble.com/users/1467981/screenshots/16585509/media/90af5c7d6b5fc2a9727cbdb8f6fdfb5d.gif" alt="Ilustrasi Kesehatan" />
   </div>
 
   <div id="content">
@@ -42,13 +88,18 @@
       const email = data.email;
 
       if (!allowedEmails.includes(email)) {
-        alert("Akses ditolak: Email tidak diizinkan.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Akses Ditolak',
+          text: 'Email kamu tidak diizinkan mengakses halaman ini.',
+          confirmButtonColor: '#d33'
+        });
         return;
       }
 
       document.getElementById("loginDiv").style.display = "none";
       document.getElementById("content").style.display = "block";
-      document.getElementById("userInfo").innerHTML = `<p>Halo, ${data.name} (${data.email})</p>`;
+      document.getElementById("userInfo").innerHTML = `<p>Halo, <strong>${data.name}</strong> (${data.email})</p>`;
 
       // Muat konten utama
       fetch("home.html")
@@ -60,4 +111,3 @@
   </script>
 </body>
 </html>
-
