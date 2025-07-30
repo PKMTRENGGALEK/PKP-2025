@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login PKP</title>
+  <meta name="google-signin-client_id" content="159159886422-e3ccfmj01e46qc5rtmubk21fhe3ocjam.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+  <div class="text-center mt-5">
+    <h3>Login untuk mengakses PKP 2025</h3>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  </div>
+
+  <script>
+    function onSignIn(googleUser) {
+      const profile = googleUser.getBasicProfile();
+      const email = profile.getEmail();
+
+      // Daftar email yang boleh akses
+      const allowedEmails = [
+        "harapan.triple.x@gmail.com",
+        
+      ];
+
+      if (!allowedEmails.includes(email)) {
+        alert("Akses ditolak: Email tidak terdaftar.");
+        signOut();
+      } else {
+        // Sembunyikan login button dan lanjutkan ke halaman utama
+        document.querySelector(".g-signin2").style.display = "none";
+        document.body.innerHTML += `<div class="text-center mt-3"><p>Selamat datang, ${profile.getName()}!</p></div>`;
+
+        // TODO: tampilkan konten utama di sini
+        loadMainContent();
+      }
+    }
+
+    function loadMainContent() {
+      // Muat konten utama setelah login
+      fetch("home.html")
+        .then(res => res.text())
+        .then(html => {
+          document.body.innerHTML += html;
+        });
+    }
+
+    function signOut() {
+      const auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(() => {
+        location.href = "https://google.com";
+      });
+    }
+  </script>
+</body>
+</html>
