@@ -51,11 +51,17 @@
       width: 200px;
       opacity: 0.2;
     }
+    .g-signin-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
   </style>
 </head>
 <body>
   <div id="loginDiv">
-    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Ilustrasi Kesehatan" />
+<!--     <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Ilustrasi Kesehatan" /> -->
     <h2>Login untuk mengakses PKP 2025</h2>
 
     <div id="g_id_onload"
@@ -63,9 +69,10 @@
          data-callback="handleCredentialResponse"
          data-auto_prompt="false">
     </div>
-    <div class="g_id_signin" data-type="standard"></div>
-
-    <img class="bg-illustration" src="https://cdn.dribbble.com/users/1467981/screenshots/16585509/media/90af5c7d6b5fc2a9727cbdb8f6fdfb5d.gif" alt="Ilustrasi Kesehatan" />
+    <div class="g-signin-container">
+      <div class="g_id_signin" data-type="standard"></div>
+    </div>
+    <img class="bg-illustration" src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png" alt="Ilustrasi Kesehatan" />
   </div>
 
   <div id="content">
