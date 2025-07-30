@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Analisa Klaster</title>
+    <title>Analisa Manajemen</title>
 
     <!-- Bootstrap -->
     <link
@@ -161,33 +161,25 @@
                 class="form-select form-select-sm"
                 style="max-width: 200px"
               >
-                <option value="Juli">Semua Bulan</option>
-                <option value="Jan">Januari</option>
-                <option value="Feb">Februari</option>
-                <option value="Mar">Maret</option>
-                <option value="Apr">April</option>
-                <option value="Mei">Mei</option>
-                <option value="Juni">Juni</option>
-                <option value="Juli">Juli</option>
-                <option value="Agst">Agustus</option>
-                <option value="Sept">September</option>
-                <option value="Okt">Oktober</option>
-                <option value="Nov">November</option>
-                <option value="Des">Desember</option>
+                <option value="">Pilih Triwulan</option>
+                <option value="Triwulan I">Triwulan I</option>
+                <option value="Triwulan II">Triwulan II</option>
+                <option value="Triwulan III">Triwulan III</option>
+                <option value="Triwulan IV">Triwulan IV</option>
               </select>
             </div>
 
             <!-- Pilih Kategori -->
             <div class="col-md-4 col-sm-6 mb-2">
-              <label for="kategoriSelect" class="form-label fw-bold"
+              <label for="programSelect" class="form-label fw-bold"
                 >Pilih Kategori:</label
               >
               <select
-                id="kategoriSelect"
+                id="programSelect"
                 class="form-select form-select-sm"
                 style="max-width: 300px"
               >
-                <option value="Semua">Semua kategori</option>
+                <option value="Semua">Semua Program</option>
                 <!-- Kategori lainnya akan ditambahkan lewat JavaScript -->
               </select>
             </div>
@@ -310,97 +302,49 @@
 
     <script>
       const endpoint =
-        "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
+        "https://script.google.com/macros/s/AKfycbzg84-rK9Grl_7-89tbqoXR_H5CSXyBcd45sE4zwEXSxn_DIxwP-ERWu2GaH6lDC9-S/exec";
 
       let originalData = [];
       let selectedBulan = "Juli";
       let selectedkategori = "Semua";
 
       const bulanKeys = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agst",
-        "Sept",
-        "Okt",
-        "Nov",
-        "Des",
+        "Triwulan II",
+        "Triwulan II",
+        "Triwulan III",
+        "Triwulan IV",
       ];
 
       const labelMap = {
-        Jan: "Januari",
-        Feb: "Februari",
-        Mar: "Maret",
-        Apr: "April",
-        Mei: "Mei",
-        Juni: "Juni",
-        Juli: "Juli",
-        Agst: "Agustus",
-        Sept: "September",
-        Okt: "Oktober",
-        Nov: "November",
-        Des: "Desember",
+        TWI: "Triwulan I",
+        TWII: "Triwulan II",
+        TWIII: "Triwulan III",
+        TWIV: "Triwulan IV",
       };
 
       const masalahMap = {
-        Januari: "Masalah_Jan",
-        Februari: "Masalah_Feb",
-        Maret: "Masalah_Mar",
-        April: "Masalah_Apr",
-        Mei: "Masalah_Mei",
-        Juni: "Masalah_Jun",
-        Juli: "Masalah_Jul",
-        Agustus: "Masalah_Agu",
-        September: "Masalah_Sep",
-        Oktober: "Masalah_Okt",
-        November: "Masalah_Nov",
-        Desember: "Masalah_Des",
+        TWI: "Masalah_TWI",
+        TWII: "Masalah_TWII",
+        TWIII: "Masalah_TWIII",
+        TWIV: "Masalah_TWIV",
       };
       const analisaMap = {
-        Januari: "Analisa_masalah_jan",
-        Februari: "Analisa_Masalah_Feb",
-        Maret: "Analisa_Masalah_Mar",
-        April: "Analisa_Masalah_Apr",
-        Mei: "Analisa_Masalah_Mei",
-        Juni: "Analisa_Masalah_Jun",
-        Juli: "Analisa_Masalah_Jul",
-        Agustus: "Analisa_Masalah_Agu",
-        September: "Analisa_Masalah_Sep",
-        Oktober: "Analisa_Masalah_Okt",
-        November: "Analisa_Masalah_Nov",
-        Desember: "Analisa_Masalah_Des",
+        TWI: "Analisa_masalah_TWI",
+        TWII: "Analisa_Masalah_TWII",
+        TWIII: "Analisa_Masalah_TWIII",
+        TWIV: "Analisa_Masalah_TWIV",
       };
       const rtlMap = {
-        Januari: "RTL_Jan",
-        Februari: "RTL_Feb",
-        Maret: "RTL_Mar",
-        April: "RTL_Apr",
-        Mei: "RTL_Mei",
-        Juni: "RTL_Jun",
-        Juli: "RTL_Jul",
-        Agustus: "RTL_Agu",
-        September: "RTL_Sep",
-        Oktober: "RTL_Okt",
-        November: "RTL_Nov",
-        Desember: "RTL_Des",
+        TWI: "RTL_TWI",
+        TWII: "RTL_TWII",
+        TWIII: "RTL_TWIII",
+        TWIV: "RTL_TWIV",
       };
       const hasilMap = {
-        Januari: "Hasil_Jan",
-        Februari: "Hasil_Feb",
-        Maret: "Hasil_Mar",
-        April: "Hasil_Apr",
-        Mei: "Hasil_Mei",
-        Juni: "Hasil_Jun",
-        Juli: "Hasil_Jul",
-        Agustus: "Hasil_Agus",
-        September: "Hasil_Sep",
-        Oktober: "Hasil_Okt",
-        November: "Hasil_Nop",
-        Desember: "Hasil_Des",
+        TWI: "Hasil_TWI",
+        TWII: "Hasil_TWII",
+        TWIII: "Hasil_TWIII",
+        TWIV: "Hasil_TWIV",
       };
 
       window.onload = function () {
@@ -416,17 +360,16 @@
                 console.log("Contoh data:", data[0]); // ⬅️ Tambahkan ini untuk lihat struktur field
 
                 // Buat dropdown kategori
-                const kategoriSet = new Set(
-                  data.map((item) => item.kategori || "Tanpa kategori")
+                const programSet = new Set(
+                  data.map((item) => item.kategori || "Tanpa Program")
                 );
 
-                const kategoriSelect =
-                  document.getElementById("kategoriSelect");
-                kategoriSet.forEach((kategori) => {
+                const programSelect = document.getElementById("programSelect");
+                programSet.forEach((kategori) => {
                   const opt = document.createElement("option");
                   opt.value = kategori;
                   opt.textContent = kategori;
-                  kategoriSelect.appendChild(opt);
+                  programSelect.appendChild(opt);
                 });
 
                 renderTable(data, selectedBulan);
@@ -452,9 +395,9 @@
         const bulanIniKey = bulanKeys[idx];
         const bulanLaluKey = bulanKeys[idx - 1] || null;
         const labelBulan = labelMap[bulanIniKey];
-        const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
-        const kolomAnalisa = analisaMap[labelBulan] || "Analisa_masalah_jan";
-        const kolomRTL = rtlMap[labelBulan] || "RTL_jan";
+        const kolomMasalah = masalahMap[labelBulan] || "Masalah_TWI";
+        const kolomAnalisa = analisaMap[labelBulan] || "Analisa_masalah_TWI";
+        const kolomRTL = rtlMap[labelBulan] || "RTL_TWI";
 
         document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
           bulanLaluKey ? labelMap[bulanLaluKey] : "-";
@@ -467,12 +410,47 @@
         document.getElementById("cakupanBulan").innerText = labelBulan;
 
         // 🔹 Filter berdasarkan kategori
-        const filtered =
-          selectedkategori === "Semua"
-            ? data
-            : data.filter(
-                (d) => (d.kategori || "Tanpa kategori") === selectedkategori
-              );
+        function renderTable(data) {
+          const selectedProgram =
+            document.getElementById("programSelect").value;
+          const filteredData = data.filter(
+            (item) => item.Program === selectedProgram
+          );
+
+          const table = document.getElementById("dataTable");
+          const tbody = table.querySelector("tbody");
+          tbody.innerHTML = "";
+
+          filteredData.forEach((row) => {
+            const tr = document.createElement("tr");
+
+            const tdNo = document.createElement("td");
+            tdNo.textContent = row.No;
+            tr.appendChild(tdNo);
+
+            const tdJenis = document.createElement("td");
+            tdJenis.textContent = row["Jenis Variabel"];
+            tr.appendChild(tdJenis);
+
+            const tdDefinisi = document.createElement("td");
+            tdDefinisi.textContent = row["Definisi Operasional"];
+            tr.appendChild(tdDefinisi);
+
+            const tdTarget = document.createElement("td");
+            tdTarget.textContent = row["Target Nilai Kinerja"];
+            tr.appendChild(tdTarget);
+
+            const tdCapaian = document.createElement("td");
+            tdCapaian.textContent = row["Capaian"];
+            tr.appendChild(tdCapaian);
+
+            const tdKetercapaian = document.createElement("td");
+            tdKetercapaian.textContent = row["Ketercapaian"];
+            tr.appendChild(tdKetercapaian);
+
+            tbody.appendChild(tr);
+          });
+        }
 
         // 🔹 Grouping berdasarkan Sub
         let grouped = {};
@@ -748,7 +726,7 @@
 
       // 🔸 Ganti kategori
       document
-        .getElementById("kategoriSelect")
+        .getElementById("programSelect")
         .addEventListener("change", function () {
           selectedkategori = this.value;
           renderTable(originalData, selectedBulan);
