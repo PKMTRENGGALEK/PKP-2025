@@ -184,37 +184,37 @@
               Simpan Perubahan
             </button>
           </div>
-<<<<<<< HEAD
+
           <div class="text-end mt-2">
             <button class="btn btn-outline-danger" id="cetakPDF">
               <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
             </button>
           </div>
-=======
+
           <div class="text-end mb-3">
-  <button id="btnPrint" class="btn btn-danger">
-    🖨️ Cetak PDF
-  </button>
-</div>
->>>>>>> f18dffaa2457eb1dbebaa31573dbe14040687c0b
+            <button id="btnPrint" class="btn btn-danger">
+              🖨️ Cetak PDF
+            </button>
+          </div>
+
           <!-- <div class="table-responsive" style="font-size: 11px">
             <table
               class="table table-bordered table-striped align-middle"
               id="programTable"
             > -->
-<<<<<<< HEAD
+
           <div class="table-responsive">
             <table
               class="table table-bordered table-striped table-hover align-middle text-nowrap"
               id="programTable"
             >
               <!-- thead dan tbody kamu -->
-=======
+
 <div id="printArea"></div>
   <div class="table-responsive">
   <table class="table table-bordered table-striped table-hover align-middle text-nowrap" id="programTable">
     <!-- thead dan tbody kamu -->
->>>>>>> f18dffaa2457eb1dbebaa31573dbe14040687c0b
+
 
               <thead class="table-success text-center align-middle">
                 <tr>
@@ -900,7 +900,7 @@
             }
           });
         });
-<<<<<<< HEAD
+
     </script>
     <script>
       document.getElementById("cetakPDF").addEventListener("click", () => {
@@ -912,7 +912,7 @@
           html2canvas: { scale: 2 },
           jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
         };
-=======
+
     });
 
     Promise.all(promises).then((results) => {
@@ -934,7 +934,6 @@
         });
       }
     });
-  });
 
 </script>
 <script>
@@ -966,10 +965,7 @@
     html2pdf().set(opt).from(printContent).save();
   });
 </script>
->>>>>>> f18dffaa2457eb1dbebaa31573dbe14040687c0b
 
-        html2pdf().set(opt).from(element).save();
-      });
-    </script>
+
   </body>
 </html>
