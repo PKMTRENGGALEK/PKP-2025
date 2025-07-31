@@ -23,88 +23,86 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-  body {
-    background: #f0f4f5;
-    font-family: "Segoe UI", sans-serif;
-  }
+    <style>
+      body {
+        background: #f0f4f5;
+        font-family: "Segoe UI", sans-serif;
+      }
 
-  .logo {
-    max-height: 100px;
-  }
+      .logo {
+        max-height: 100px;
+      }
 
-  .table-responsive {
-    max-height: 75vh;
-    overflow: auto;
-  }
+      .table-responsive {
+        max-height: 75vh;
+        overflow: auto;
+      }
 
-  .table th,
-  .table thead th {
-    background-color: #c62828 !important;
-    color: white !important;
-    font-size: 0.72rem;
-    text-align: center;
-    vertical-align: middle;
-  }
+      .table th,
+      .table thead th {
+        background-color: #c62828 !important;
+        color: white !important;
+        font-size: 0.72rem;
+        text-align: center;
+        vertical-align: middle;
+      }
 
-  .table td {
-    font-size: 0.72rem;
-    vertical-align: middle;
-  }
+      .table td {
+        font-size: 0.72rem;
+        vertical-align: middle;
+      }
 
-  /* Sticky thead rows */
-  .table thead tr:nth-child(1) th {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-  }
+      /* Sticky thead rows */
+      .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+      }
 
-  .table thead tr:nth-child(2) th {
-    position: sticky;
-    top: 36px; /* Sesuaikan dengan tinggi baris 1 */
-    z-index: 2;
-  }
+      .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 36px; /* Sesuaikan dengan tinggi baris 1 */
+        z-index: 2;
+      }
 
-  .bulan-input {
-    width: 45px;
-    font-size: 0.72rem;
-    text-align: center;
-  }
+      .bulan-input {
+        width: 45px;
+        font-size: 0.72rem;
+        text-align: center;
+      }
 
-  .updated {
-    background-color: #d1e7dd !important;
-  }
-  .table-responsive {
-  position: relative;
-  max-height: 75vh;
-  overflow: auto;
-}
+      .updated {
+        background-color: #d1e7dd !important;
+      }
+      .table-responsive {
+        position: relative;
+        max-height: 75vh;
+        overflow: auto;
+      }
 
-/* Header baris pertama */
-.table thead tr:nth-child(1) th {
-  position: sticky;
-  top: 0;
-  background-color: #c62828 !important;
-  z-index: 3;
-}
+      /* Header baris pertama */
+      .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        background-color: #c62828 !important;
+        z-index: 3;
+      }
 
-/* Header baris kedua */
-.table thead tr:nth-child(2) th {
-  position: sticky;
-  top: 38px; /* pastikan sesuai dengan height baris pertama */
-  background-color: #c62828 !important;
-  z-index: 2;
-}
-.table th,
-.table td {
-  white-space: nowrap;
-}
-.table thead tr:nth-child(2) th {
-  top: 34px; /* atau 32px, eksperimen untuk pas */
-}
-
-</style>
-
+      /* Header baris kedua */
+      .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 38px; /* pastikan sesuai dengan height baris pertama */
+        background-color: #c62828 !important;
+        z-index: 2;
+      }
+      .table th,
+      .table td {
+        white-space: nowrap;
+      }
+      .table thead tr:nth-child(2) th {
+        top: 34px; /* atau 32px, eksperimen untuk pas */
+      }
+    </style>
   </head>
   <body>
     <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
@@ -121,7 +119,7 @@
           </div>
 
           <div class="d-flex justify-content-start mb-3">
-            <a href="index.html" class="btn btn-outline-success shadow-sm">
+            <a href="home.html" class="btn btn-outline-success shadow-sm">
               ⬅️ Kembali
             </a>
           </div>
@@ -199,210 +197,241 @@
       }
 
       function bindInputEvents() {
-  $(".bulan-input")
-    .off("blur")
-    .on("blur", function () {
-      const input = $(this);
-      const id = input.data("id");
-      const field = input.data("field") || input.data("bulan");
-      const nilaiBaru = input.val().trim();
-      const nilaiLama = input.data("old");
+        $(".bulan-input")
+          .off("blur")
+          .on("blur", function () {
+            const input = $(this);
+            const id = input.data("id");
+            const field = input.data("field") || input.data("bulan");
+            const nilaiBaru = input.val().trim();
+            const nilaiLama = input.data("old");
 
-      if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
+            if (nilaiBaru === nilaiLama || nilaiBaru === "") return;
 
-      if (!/^\d+$/.test(nilaiBaru)) {
-        Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
-        input.val(nilaiLama);
-        return;
-      }
+            if (!/^\d+$/.test(nilaiBaru)) {
+              Swal.fire("Input tidak valid", "Masukkan angka saja.", "warning");
+              input.val(nilaiLama);
+              return;
+            }
 
-      Swal.fire({
-        title: "Menyimpan...",
-        text: "Sedang mengupdate data...",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
-
-      const url = `${endpoint}?action=update&id=${encodeURIComponent(
-        id
-      )}&field=${encodeURIComponent(field)}&nilai=${encodeURIComponent(nilaiBaru)}`;
-
-      fetch(url)
-        .then((res) => res.json())
-        .then((res) => {
-          Swal.close();
-          if (res.success) {
             Swal.fire({
-              icon: "success",
-              title: "Berhasil diperbarui",
-              timer: 1200,
-              showConfirmButton: false,
+              title: "Menyimpan...",
+              text: "Sedang mengupdate data...",
+              allowOutsideClick: false,
+              didOpen: () => Swal.showLoading(),
             });
 
-            input.data("old", nilaiBaru);
-            input.addClass("updated");
+            const url = `${endpoint}?action=update&id=${encodeURIComponent(
+              id
+            )}&field=${encodeURIComponent(field)}&nilai=${encodeURIComponent(
+              nilaiBaru
+            )}`;
 
-            // 🔁 Perbarui tampilan langsung jika perlu
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row) {
-              if (field === "Total Sasaran" || bulanKeys.includes(field)) {
-                updateDerivedColumns(row);
-              }
-            }
-          } else {
-            Swal.fire("Gagal", res.message || "Gagal update", "error");
-            input.val(nilaiLama);
-          }
-        })
-        .catch((err) => {
-          Swal.close();
-          Swal.fire("Gagal", err.message || "Kesalahan jaringan", "error");
-          input.val(nilaiLama);
+            fetch(url)
+              .then((res) => res.json())
+              .then((res) => {
+                Swal.close();
+                if (res.success) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Berhasil diperbarui",
+                    timer: 1200,
+                    showConfirmButton: false,
+                  });
+
+                  input.data("old", nilaiBaru);
+                  input.addClass("updated");
+
+                  // 🔁 Perbarui tampilan langsung jika perlu
+                  const row = document.querySelector(`tr[data-id="${id}"]`);
+                  if (row) {
+                    if (
+                      field === "Total Sasaran" ||
+                      bulanKeys.includes(field)
+                    ) {
+                      updateDerivedColumns(row);
+                    }
+                  }
+                } else {
+                  Swal.fire("Gagal", res.message || "Gagal update", "error");
+                  input.val(nilaiLama);
+                }
+              })
+              .catch((err) => {
+                Swal.close();
+                Swal.fire(
+                  "Gagal",
+                  err.message || "Kesalahan jaringan",
+                  "error"
+                );
+                input.val(nilaiLama);
+              });
+          });
+      }
+      function updateDerivedColumns(row) {
+        const bulanInputs = row.querySelectorAll("input[data-bulan]");
+        let totalBulan = 0;
+
+        bulanInputs.forEach((input) => {
+          const val = parseInt(input.value);
+          if (!isNaN(val)) totalBulan += val;
         });
-    });
-}
-function updateDerivedColumns(row) {
-  const bulanInputs = row.querySelectorAll('input[data-bulan]');
-  let totalBulan = 0;
 
-  bulanInputs.forEach((input) => {
-    const val = parseInt(input.value);
-    if (!isNaN(val)) totalBulan += val;
-  });
+        const totalSasaranInput = row.querySelector(
+          'input[data-field="Total Sasaran"]'
+        );
+        const totalSasaran = totalSasaranInput
+          ? parseInt(totalSasaranInput.value)
+          : 0;
 
-  const totalSasaranInput = row.querySelector('input[data-field="Total Sasaran"]');
-  const totalSasaran = totalSasaranInput ? parseInt(totalSasaranInput.value) : 0;
+        const cakupanCell = row.cells[9]; // Kolom ke-10 = % Cakupan Rill
+        const capaianCell = row.cells[10]; // Kolom ke-11 = Ketercapaian Target Tahun N
 
-  const cakupanCell = row.cells[9]; // Kolom ke-10 = % Cakupan Rill
-  const capaianCell = row.cells[10]; // Kolom ke-11 = Ketercapaian Target Tahun N
+        if (cakupanCell && totalSasaran) {
+          const cakupan = ((totalBulan / totalSasaran) * 100).toFixed(2) + "%";
+          cakupanCell.textContent = cakupan;
+        }
 
-  if (cakupanCell && totalSasaran) {
-    const cakupan = ((totalBulan / totalSasaran) * 100).toFixed(2) + "%";
-    cakupanCell.textContent = cakupan;
-  }
-
-  if (capaianCell && totalSasaran) {
-    const targetTahun = parseFloat(row.cells[4].textContent.replace("%", "")); // Target %
-    const realisasi = (totalBulan / totalSasaran) * 100;
-    const status = realisasi >= targetTahun ? "Tercapai" : "Belum Tercapai";
-    capaianCell.textContent = status;
-  }
-}
-
-
+        if (capaianCell && totalSasaran) {
+          const targetTahun = parseFloat(
+            row.cells[4].textContent.replace("%", "")
+          ); // Target %
+          const realisasi = (totalBulan / totalSasaran) * 100;
+          const status =
+            realisasi >= targetTahun ? "Tercapai" : "Belum Tercapai";
+          capaianCell.textContent = status;
+        }
+      }
 
       function renderTable(rows, selectedKategori) {
-  const fragment = document.createDocumentFragment();
-  const bulanKeys = [
-    "Jan", "Feb", "Mar", "Apr", "Mei", "Juni", "Juli", "Agst", "Sept", "Okt", "Nov", "Des"
-  ];
+        const fragment = document.createDocumentFragment();
+        const bulanKeys = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Juni",
+          "Juli",
+          "Agst",
+          "Sept",
+          "Okt",
+          "Nov",
+          "Des",
+        ];
 
-  // Grouping by Induk > Sub
-  const grouped = {};
-  rows.forEach((row) => {
-    const induk = row["Klaster"] || "Lainnya";
-    const sub = row["Sub"] || "Lainnya";
-    if (!grouped[induk]) grouped[induk] = {};
-    if (!grouped[induk][sub]) grouped[induk][sub] = [];
-    grouped[induk][sub].push(row);
-  });
+        // Grouping by Induk > Sub
+        const grouped = {};
+        rows.forEach((row) => {
+          const induk = row["Klaster"] || "Lainnya";
+          const sub = row["Sub"] || "Lainnya";
+          if (!grouped[induk]) grouped[induk] = {};
+          if (!grouped[induk][sub]) grouped[induk][sub] = [];
+          grouped[induk][sub].push(row);
+        });
 
-  let index = 1;
+        let index = 1;
 
-  // Kategori header
-  // const headerRow = document.createElement("tr");
-  // headerRow.style.backgroundColor = "#d1e7dd";
-  // headerRow.innerHTML = `<td colspan="30"><strong>📌 ${selectedKategori}</strong></td>`;
-  // fragment.appendChild(headerRow);
+        // Kategori header
+        // const headerRow = document.createElement("tr");
+        // headerRow.style.backgroundColor = "#d1e7dd";
+        // headerRow.innerHTML = `<td colspan="30"><strong>📌 ${selectedKategori}</strong></td>`;
+        // fragment.appendChild(headerRow);
 
-  // Loop kelompok Induk > Sub
-  for (const induk in grouped) {
-    const indukRow = document.createElement("tr");
-    indukRow.style.backgroundColor = "#f8d7da";
-    indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger"> ${induk}</td>`;
-    fragment.appendChild(indukRow);
+        // Loop kelompok Induk > Sub
+        for (const induk in grouped) {
+          const indukRow = document.createElement("tr");
+          indukRow.style.backgroundColor = "#f8d7da";
+          indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger"> ${induk}</td>`;
+          fragment.appendChild(indukRow);
 
-    for (const sub in grouped[induk]) {
-      const subRow = document.createElement("tr");
-      subRow.style.backgroundColor = "#cff4fc";
-      subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3"> ${sub}</td>`;
-      fragment.appendChild(subRow);
+          for (const sub in grouped[induk]) {
+            const subRow = document.createElement("tr");
+            subRow.style.backgroundColor = "#cff4fc";
+            subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3"> ${sub}</td>`;
+            fragment.appendChild(subRow);
 
-      // Render baris kegiatan
-      for (const row of grouped[induk][sub]) {
-        const rowId = row["No"];
-        const tr = document.createElement("tr");
-        tr.dataset.id = rowId;
+            // Render baris kegiatan
+            for (const row of grouped[induk][sub]) {
+              const rowId = row["No"];
+              const tr = document.createElement("tr");
+              tr.dataset.id = rowId;
 
-        let html = `<td>${index++}</td>`;
-        html += `<td>${row["kategori"] || "-"}</td>`;
-        html += `<td>${row["Kegiatan"] || "-"}</td>`;
-        html += `<td>${row["Indikator Kerja"] || "-"}</td>`;
-        const targetValue = parseFloat(row["Target 2025"]);
-        html += `<td>${isNaN(targetValue) ? "-" : Math.round(targetValue * 100) + "%"}</td>`;
-        html += `<td>${row["Satuan Sasaran"] || "-"}</td>`;
-        html += `<td class="text-center">
+              let html = `<td>${index++}</td>`;
+              html += `<td>${row["kategori"] || "-"}</td>`;
+              html += `<td>${row["Kegiatan"] || "-"}</td>`;
+              html += `<td>${row["Indikator Kerja"] || "-"}</td>`;
+              const targetValue = parseFloat(row["Target 2025"]);
+              html += `<td>${
+                isNaN(targetValue) ? "-" : Math.round(targetValue * 100) + "%"
+              }</td>`;
+              html += `<td>${row["Satuan Sasaran"] || "-"}</td>`;
+              html += `<td class="text-center">
             <input type="text" class="form-control form-control-sm bulan-input"
-                data-field="Total Sasaran" data-id="${rowId}" data-old="${row["Total Sasaran"] || ""}"
+                data-field="Total Sasaran" data-id="${rowId}" data-old="${
+                row["Total Sasaran"] || ""
+              }"
                 value="${row["Total Sasaran"] || ""}" />
             </td>`;
 
-        html += `<td>${row["Target Sasaran"] || "-"}</td>`;
-        html += `<td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>`;
-        html += `<td>${row["% Cakupan Rill"] || "-"}</td>`;
-        html += `<td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
+              html += `<td>${row["Target Sasaran"] || "-"}</td>`;
+              html += `<td>${
+                row["Pencapaian (dalam satuan sasaran)"] || "-"
+              }</td>`;
+              html += `<td>${row["% Cakupan Rill"] || "-"}</td>`;
+              html += `<td>${row["Ketercapaian Target Tahun N"] || "-"}</td>`;
 
-        for (const bulan of bulanKeys) {
-          html += renderEditableCell(bulan, rowId, row[bulan]);
+              for (const bulan of bulanKeys) {
+                html += renderEditableCell(bulan, rowId, row[bulan]);
+              }
+
+              // html += `<td>${row["Analisa Akar Penyebab Masalah"] || "-"}</td>`;
+              // html += `<td>${row["Rencana Tindak lanjut"] || "-"}</td>`;
+
+              tr.innerHTML = html;
+              fragment.appendChild(tr);
+            }
+          }
         }
 
-        // html += `<td>${row["Analisa Akar Penyebab Masalah"] || "-"}</td>`;
-        // html += `<td>${row["Rencana Tindak lanjut"] || "-"}</td>`;
-
-        tr.innerHTML = html;
-        fragment.appendChild(tr);
+        tableBody.innerHTML = ""; // Clear
+        tableBody.appendChild(fragment);
+        bindInputEvents();
       }
-    }
-  }
 
-  tableBody.innerHTML = ""; // Clear
-  tableBody.appendChild(fragment);
-  bindInputEvents();
-}
+      function loadData() {
+        const selectedKlaster = getQueryParam("klaster");
 
-        function loadData() {
-  const selectedKlaster = getQueryParam("klaster");
+        if (!selectedKlaster) {
+          tableBody.innerHTML = `<tr><td colspan="25" class="text-center text-muted">Parameter <code>?klaster=</code> diperlukan.</td></tr>`;
+          return;
+        }
 
-  if (!selectedKlaster) {
-    tableBody.innerHTML = `<tr><td colspan="25" class="text-center text-muted">Parameter <code>?klaster=</code> diperlukan.</td></tr>`;
-    return;
-  }
-
-  tableBody.innerHTML = `
+        tableBody.innerHTML = `
       <tr><td colspan="25" class="text-center py-4">
         <div class="spinner-border text-success" role="status"></div>
         <div class="mt-2 text-success fw-semibold">Memuat data...</div>
       </td></tr>`;
 
-  fetch(endpoint)
-    .then((res) => res.json())
-    .then((data) => {
-      const filtered = data.filter(
-        (item) => item.Klaster === selectedKlaster
-      );
+        fetch(endpoint)
+          .then((res) => res.json())
+          .then((data) => {
+            const filtered = data.filter(
+              (item) => item.Klaster === selectedKlaster
+            );
 
-      if (filtered.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Klaster <strong>${selectedKlaster}</strong> tidak ditemukan.</td></tr>`;
-        return;
+            if (filtered.length === 0) {
+              tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Klaster <strong>${selectedKlaster}</strong> tidak ditemukan.</td></tr>`;
+              return;
+            }
+
+            renderTable(filtered, selectedKlaster);
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+            tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
+          });
       }
-
-      renderTable(filtered, selectedKlaster);
-    })
-    .catch((error) => {
-      console.error("Fetch error:", error);
-      tableBody.innerHTML = `<tr><td colspan="25" class="text-danger text-center">Gagal memuat data.</td></tr>`;
-    });
-}
 
       loadData();
     </script>
