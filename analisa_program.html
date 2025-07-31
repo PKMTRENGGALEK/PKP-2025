@@ -20,10 +20,14 @@
       href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
       body {
@@ -86,7 +90,6 @@
         word-wrap: break-word;
         word-break: break-word;
       }
-    
 
       .bg-biru {
         background-color: #2196f3;
@@ -149,7 +152,7 @@
             </select>
           </div>
           <!-- Filter kategori -->
-        <div class="mb-3 d-none">
+          <div class="mb-3 d-none">
             <label for="kategoriSelect" class="form-label fw-bold"
               >Pilih kategori:</label
             >
@@ -167,33 +170,62 @@
               Simpan Perubahan
             </button>
           </div>
-
+          <div class="text-end mt-2">
+            <button class="btn btn-outline-danger" id="cetakPDF">
+              <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
+            </button>
+          </div>
           <!-- <div class="table-responsive" style="font-size: 11px">
             <table
               class="table table-bordered table-striped align-middle"
               id="programTable"
             > -->
-        <div class="table-responsive">
-  <table class="table table-bordered table-striped table-hover align-middle text-nowrap" id="programTable">
-    <!-- thead dan tbody kamu -->
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-striped table-hover align-middle text-nowrap"
+              id="programTable"
+            >
+              <!-- thead dan tbody kamu -->
 
               <thead class="table-success text-center align-middle">
                 <tr>
                   <th rowspan="2">No</th>
                   <th rowspan="2" width="300px">Indikator Kerja</th>
                   <th colspan="2">Bulan</th>
-                  <th rowspan="2" id="targetHeader" width="70px" class="text-wrap">% Target s/d Bulan ...</th>
+                  <th
+                    rowspan="2"
+                    id="targetHeader"
+                    width="70px"
+                    class="text-wrap"
+                  >
+                    % Target s/d Bulan ...
+                  </th>
                   <th rowspan="2" width="70px" class="text-wrap">
                     % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
                   </th>
-                  <th rowspan="2" id="kesenjangan" width="60px" class="text-wrap">% Kesenjangan</th>
-                  <th rowspan="2" id="Tren" width="70px" class="text-wrap">TREN</th>
+                  <th
+                    rowspan="2"
+                    id="kesenjangan"
+                    width="60px"
+                    class="text-wrap"
+                  >
+                    % Kesenjangan
+                  </th>
+                  <th rowspan="2" id="Tren" width="70px" class="text-wrap">
+                    TREN
+                  </th>
                   <th rowspan="2" width="30px">Grade</th>
-                   <!-- Empat kolom besar dengan lebar sama -->
+                  <!-- Empat kolom besar dengan lebar sama -->
                   <th rowspan="2" width="220px" class="text-wrap">Masalah</th>
-                  <th rowspan="2" width="220px" class="text-wrap">Analisa Penyebab Masalah</th>
-                  <th rowspan="2" width="220px" class="text-wrap">Rencana Tindak Lanjut</th>
-                  <th rowspan="2" width="220px" class="text-wrap">Hasil Tindak Lanjut</th>
+                  <th rowspan="2" width="220px" class="text-wrap">
+                    Analisa Penyebab Masalah
+                  </th>
+                  <th rowspan="2" width="220px" class="text-wrap">
+                    Rencana Tindak Lanjut
+                  </th>
+                  <th rowspan="2" width="220px" class="text-wrap">
+                    Hasil Tindak Lanjut
+                  </th>
                 </tr>
                 <tr>
                   <th>Bulan Lalu</th>
@@ -208,30 +240,37 @@
             </table>
           </div>
           <div class="mb-3 mt-2">
-  <h6 class="fw-bold">Keterangan Warna Grade:</h6>
-  <ul class="list-unstyled" style="font-size: 10px;">
-    <li>
-      <span class="badge bg-primary text-white">BIRU</span> :
-      jika <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu dan kumulatif di atas target
-    </li>
-    <li class="mt-2">
-      <span class="badge bg-light text-dark border border-dark">PUTIH</span> :
-      jika <strong>Capaian Bulan ini sama</strong> dengan bulan lalu dan kumulatif di atas target
-    </li>
-    <li class="mt-2">
-      <span class="badge bg-success text-white">HIJAU</span> :
-      jika <strong>Capaian Bulan ini lebih kecil</strong> dari bulan lalu dan kumulatif di atas target
-    </li>
-    <li class="mt-2">
-      <span class="badge bg-warning text-dark">KUNING</span> :
-      jika <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu dan kumulatif di bawah target
-    </li>
-    <li class="mt-2">
-      <span class="badge bg-danger text-white">MERAH</span> :
-      jika <strong>Capaian Bulan ini lebih kecil</strong> atau sama dengan bulan lalu dan kumulatif di bawah target
-    </li>
-  </ul>
-</div>
+            <h6 class="fw-bold">Keterangan Warna Grade:</h6>
+            <ul class="list-unstyled" style="font-size: 10px">
+              <li>
+                <span class="badge bg-primary text-white">BIRU</span> : jika
+                <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu
+                dan kumulatif di atas target
+              </li>
+              <li class="mt-2">
+                <span class="badge bg-light text-dark border border-dark"
+                  >PUTIH</span
+                >
+                : jika <strong>Capaian Bulan ini sama</strong> dengan bulan lalu
+                dan kumulatif di atas target
+              </li>
+              <li class="mt-2">
+                <span class="badge bg-success text-white">HIJAU</span> : jika
+                <strong>Capaian Bulan ini lebih kecil</strong> dari bulan lalu
+                dan kumulatif di atas target
+              </li>
+              <li class="mt-2">
+                <span class="badge bg-warning text-dark">KUNING</span> : jika
+                <strong>Capaian Bulan ini lebih besar</strong> dari bulan lalu
+                dan kumulatif di bawah target
+              </li>
+              <li class="mt-2">
+                <span class="badge bg-danger text-white">MERAH</span> : jika
+                <strong>Capaian Bulan ini lebih kecil</strong> atau sama dengan
+                bulan lalu dan kumulatif di bawah target
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -244,7 +283,7 @@
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
-        }
+      }
 
       const endpoint =
         "https://script.google.com/macros/s/AKfycbyXUb1qcb9YTr8nv4C1Ad2p2ifqosTbRBF0B-rg8bb1f2Tc9hy4LMwrIaZia1YIkPMD6w/exec";
@@ -298,56 +337,55 @@
         Desember: "Masalah_Des",
       };
       const analisaMap = {
-  Januari: "Analisa_masalah_jan",
-  Februari: "Analisa_Masalah_Feb",
-  Maret: "Analisa_Masalah_Mar",
-  April: "Analisa_Masalah_Apr",
-  Mei: "Analisa_Masalah_Mei",
-  Juni: "Analisa_Masalah_Jun",
-  Juli: "Analisa_Masalah_Jul",
-  Agustus: "Analisa_Masalah_Agu",
-  September: "Analisa_Masalah_Sep",
-  Oktober: "Analisa_Masalah_Okt",
-  November: "Analisa_Masalah_Nov",
-  Desember: "Analisa_Masalah_Des",
-};
-const rtlMap = {
-  Januari: "RTL_Jan",
-  Februari: "RTL_Feb",
-  Maret: "RTL_Mar",
-  April: "RTL_Apr",
-  Mei: "RTL_Mei",
-  Juni: "RTL_Jun",
-  Juli: "RTL_Jul",
-  Agustus: "RTL_Agu",
-  September: "RTL_Sep",
-  Oktober: "RTL_Okt",
-  November: "RTL_Nov",
-  Desember: "RTL_Des",
-};
+        Januari: "Analisa_masalah_jan",
+        Februari: "Analisa_Masalah_Feb",
+        Maret: "Analisa_Masalah_Mar",
+        April: "Analisa_Masalah_Apr",
+        Mei: "Analisa_Masalah_Mei",
+        Juni: "Analisa_Masalah_Jun",
+        Juli: "Analisa_Masalah_Jul",
+        Agustus: "Analisa_Masalah_Agu",
+        September: "Analisa_Masalah_Sep",
+        Oktober: "Analisa_Masalah_Okt",
+        November: "Analisa_Masalah_Nov",
+        Desember: "Analisa_Masalah_Des",
+      };
+      const rtlMap = {
+        Januari: "RTL_Jan",
+        Februari: "RTL_Feb",
+        Maret: "RTL_Mar",
+        April: "RTL_Apr",
+        Mei: "RTL_Mei",
+        Juni: "RTL_Jun",
+        Juli: "RTL_Jul",
+        Agustus: "RTL_Agu",
+        September: "RTL_Sep",
+        Oktober: "RTL_Okt",
+        November: "RTL_Nov",
+        Desember: "RTL_Des",
+      };
       const hasilMap = {
-  Januari: "Hasil_Jan",
-  Februari: "Hasil_Feb",
-  Maret: "Hasil_Mar",
-  April: "Hasil_Apr",
-  Mei: "Hasil_Mei",
-  Juni: "Hasil_Jun",
-  Juli: "Hasil_Jul",
-  Agustus: "Hasil_Agus",
-  September: "Hasil_Sep",
-  Oktober: "Hasil_Okt",
-  November: "Hasil_Nop",
-  Desember: "Hasil_Des",
-};
-
+        Januari: "Hasil_Jan",
+        Februari: "Hasil_Feb",
+        Maret: "Hasil_Mar",
+        April: "Hasil_Apr",
+        Mei: "Hasil_Mei",
+        Juni: "Hasil_Jun",
+        Juli: "Hasil_Jul",
+        Agustus: "Hasil_Agus",
+        September: "Hasil_Sep",
+        Oktober: "Hasil_Okt",
+        November: "Hasil_Nop",
+        Desember: "Hasil_Des",
+      };
 
       window.onload = function () {
         const kategoriFromURL = getQueryParam("kategori");
-  if (kategoriFromURL) {
-    selectedkategori = decodeURIComponent(kategoriFromURL);
-    // Set dropdown ke kategori yang sesuai
-    document.getElementById("kategoriSelect").value = selectedkategori;
-  }
+        if (kategoriFromURL) {
+          selectedkategori = decodeURIComponent(kategoriFromURL);
+          // Set dropdown ke kategori yang sesuai
+          document.getElementById("kategoriSelect").value = selectedkategori;
+        }
         fetch(endpoint)
           .then((res) => res.json())
           .then((data) => {
@@ -467,30 +505,32 @@ const rtlMap = {
             const analisaBulanIni = row[kolomAnalisa] || "";
             const RTLBulanIni = row[kolomRTL] || "";
 
-           let gap = "-";
-          let tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
-          let trenClass = "";
+            let gap = "-";
+            let tren =
+              "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+            let trenClass = "";
 
-          // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
-          if (!isNaN(parseFloat(cakupanSD)) && !isNaN(parseFloat(targetSD))) {
-            const selisihGap = (
-              parseFloat(cakupanSD) - parseFloat(targetSD)
-            ).toFixed(2);
-            gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
-          }
-
-          // Tetap hitung tren seperti sebelumnya
-          if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
-            const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
-            if (selisihBulan > 0) {
-              tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
-              trenClass = "bg-success text-white";
-            } else if (selisihBulan < 0) {
-              tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
-              trenClass = "bg-danger text-white";
+            // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
+            if (!isNaN(parseFloat(cakupanSD)) && !isNaN(parseFloat(targetSD))) {
+              const selisihGap = (
+                parseFloat(cakupanSD) - parseFloat(targetSD)
+              ).toFixed(2);
+              gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
             }
-          }
 
+            // Tetap hitung tren seperti sebelumnya
+            if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+              const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+              if (selisihBulan > 0) {
+                tren =
+                  "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+                trenClass = "bg-success text-white";
+              } else if (selisihBulan < 0) {
+                tren =
+                  "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+                trenClass = "bg-danger text-white";
+              }
+            }
 
             let grade = "-";
             let gradeClass = "";
@@ -505,7 +545,8 @@ const rtlMap = {
               const capaianTurun = bulanIniVal < bulanLaluVal;
               const capaianSama = bulanIniVal === bulanLaluVal;
 
-              const selisihCakupan = parseFloat(cakupanSD) - parseFloat(targetSD);
+              const selisihCakupan =
+                parseFloat(cakupanSD) - parseFloat(targetSD);
 
               if ((capaianNaik || capaianSama) && selisihCakupan >= 0) {
                 grade = "";
@@ -522,13 +563,16 @@ const rtlMap = {
               }
             }
 
-
             rows += `
               <tr>
                 <td class="text-center">${counter++}</td>
                 <td class="text-wrap "  title="${indikator}">${indikator}</td>
-                <td class="text-wrap text-center">${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
-                <td class="text-wrap text-center">${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
+                <td class="text-wrap text-center">${
+                  isNaN(bulanLaluVal) ? "-" : bulanLaluVal
+                }</td>
+                <td class="text-wrap text-center">${
+                  isNaN(bulanIniVal) ? "-" : bulanIniVal
+                }</td>
                 <td class="text-wrap text-center">${targetSD}</td>
                 <td class="text-wrap text-center">${cakupanSD}</td>
                 <td class="text-center">${gap}</td>
@@ -556,7 +600,9 @@ const rtlMap = {
                   <textarea class="form-control form-control-sm hasil-textarea"
                     rows="2"
                     data-id="${row["No"]}"
-                    data-bulan="Hasil_${bulanIniKey}">${row["Hasil_" + bulanIniKey] || ""}</textarea>
+                    data-bulan="Hasil_${bulanIniKey}">${
+              row["Hasil_" + bulanIniKey] || ""
+            }</textarea>
                 </td>
 
               </tr>`;
@@ -566,106 +612,110 @@ const rtlMap = {
         tbody.innerHTML = rows;
 
         document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
-              textarea.addEventListener("change", async function () {
-                const id = this.dataset.id;
-                const bulan = this.dataset.bulan;
-                const nilai = this.value;
+          textarea.addEventListener("change", async function () {
+            const id = this.dataset.id;
+            const bulan = this.dataset.bulan;
+            const nilai = this.value;
 
-                if (id && bulan) {
-                  try {
-                    const res = await fetch(
-                      `${endpoint}?action=update&id=${encodeURIComponent(
-                        id
-                      )}&bulan=${encodeURIComponent(
-                        bulan
-                      )}&nilai=${encodeURIComponent(nilai)}`
-                    );
-                    const result = await res.json();
-                    if (!result.success) {
-                      alert("Gagal memperbarui data: " + result.message);
-                    }
-                  } catch (err) {
-                    console.error("Update error:", err);
-                    alert("Terjadi kesalahan saat menyimpan data.");
-                  }
+            if (id && bulan) {
+              try {
+                const res = await fetch(
+                  `${endpoint}?action=update&id=${encodeURIComponent(
+                    id
+                  )}&bulan=${encodeURIComponent(
+                    bulan
+                  )}&nilai=${encodeURIComponent(nilai)}`
+                );
+                const result = await res.json();
+                if (!result.success) {
+                  alert("Gagal memperbarui data: " + result.message);
                 }
-              });
-            });
-      document.querySelectorAll(".analisa-textarea").forEach((textarea) => {
-      textarea.addEventListener("change", async function () {
-        const id = this.dataset.id;
-        const bulan = this.dataset.bulan;
-        const nilai = this.value;
-
-        if (id && bulan) {
-          try {
-            const res = await fetch(
-              `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(
-                bulan
-              )}&nilai=${encodeURIComponent(nilai)}`
-            );
-            const result = await res.json();
-            if (!result.success) {
-              alert("Gagal memperbarui data: " + result.message);
+              } catch (err) {
+                console.error("Update error:", err);
+                alert("Terjadi kesalahan saat menyimpan data.");
+              }
             }
-          } catch (err) {
-            console.error("Update error (analisa):", err);
-            alert("Terjadi kesalahan saat menyimpan data Analisa Masalah.");
-          }
-        }
-      });
-});
-document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
-  textarea.addEventListener("change", async function () {
-    const id = this.dataset.id;
-    const bulan = this.dataset.bulan;
-    const nilai = this.value;
+          });
+        });
+        document.querySelectorAll(".analisa-textarea").forEach((textarea) => {
+          textarea.addEventListener("change", async function () {
+            const id = this.dataset.id;
+            const bulan = this.dataset.bulan;
+            const nilai = this.value;
 
-    if (id && bulan) {
-      try {
-        const res = await fetch(
-          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(
-            bulan
-          )}&nilai=${encodeURIComponent(nilai)}`
-        );
-        const result = await res.json();
-        if (!result.success) {
-          alert("Gagal memperbarui data RTL: " + result.message);
-        }
-      } catch (err) {
-        console.error("Update error (RTL):", err);
-        alert("Terjadi kesalahan saat menyimpan data RTL.");
+            if (id && bulan) {
+              try {
+                const res = await fetch(
+                  `${endpoint}?action=update&id=${encodeURIComponent(
+                    id
+                  )}&bulan=${encodeURIComponent(
+                    bulan
+                  )}&nilai=${encodeURIComponent(nilai)}`
+                );
+                const result = await res.json();
+                if (!result.success) {
+                  alert("Gagal memperbarui data: " + result.message);
+                }
+              } catch (err) {
+                console.error("Update error (analisa):", err);
+                alert("Terjadi kesalahan saat menyimpan data Analisa Masalah.");
+              }
+            }
+          });
+        });
+        document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
+          textarea.addEventListener("change", async function () {
+            const id = this.dataset.id;
+            const bulan = this.dataset.bulan;
+            const nilai = this.value;
+
+            if (id && bulan) {
+              try {
+                const res = await fetch(
+                  `${endpoint}?action=update&id=${encodeURIComponent(
+                    id
+                  )}&bulan=${encodeURIComponent(
+                    bulan
+                  )}&nilai=${encodeURIComponent(nilai)}`
+                );
+                const result = await res.json();
+                if (!result.success) {
+                  alert("Gagal memperbarui data RTL: " + result.message);
+                }
+              } catch (err) {
+                console.error("Update error (RTL):", err);
+                alert("Terjadi kesalahan saat menyimpan data RTL.");
+              }
+            }
+          });
+        });
+        document.querySelectorAll(".hasil-textarea").forEach((textarea) => {
+          textarea.addEventListener("change", async function () {
+            const id = this.dataset.id;
+            const bulan = this.dataset.bulan;
+            const nilai = this.value;
+
+            if (id && bulan) {
+              try {
+                const res = await fetch(
+                  `${endpoint}?action=update&id=${encodeURIComponent(
+                    id
+                  )}&bulan=${encodeURIComponent(
+                    bulan
+                  )}&nilai=${encodeURIComponent(nilai)}`
+                );
+                const result = await res.json();
+                if (!result.success) {
+                  alert("Gagal memperbarui data Hasil: " + result.message);
+                }
+              } catch (err) {
+                console.error("Update error (Hasil):", err);
+                alert("Terjadi kesalahan saat menyimpan data Hasil.");
+              }
+            }
+          });
+        });
       }
-    }
-  });
-});
-document.querySelectorAll(".hasil-textarea").forEach((textarea) => {
-  textarea.addEventListener("change", async function () {
-    const id = this.dataset.id;
-    const bulan = this.dataset.bulan;
-    const nilai = this.value;
-
-    if (id && bulan) {
-      try {
-        const res = await fetch(
-          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(
-            bulan
-          )}&nilai=${encodeURIComponent(nilai)}`
-        );
-        const result = await res.json();
-        if (!result.success) {
-          alert("Gagal memperbarui data Hasil: " + result.message);
-        }
-      } catch (err) {
-        console.error("Update error (Hasil):", err);
-        alert("Terjadi kesalahan saat menyimpan data Hasil.");
-      }
-    }
-  });
-});
-
-
-}
 
       // 🔸 Ganti bulan
       document
@@ -688,118 +738,138 @@ document.querySelectorAll(".hasil-textarea").forEach((textarea) => {
     </script>
 
     <script>
-  document.getElementById("simpanMasalah").addEventListener("click", function () {
-    const textareas = document.querySelectorAll(".masalah-textarea");
-    const analisaAreas = document.querySelectorAll(".analisa-textarea");
-    const rtlAreas = document.querySelectorAll(".rtl-textarea"); // Tambahan untuk RTL
-    const hasilAreas = document.querySelectorAll(".hasil-textarea");
+      document
+        .getElementById("simpanMasalah")
+        .addEventListener("click", function () {
+          const textareas = document.querySelectorAll(".masalah-textarea");
+          const analisaAreas = document.querySelectorAll(".analisa-textarea");
+          const rtlAreas = document.querySelectorAll(".rtl-textarea"); // Tambahan untuk RTL
+          const hasilAreas = document.querySelectorAll(".hasil-textarea");
 
-    const updates = [];
+          const updates = [];
 
-    const bulanDipilih = document.getElementById("bulanSelect").value;
-    const labelBulan = labelMap[bulanDipilih];
-    const kolomMasalahDipilih = masalahMap[labelBulan];
-    const kolomAnalisaDipilih = analisaMap[labelBulan];
-    const kolomRTLDipilih = rtlMap[labelBulan]; // Map RTL
+          const bulanDipilih = document.getElementById("bulanSelect").value;
+          const labelBulan = labelMap[bulanDipilih];
+          const kolomMasalahDipilih = masalahMap[labelBulan];
+          const kolomAnalisaDipilih = analisaMap[labelBulan];
+          const kolomRTLDipilih = rtlMap[labelBulan]; // Map RTL
 
-    // Masalah
-    textareas.forEach((textarea) => {
-      const id = textarea.getAttribute("data-id");
-      const kolomBulan = textarea.getAttribute("data-bulan");
+          // Masalah
+          textareas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
 
-      if (kolomBulan !== kolomMasalahDipilih) return;
+            if (kolomBulan !== kolomMasalahDipilih) return;
 
-      const nilai = textarea.value.trim();
-      if (id && kolomBulan && nilai !== "") {
-        updates.push({ id, bulan: kolomBulan, nilai });
-      }
-    });
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
 
-    // Analisa
-    analisaAreas.forEach((textarea) => {
-      const id = textarea.getAttribute("data-id");
-      const kolomBulan = textarea.getAttribute("data-bulan");
+          // Analisa
+          analisaAreas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
 
-      if (kolomBulan !== kolomAnalisaDipilih) return;
+            if (kolomBulan !== kolomAnalisaDipilih) return;
 
-      const nilai = textarea.value.trim();
-      if (id && kolomBulan && nilai !== "") {
-        updates.push({ id, bulan: kolomBulan, nilai });
-      }
-    });
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
 
-    // RTL
-    rtlAreas.forEach((textarea) => {
-      const id = textarea.getAttribute("data-id");
-      const kolomBulan = textarea.getAttribute("data-bulan");
+          // RTL
+          rtlAreas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
 
-      if (kolomBulan !== kolomRTLDipilih) return;
+            if (kolomBulan !== kolomRTLDipilih) return;
 
-      const nilai = textarea.value.trim();
-      if (id && kolomBulan && nilai !== "") {
-        updates.push({ id, bulan: kolomBulan, nilai });
-      }
-    });
-// Hasil
-hasilAreas.forEach((textarea) => {
-  const id = textarea.getAttribute("data-id");
-  const kolomBulan = textarea.getAttribute("data-bulan");
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
+          // Hasil
+          hasilAreas.forEach((textarea) => {
+            const id = textarea.getAttribute("data-id");
+            const kolomBulan = textarea.getAttribute("data-bulan");
 
-  if (kolomBulan !== hasilMap[labelBulan]) return;
+            if (kolomBulan !== hasilMap[labelBulan]) return;
 
-  const nilai = textarea.value.trim();
-  if (id && kolomBulan && nilai !== "") {
-    updates.push({ id, bulan: kolomBulan, nilai });
-  }
-});
+            const nilai = textarea.value.trim();
+            if (id && kolomBulan && nilai !== "") {
+              updates.push({ id, bulan: kolomBulan, nilai });
+            }
+          });
 
-    if (updates.length === 0) {
-      Swal.fire("Tidak ada data yang diubah untuk bulan ini.", "", "info");
-      return;
-    }
+          if (updates.length === 0) {
+            Swal.fire(
+              "Tidak ada data yang diubah untuk bulan ini.",
+              "",
+              "info"
+            );
+            return;
+          }
 
-    Swal.fire({
-      title: "Menyimpan data...",
-      text: "Mohon tunggu sebentar.",
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading(),
-    });
+          Swal.fire({
+            title: "Menyimpan data...",
+            text: "Mohon tunggu sebentar.",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading(),
+          });
 
-    const promises = updates.map((item) => {
-      const url = `${endpoint}?action=updateMasalah&id=${encodeURIComponent(
-        item.id
-      )}&bulan=${encodeURIComponent(item.bulan)}&nilai=${encodeURIComponent(item.nilai)}`;
+          const promises = updates.map((item) => {
+            const url = `${endpoint}?action=updateMasalah&id=${encodeURIComponent(
+              item.id
+            )}&bulan=${encodeURIComponent(
+              item.bulan
+            )}&nilai=${encodeURIComponent(item.nilai)}`;
 
-      return fetch(url)
-        .then((res) => res.json())
-        .catch((err) => {
-          console.error("Gagal update masalah:", err);
-          return { success: false };
+            return fetch(url)
+              .then((res) => res.json())
+              .catch((err) => {
+                console.error("Gagal update masalah:", err);
+                return { success: false };
+              });
+          });
+
+          Promise.all(promises).then((results) => {
+            const gagal = results.filter((r) => !r.success);
+            Swal.close();
+
+            if (gagal.length > 0) {
+              Swal.fire(
+                "data Berhasil disimpan",
+                // `${gagal.length} baris tidak tersimpan.`,
+                "success"
+              );
+            } else {
+              Swal.fire({
+                icon: "success",
+                title: "Data bulan ini berhasil disimpan!",
+                timer: 1500,
+                showConfirmButton: false,
+              });
+            }
+          });
         });
-    });
+    </script>
+    <script>
+      document.getElementById("cetakPDF").addEventListener("click", () => {
+        const element = document.querySelector(".table-responsive"); // Bisa diganti ke div/card lain kalau mau
+        const opt = {
+          margin: 0.5,
+          filename: `Laporan_PKP_${selectedBulan}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+        };
 
-    Promise.all(promises).then((results) => {
-      const gagal = results.filter((r) => !r.success);
-      Swal.close();
-
-      if (gagal.length > 0) {
-        Swal.fire(
-          "data Berhasil disimpan",
-          // `${gagal.length} baris tidak tersimpan.`,
-          "success"
-        );
-      } else {
-        Swal.fire({
-          icon: "success",
-          title: "Data bulan ini berhasil disimpan!",
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      }
-    });
-  });
-
-</script>
-
+        html2pdf().set(opt).from(element).save();
+      });
+    </script>
   </body>
 </html>
