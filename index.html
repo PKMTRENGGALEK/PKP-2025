@@ -12,26 +12,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+      html,
       body {
         margin: 0;
+        padding: 0;
         font-family: "Segoe UI", sans-serif;
         background: linear-gradient(to right, #a8e063, #56ab2f);
         color: #333;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
       }
 
-      #loginDiv,
-      #content {
+      #loginDiv {
         background-color: #fff;
         border-radius: 15px;
         padding: 40px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        max-width: 600px;
         width: 90%;
+        max-width: 600px;
         text-align: center;
+        margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       #loginDiv img.logo-pkm {
@@ -44,61 +49,34 @@
         margin-bottom: 20px;
       }
 
-      #content {
-        display: none;
-        width: 100%;
-        height: 100vh;
-        padding: 0;
-        margin: 0;
-        box-shadow: none;
-        border-radius: 0;
-      }
-
       .g-signin-container {
         display: flex;
         justify-content: center;
         margin-top: 20px;
       }
 
+      #content {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+      }
+
       iframe {
-        width: 100%;
-        height: calc(100vh - 50px);
+        width: 100vw;
+        height: 100vh;
         border: none;
-      }
-
-      .navbar {
-        background: #ffffff;
-        border-bottom: 1px solid #e0e0e0;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .navbar h3 {
-        margin: 0;
-        color: #2e7d32;
-        font-weight: 600;
-      }
-
-      .nav-buttons button {
-        margin-left: 10px;
-        background-color: #2e7d32;
-        border: none;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-
-      .nav-buttons button:hover {
-        background-color: #256c27;
       }
 
       #userInfo {
-        padding: 0 20px;
-        font-size: 0.9rem;
-        color: #555;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        color: #333;
+        z-index: 999;
       }
     </style>
   </head>
@@ -123,14 +101,6 @@
     </div>
 
     <div id="content">
-      <div class="navbar">
-        <h3>PKP 2025 Puskesmas Trenggalek</h3>
-        <div class="nav-buttons">
-          <button onclick="loadPage('home.html')">Home</button>
-          <button onclick="loadPage('iku.html')">Indikator IKU</button>
-          <button onclick="loadPage('manajemen.html')">Manajemen</button>
-        </div>
-      </div>
       <div id="userInfo"></div>
       <iframe id="pageFrame" src=""></iframe>
     </div>
