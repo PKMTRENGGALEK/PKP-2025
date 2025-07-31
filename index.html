@@ -17,11 +17,25 @@
         margin: 0;
         padding: 0;
         font-family: "Segoe UI", sans-serif;
-        background: linear-gradient(to right, #a8e063, #56ab2f);
         color: #333;
         height: 100%;
         width: 100%;
         overflow: hidden;
+        background: linear-gradient(135deg, #ffffff, #a8e063, #ffffff);
+        background-size: 400% 400%;
+        animation: gradientFlow 10s ease infinite;
+      }
+
+      @keyframes gradientFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
       #loginDiv {
@@ -40,8 +54,7 @@
       }
 
       #loginDiv img.logo-pkm {
-        width: 100px;
-        margin-bottom: 20px;
+        width: 200px;
       }
 
       h2 {
@@ -87,7 +100,7 @@
         src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
         alt="Logo Puskesmas"
       />
-      <h2>Login untuk mengakses PKP 2025</h2>
+      <h2>Login dengan Google untuk mengakses PKP 2025</h2>
 
       <div
         id="g_id_onload"
@@ -131,7 +144,6 @@
           return;
         }
 
-        // Login berhasil
         document.getElementById("loginDiv").style.display = "none";
         document.getElementById("content").style.display = "block";
         document.getElementById(
