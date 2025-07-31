@@ -1,125 +1,188 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Login dengan Google</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login dengan Google - PKP 2025</title>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #a8e063, #56ab2f);
-      color: #333;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    #loginDiv, #content {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 40px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      max-width: 600px;
-      width: 90%;
-      text-align: center;
-      position: relative;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(to right, #a8e063, #56ab2f);
+        color: #333;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-    #loginDiv img {
-      width: 150px;
-      margin-bottom: 20px;
-    }
+      #loginDiv,
+      #content {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+      }
 
-    h2 {
-      color: #2e7d32;
-      margin-bottom: 20px;
-    }
+      #loginDiv img.logo-pkm {
+        width: 100px;
+        margin-bottom: 20px;
+      }
 
-    #content {
-      display: none;
-    }
+      h2 {
+        color: #2e7d32;
+        margin-bottom: 20px;
+      }
 
-    .bg-illustration {
-      position: absolute;
-      top: -50px;
-      right: -60px;
-      width: 200px;
-      opacity: 0.2;
-    }
-    .g-signin-container {
+      #content {
+        display: none;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .g-signin-container {
         display: flex;
         justify-content: center;
         margin-top: 20px;
       }
-  .logo-pkm {
-  width: 100px;
-  height: auto;
-  display: block;
-  margin: 0 auto 20px auto;
-}
-  </style>
-</head>
-<body>
-  <div id="loginDiv">
-<!--     <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Ilustrasi Kesehatan" /> -->
-    <h2>Login untuk mengakses PKP 2025</h2>
 
-    <div id="g_id_onload"
-         data-client_id="159159886422-e3ccfmj01e46qc5rtmubk21fhe3ocjam.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
-    <div class="g-signin-container">
-      <div class="g_id_signin" data-type="standard"></div>
-    </div>
-    <img class="logo-pkm" src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png" alt="Ilustrasi Kesehatan" />
-  </div>
-
-  <div id="content">
-    <h2>Selamat Datang!</h2>
-    <div id="userInfo"></div>
-    <div id="mainApp"></div>
-  </div>
-
-  <script>
-    const allowedEmails = ["harapan.triple.x@gmail.com", "pkmpkmtrenggalek@gmail.com"];
-
-    function decodeJwtResponse(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
-    }
-
-    function handleCredentialResponse(response) {
-      const data = decodeJwtResponse(response.credential);
-      const email = data.email;
-
-      if (!allowedEmails.includes(email)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Akses Ditolak',
-          text: 'Email kamu tidak diizinkan mengakses halaman ini.',
-          confirmButtonColor: '#d33'
-        });
-        return;
+      iframe {
+        width: 100%;
+        height: calc(100vh - 50px);
+        border: none;
       }
 
-      document.getElementById("loginDiv").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      document.getElementById("userInfo").innerHTML = `<p>Halo, <strong>${data.name}</strong> (${data.email})</p>`;
+      .navbar {
+        background: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-      // Muat konten utama
-      fetch("home.html")
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("mainApp").innerHTML = html;
+      .navbar h3 {
+        margin: 0;
+        color: #2e7d32;
+        font-weight: 600;
+      }
+
+      .nav-buttons button {
+        margin-left: 10px;
+        background-color: #2e7d32;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .nav-buttons button:hover {
+        background-color: #256c27;
+      }
+
+      #userInfo {
+        padding: 0 20px;
+        font-size: 0.9rem;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loginDiv">
+      <img
+        class="logo-pkm"
+        src="https://puskesmastrenggalek.github.io/SIP/assets/pkm.png"
+        alt="Logo Puskesmas"
+      />
+      <h2>Login untuk mengakses PKP 2025</h2>
+
+      <div
+        id="g_id_onload"
+        data-client_id="159159886422-e3ccfmj01e46qc5rtmubk21fhe3ocjam.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false"
+      ></div>
+      <div class="g-signin-container">
+        <div class="g_id_signin" data-type="standard"></div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="navbar">
+        <h3>PKP 2025 Puskesmas Trenggalek</h3>
+        <div class="nav-buttons">
+          <button onclick="loadPage('home.html')">Home</button>
+          <button onclick="loadPage('iku.html')">Indikator IKU</button>
+          <button onclick="loadPage('manajemen.html')">Manajemen</button>
+        </div>
+      </div>
+      <div id="userInfo"></div>
+      <iframe id="pageFrame" src=""></iframe>
+    </div>
+
+    <script>
+      const allowedEmails = [
+        "harapan.triple.x@gmail.com",
+        "pkmpkmtrenggalek@gmail.com",
+      ];
+
+      function decodeJwtResponse(token) {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
+      }
+
+      function handleCredentialResponse(response) {
+        const data = decodeJwtResponse(response.credential);
+        const email = data.email;
+
+        if (!allowedEmails.includes(email)) {
+          Swal.fire({
+            icon: "error",
+            title: "Akses Ditolak",
+            text: "Email kamu tidak diizinkan mengakses halaman ini.",
+            confirmButtonColor: "#d33",
+          });
+          return;
+        }
+
+        // Login berhasil
+        document.getElementById("loginDiv").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        document.getElementById(
+          "userInfo"
+        ).innerHTML = `<p>Halo, <strong>${data.name.toUpperCase()}</strong> (${
+          data.email
+        })</p>`;
+        document.getElementById("pageFrame").src = "home.html";
+
+        Swal.fire({
+          icon: "success",
+          title: "Login Berhasil",
+          text: `Selamat datang, ${data.name}!`,
+          timer: 2000,
+          showConfirmButton: false,
         });
-    }
-  </script>
-</body>
+      }
+
+      function loadPage(page) {
+        document.getElementById("pageFrame").src = page;
+      }
+    </script>
+  </body>
 </html>
