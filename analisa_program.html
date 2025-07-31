@@ -30,25 +30,54 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-
-
     <style>
       body {
         background: #f0f4f5;
         font-family: "Segoe UI", sans-serif;
       }
       @media print {
-    #ttd-section {
-      display: block;
-      page-break-before: always; /* jika ingin pindah ke halaman baru */
-    }
-  }
+        /* Hapus visibility global — terlalu agresif */
+        body {
+          visibility: visible !important;
+        }
 
-  @media screen {
-    #ttd-section {
-      display: none;
-    }
-  }
+        .table-responsive {
+          overflow: visible !important;
+          max-height: none !important;
+          height: auto !important;
+        }
+
+        /* Lebih aman daripada visibility: hidden semua */
+        body * {
+          visibility: visible !important;
+        }
+
+        /* Hindari position absolute di #print-area */
+        #print-area {
+          position: static !important;
+          width: 100%;
+        }
+
+        #ttd-section {
+          display: block !important;
+          break-inside: avoid;
+          margin-top: 1cm; /* jarak fleksibel dari tabel terakhir */
+        }
+
+        @page {
+          size: A4 landscape;
+          margin: 1cm;
+        }
+        .no-print {
+          display: none !important;
+        }
+      }
+
+      @media screen {
+        #ttd-section {
+          display: none;
+        }
+      }
       .logo {
         max-height: 100px;
       }
@@ -135,13 +164,15 @@
           </div>
 
           <div class="d-flex justify-content-start mb-3">
-            <a href="home.html" class="btn btn-outline-success shadow-sm"
+            <a
+              href="home.html"
+              class="btn btn-outline-success shadow-sm no-print"
               >⬅️ Kembali</a
             >
           </div>
 
           <div class="mb-3">
-            <label for="bulanSelect" class="form-label fw-bold"
+            <label for="bulanSelect" class="form-label fw-bold no-print"
               >Pilih Bulan:</label
             >
             <select
@@ -180,110 +211,100 @@
           </div>
 
           <div class="text-end mt-3 mb-2">
-            <button class="btn btn-success" id="simpanMasalah">
+            <button class="btn btn-success no-print" id="simpanMasalah">
               Simpan Perubahan
             </button>
           </div>
-
-          <div class="text-end mt-2">
-            <button class="btn btn-outline-danger" id="cetakPDF">
-              <i class="bi bi-file-earmark-pdf-fill"></i> Cetak PDF
-            </button>
-          </div>
-
           <div class="text-end mb-3">
-            <button id="btnPrint" class="btn btn-danger">
+            <button
+              onclick="window.print()"
+              class="btn btn-outline-danger no-print"
+            >
               🖨️ Cetak PDF
             </button>
           </div>
+          <!-- Awal Print Area -->
+          <div id="printArea">
+            <div class="table-responsive">
+              <table
+                class="table table-bordered table-striped table-hover align-middle text-nowrap"
+                id="programTable"
+              >
+                <thead class="table-success text-center align-middle">
+                  <tr>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2" width="300px">Indikator Kerja</th>
+                    <th colspan="2">Bulan</th>
+                    <th
+                      rowspan="2"
+                      id="targetHeader"
+                      width="70px"
+                      class="text-wrap"
+                    >
+                      % Target s/d Bulan ...
+                    </th>
+                    <th rowspan="2" width="70px" class="text-wrap">
+                      % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
+                    </th>
+                    <th
+                      rowspan="2"
+                      id="kesenjangan"
+                      width="60px"
+                      class="text-wrap"
+                    >
+                      % Kesenjangan
+                    </th>
+                    <th rowspan="2" id="Tren" width="70px" class="text-wrap">
+                      TREN
+                    </th>
+                    <th rowspan="2" width="30px">Grade</th>
+                    <th rowspan="2" width="220px" class="text-wrap">Masalah</th>
+                    <th rowspan="2" width="220px" class="text-wrap">
+                      Analisa Penyebab Masalah
+                    </th>
+                    <th rowspan="2" width="220px" class="text-wrap">
+                      Rencana Tindak Lanjut
+                    </th>
+                    <th rowspan="2" width="220px" class="text-wrap">
+                      Hasil Tindak Lanjut
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Bulan Lalu</th>
+                    <th>Bulan Ini</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <tr>
+                    <td colspan="25" class="text-center">Memuat data...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <!-- <div class="table-responsive" style="font-size: 11px">
-            <table
-              class="table table-bordered table-striped align-middle"
-              id="programTable"
-            > -->
-
-          <div class="table-responsive">
-            <table
-              class="table table-bordered table-striped table-hover align-middle text-nowrap"
-              id="programTable"
-            >
-              <!-- thead dan tbody kamu -->
-
-<div id="printArea"></div>
-  <div class="table-responsive">
-  <table class="table table-bordered table-striped table-hover align-middle text-nowrap" id="programTable">
-    <!-- thead dan tbody kamu -->
-
-
-              <thead class="table-success text-center align-middle">
-                <tr>
-                  <th rowspan="2">No</th>
-                  <th rowspan="2" width="300px">Indikator Kerja</th>
-                  <th colspan="2">Bulan</th>
-                  <th
-                    rowspan="2"
-                    id="targetHeader"
-                    width="70px"
-                    class="text-wrap"
-                  >
-                    % Target s/d Bulan ...
-                  </th>
-                  <th rowspan="2" width="70px" class="text-wrap">
-                    % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
-                  </th>
-                  <th
-                    rowspan="2"
-                    id="kesenjangan"
-                    width="60px"
-                    class="text-wrap"
-                  >
-                    % Kesenjangan
-                  </th>
-                  <th rowspan="2" id="Tren" width="70px" class="text-wrap">
-                    TREN
-                  </th>
-                  <th rowspan="2" width="30px">Grade</th>
-                  <!-- Empat kolom besar dengan lebar sama -->
-                  <th rowspan="2" width="220px" class="text-wrap">Masalah</th>
-                  <th rowspan="2" width="220px" class="text-wrap">
-                    Analisa Penyebab Masalah
-                  </th>
-                  <th rowspan="2" width="220px" class="text-wrap">
-                    Rencana Tindak Lanjut
-                  </th>
-                  <th rowspan="2" width="220px" class="text-wrap">
-                    Hasil Tindak Lanjut
-                  </th>
-                </tr>
-                <tr>
-                  <th>Bulan Lalu</th>
-                  <th>Bulan Ini</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <tr>
-                  <td colspan="25" class="text-center">Memuat data...</td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- Tanda Tangan (TTD) -->
             <div id="ttd-section" class="mt-5">
-              <div class="row text-center" style="font-size: 0.9rem;">
+              <div class="row text-center" style="font-size: 0.9rem">
                 <div class="col-6">
                   <p class="mb-5">Pelaksana,</p>
-                  <br><br><br>
-                  <p class="fw-bold text-decoration-underline">..........................................</p>
+                  <br /><br /><br />
+                  <p class="fw-bold text-decoration-underline">
+                    ..........................................
+                  </p>
                 </div>
                 <div class="col-6">
-                  <p class="mb-5">Mengetahui,<br>Penanggung Jawab</p>
-                  <br><br><br>
-                  <p class="fw-bold text-decoration-underline">..........................................</p>
+                  <p class="mb-5">Mengetahui,<br />Penanggung Jawab</p>
+                  <br /><br /><br />
+                  <p class="fw-bold text-decoration-underline">
+                    ..........................................
+                  </p>
                 </div>
               </div>
             </div>
-    </div>
-</div>
-          <div class="mb-3 mt-2">
+          </div>
+          <!-- Akhir Print Area -->
+
+          <div class="mb-3 mt-2 no-print">
             <h6 class="fw-bold">Keterangan Warna Grade:</h6>
             <ul class="list-unstyled" style="font-size: 10px">
               <li>
@@ -292,9 +313,7 @@
                 dan kumulatif di atas target
               </li>
               <li class="mt-2">
-                <span class="badge bg-light text-dark border border-dark"
-                  >PUTIH</span
-                >
+                <span class="badge bg-primary text-white">BIRU</span>
                 : jika <strong>Capaian Bulan ini sama</strong> dengan bulan lalu
                 dan kumulatif di atas target
               </li>
@@ -836,12 +855,14 @@
               updates.push({ id, bulan: kolomBulan, nilai });
             }
           });
+
           // Hasil
           hasilAreas.forEach((textarea) => {
             const id = textarea.getAttribute("data-id");
             const kolomBulan = textarea.getAttribute("data-bulan");
 
-            if (kolomBulan !== hasilMap[labelBulan]) return;
+            // Pastikan kolom bulan sesuai Hasil_[BulanIni]
+            if (!kolomBulan.includes(`Hasil_${bulanDipilih}`)) return;
 
             const nilai = textarea.value.trim();
             if (id && kolomBulan && nilai !== "") {
@@ -851,56 +872,50 @@
 
           if (updates.length === 0) {
             Swal.fire(
-              "Tidak ada data yang diubah untuk bulan ini.",
-              "",
+              "Tidak ada perubahan",
+              "Silakan isi data terlebih dahulu",
               "info"
             );
             return;
           }
 
-          Swal.fire({
-            title: "Menyimpan data...",
-            text: "Mohon tunggu sebentar.",
-            allowOutsideClick: false,
-            didOpen: () => Swal.showLoading(),
-          });
-
-          const promises = updates.map((item) => {
-            const url = `${endpoint}?action=updateMasalah&id=${encodeURIComponent(
-              item.id
-            )}&bulan=${encodeURIComponent(
-              item.bulan
-            )}&nilai=${encodeURIComponent(item.nilai)}`;
-
-            return fetch(url)
-              .then((res) => res.json())
-              .catch((err) => {
-                console.error("Gagal update masalah:", err);
-                return { success: false };
-              });
-          });
-
-          Promise.all(promises).then((results) => {
-            const gagal = results.filter((r) => !r.success);
-            Swal.close();
-
-            if (gagal.length > 0) {
+          // Kirim update satu per satu
+          Promise.all(
+            updates.map((item) =>
+              fetch(
+                `${endpoint}?action=update&id=${encodeURIComponent(
+                  item.id
+                )}&bulan=${encodeURIComponent(
+                  item.bulan
+                )}&nilai=${encodeURIComponent(item.nilai)}`
+              ).then((res) => res.json())
+            )
+          )
+            .then((results) => {
+              const gagal = results.filter((r) => !r.success);
+              if (gagal.length > 0) {
+                Swal.fire(
+                  "Sebagian Gagal",
+                  `${gagal.length} data gagal disimpan.`,
+                  "warning"
+                );
+              } else {
+                Swal.fire(
+                  "Tersimpan!",
+                  "Seluruh perubahan berhasil disimpan.",
+                  "success"
+                );
+              }
+            })
+            .catch((err) => {
+              console.error("Kesalahan penyimpanan:", err);
               Swal.fire(
-                "data Berhasil disimpan",
-                // `${gagal.length} baris tidak tersimpan.`,
-                "success"
+                "Error",
+                "Terjadi kesalahan saat menyimpan data.",
+                "error"
               );
-            } else {
-              Swal.fire({
-                icon: "success",
-                title: "Data bulan ini berhasil disimpan!",
-                timer: 1500,
-                showConfirmButton: false,
-              });
-            }
-          });
+            });
         });
-
     </script>
     <script>
       document.getElementById("cetakPDF").addEventListener("click", () => {
@@ -912,60 +927,64 @@
           html2canvas: { scale: 2 },
           jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
         };
+      });
 
-    });
+      Promise.all(promises).then((results) => {
+        const gagal = results.filter((r) => !r.success);
+        Swal.close();
 
-    Promise.all(promises).then((results) => {
-      const gagal = results.filter((r) => !r.success);
-      Swal.close();
+        if (gagal.length > 0) {
+          Swal.fire(
+            "data Berhasil disimpan",
+            // `${gagal.length} baris tidak tersimpan.`,
+            "success"
+          );
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Data bulan ini berhasil disimpan!",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      });
+    </script>
+    <script>
+      document
+        .getElementById("btnPrint")
+        .addEventListener("click", function () {
+          const printContent = document.createElement("div");
 
-      if (gagal.length > 0) {
-        Swal.fire(
-          "data Berhasil disimpan",
-          // `${gagal.length} baris tidak tersimpan.`,
-          "success"
-        );
-      } else {
-        Swal.fire({
-          icon: "success",
-          title: "Data bulan ini berhasil disimpan!",
-          timer: 1500,
-          showConfirmButton: false,
+          const tableClone = document
+            .querySelector(".table-responsive")
+            .cloneNode(true);
+          const ttdClone = document
+            .getElementById("ttd-section")
+            .cloneNode(true);
+
+          printContent.appendChild(tableClone);
+          printContent.appendChild(ttdClone);
+
+          const opt = {
+            margin: 0.5,
+            filename: `Analisa_PKP_${
+              new Date().toISOString().split("T")[0]
+            }.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+            },
+            jsPDF: {
+              unit: "in",
+              format: "a4",
+              orientation: "landscape",
+            },
+          };
+
+          html2pdf().set(opt).from(printContent).save();
         });
-      }
-    });
-
-</script>
-<script>
-  document.getElementById("btnPrint").addEventListener("click", function () {
-    const printContent = document.createElement("div");
-
-    const tableClone = document.querySelector(".table-responsive").cloneNode(true);
-    const ttdClone = document.getElementById("ttd-section").cloneNode(true);
-
-    printContent.appendChild(tableClone);
-    printContent.appendChild(ttdClone);
-
-    const opt = {
-      margin: 0.5,
-      filename: `Analisa_PKP_${new Date().toISOString().split("T")[0]}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-      },
-      jsPDF: {
-        unit: "in",
-        format: "a4",
-        orientation: "landscape",
-      },
-    };
-
-    html2pdf().set(opt).from(printContent).save();
-  });
-</script>
-
-
+    </script>
   </body>
 </html>
