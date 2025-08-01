@@ -563,9 +563,9 @@
               if (!isNaN(val)) totalCapaian += val;
             }
 
-            const cakupanSD = targetTahun
-              ? (totalCapaian / targetTahun).toFixed(2)
-              : "-";
+            const cakupanSD = targetSasaran
+  ? ((totalCapaian / targetSasaran) * 100).toFixed(2) + "%"
+  : "-";
 
             const masalahBulanIni = row[kolomMasalah] || "";
             const analisaBulanIni = row[kolomAnalisa] || "";
