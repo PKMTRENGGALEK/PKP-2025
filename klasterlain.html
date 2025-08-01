@@ -463,13 +463,13 @@
           });
       }
       const kategoriParam = getQueryParam("kategori");
-const namaParam = getQueryParam("nama");
+      const namaParam = getQueryParam("nama");
 
-if (kategoriParam && namaParam) {
-  document.getElementById("analisaLink").href = `analisa_program.html?kategori=${encodeURIComponent(
-    kategoriParam
-  )}&nama=${encodeURIComponent(namaParam)}`;
-}
+      if (kategoriParam && namaParam) {
+        document.getElementById("analisaLink").href = `analisa_program.html?kategori=${encodeURIComponent(
+          kategoriParam
+        )}&nama=${encodeURIComponent(namaParam)}`;
+      }
 
 
       // Load data on page load

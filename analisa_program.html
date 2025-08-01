@@ -551,13 +551,11 @@
               ? parseFloat(row[bulanLaluKey])
               : 0;
             const targetTahun = parseFloat(row["Target 2025"]) || 0;
+          const targetSasaran = parseFloat(row["Total Sasaran"]) || 0;
+          const targetSD = targetSasaran
+            ? Math.round((targetSasaran / 12) * (idx + 1) )
+            : "-";
 
-            const targetSD = targetTahun
-              ? (
-                  (((targetTahun / 12) * (idx + 1)) / targetTahun) *
-                  100
-                ).toFixed(2)
-              : "-";
 
             let totalCapaian = 0;
             for (let i = 0; i <= idx; i++) {
@@ -579,12 +577,14 @@
             let trenClass = "";
 
             // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
-            if (!isNaN(parseFloat(cakupanSD)) && !isNaN(parseFloat(targetSD))) {
-              const selisihGap = (
-                parseFloat(cakupanSD) - parseFloat(targetSD)
-              ).toFixed(2);
-              gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
-            }
+           const cakupanVal = parseFloat(cakupanSD);
+const targetVal = parseFloat(targetSD);
+
+if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+  const selisihGap = Math.round(cakupanVal - targetVal);
+  gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+}
+
 
             // Tetap hitung tren seperti sebelumnya
             if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
