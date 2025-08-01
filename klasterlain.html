@@ -380,18 +380,26 @@
                 <td>${row["Klaster"] || "-"}</td>
                 <td width="60px">${row["Kegiatan"] || "-"}</td>
                 <td>
-                <div class="d-flex justify-content-between align-items-start flex-column h-100">
-                  <div>${row["Indikator Kerja"] || "-"}</div>
-                  <div class="mt-1 ms-auto">
-                    <button class="btn btn-xs btn-outline-secondary btn-sm py-0 px-1 me-1 show-info-btn" data-type="DO" data-id="${
-                      row["No"]
-                    }">DO</button>
-                    <button class="btn btn-xs btn-outline-info btn-sm py-0 px-1 show-info-btn" data-type="Cara Penghitungan" data-id="${
-                      row["No"]
-                    }">Cara</button>
-                  </div>
-                </div>
-              </td>
+  <div class="d-flex justify-content-between align-items-start flex-column h-100">
+    <div>${row["Indikator Kerja"] || "-"}</div>
+    <div class="mt-1 ms-auto">
+      <button class="btn btn-xs btn-outline-secondary btn-sm py-0 px-1 me-1 show-info-btn" data-type="DO" data-id="${row["No"]}">DO</button>
+      <button class="btn btn-xs btn-outline-info btn-sm py-0 px-1 me-1 show-info-btn" data-type="Cara Penghitungan" data-id="${row["No"]}">Cara</button>
+      ${
+        [
+          "Penggunaan antibiotika pada penatalaksanaan ISPA non pneumonia",
+          "Penggunaan antibiotika pada penatalaksanaan kasus diare non spesifik",
+          "Penggunaan Injeksi pada Myalgia",
+          "Rerata item obat yang diresepkan",
+          "Pengkajian resep,pelayanan resep dan pemberian informasi obat"
+        ].includes((row["Indikator Kerja"] || "").trim())
+          ? `<a href="https://docs.google.com/spreadsheets/d/10yksTSttJTrDImCOJ5xsp3ipAG6CNs-W37rJNnCgIIs/edit?gid=701432751#gid=701432751" target="_blank" class="btn btn-xs btn-outline-warning btn-sm py-0 px-1">Calc</a>`
+          : ""
+      }
+    </div>
+  </div>
+</td>
+
                 <td>${row["Target 2025"] || "-"}</td>
                 <td>${row["Satuan Sasaran"] || "-"}</td>
                 <td class="text-center">
