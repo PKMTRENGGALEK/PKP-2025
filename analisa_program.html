@@ -283,29 +283,44 @@
             </div>
 
             <!-- Tanda Tangan (TTD) -->
-           <div id="ttd-section" class="mt-5">
-  <div class="row text-center" style="font-size: 0.9rem">
-    <!-- Pelaksana -->
-    <div class="col-6">
-      <p class="mb-0"><br>Pelaksana,</p>
-      <!-- Gambar tanda tangan transparan -->
-      <img id="ttdPelaksana" src="img/ttd_pelaksana.png" alt="TTD Pelaksana" style="max-height: 60px; margin: 10px 0; opacity: 0.8" />
-      <p id="namaPelaksana" class="fw-bold text-decoration-underline mb-1">
-        ..........................................
-      </p>
-      <p id="nipPelaksana" class="mb-0">NIP. ..........................................</p>
-    </div>
+            <div id="ttd-section" class="mt-5">
+              <div class="row text-center" style="font-size: 0.9rem">
+                <!-- Pelaksana -->
+                <div class="col-6">
+                  <p class="mb-0"><br />Pelaksana,</p>
+                  <!-- Gambar tanda tangan transparan -->
+                  <img
+                    id="ttdPelaksana"
+                    src="img/ttd_pelaksana.png"
+                    alt="TTD Pelaksana"
+                    style="max-height: 60px; margin: 10px 0; opacity: 0.8"
+                  />
+                  <p
+                    id="namaPelaksana"
+                    class="fw-bold text-decoration-underline mb-1"
+                  >
+                    ..........................................
+                  </p>
+                  <p id="nipPelaksana" class="mb-0">
+                    NIP. ..........................................
+                  </p>
+                </div>
 
-    <!-- Penanggung Jawab -->
-    <div class="col-6">
-      <p class="mb-0">Mengetahui,<br />Penanggung Jawab</p>
-      <img src="img/ttd_murti.png" alt="TTD PJ" style="max-height: 60px; margin: 10px 0; opacity: 0.8" />
-      <p class="fw-bold text-decoration-underline mb-1">dr. Murti Rukiyandari</p>
-      <p class="mb-0">NIP. 19780910 200604 2 001</p>
-    </div>
-  </div>
-</div>
-
+                <!-- Penanggung Jawab -->
+                <div class="col-6">
+                  <p class="mb-0">Mengetahui,<br />Penanggung Jawab</p>
+                  <img
+                    src="img/ttd_murti.png"
+                    alt="TTD PJ"
+                    style="max-height: 60px; margin: 10px 0; opacity: 0.8"
+                  />
+                  <p class="fw-bold text-decoration-underline mb-1">
+                    dr. Murti Rukiyandari
+                  </p>
+                  <p class="mb-0">NIP. 19780910 200604 2 001</p>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Akhir Print Area -->
 
@@ -551,11 +566,10 @@
               ? parseFloat(row[bulanLaluKey])
               : 0;
             const targetTahun = parseFloat(row["Target 2025"]) || 0;
-          const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
-          const targetSD = targetSasaran
-            ? Math.round((targetSasaran / 12) * (idx + 1) )
-            : "-";
-
+            const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
+            const targetSD = targetSasaran
+              ? Math.round((targetSasaran / 12) * (idx + 1))
+              : "-";
 
             let totalCapaian = 0;
             for (let i = 0; i <= idx; i++) {
@@ -564,8 +578,8 @@
             }
 
             const cakupanSD = targetSasaran
-  ? ((totalCapaian / targetSasaran) * 100).toFixed(2) + "%"
-  : "-";
+              ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+              : "-";
 
             const masalahBulanIni = row[kolomMasalah] || "";
             const analisaBulanIni = row[kolomAnalisa] || "";
@@ -577,14 +591,13 @@
             let trenClass = "";
 
             // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
-           const cakupanVal = parseFloat(cakupanSD);
-const targetVal = parseFloat(targetSD);
+            const cakupanVal = parseFloat(cakupanSD);
+            const targetVal = parseFloat(targetSD);
 
-if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
-  const selisihGap = Math.round(cakupanVal - targetVal);
-  gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
-}
-
+            if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+              const selisihGap = Math.round(cakupanVal - targetVal);
+              gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+            }
 
             // Tetap hitung tren seperti sebelumnya
             if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
@@ -992,17 +1005,16 @@ if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
         });
     </script>
     <script>
-  function getParameterByName(name) {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(name) || "";
-  }
+      function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name) || "";
+      }
 
-  const namaPelaksana = getParameterByName("nama");
+      const namaPelaksana = getParameterByName("nama");
 
-  if (namaPelaksana) {
-    document.getElementById("namaPelaksana").textContent = namaPelaksana;
-  }
-</script>
-
+      if (namaPelaksana) {
+        document.getElementById("namaPelaksana").textContent = namaPelaksana;
+      }
+    </script>
   </body>
 </html>
