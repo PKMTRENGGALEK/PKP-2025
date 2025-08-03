@@ -359,12 +359,12 @@
         let index = 1;
 
        for (const induk in grouped) {
-  const indukRow = document.createElement("tr");
-  indukRow.style.backgroundColor = "#f8d7da";
-  indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger">${induk}</td>`;
-  fragment.appendChild(indukRow);
+    const indukRow = document.createElement("tr");
+    indukRow.style.backgroundColor = "#f8d7da";
+    indukRow.innerHTML = `<td colspan="30" class="fw-bold text-danger">${induk}</td>`;
+    fragment.appendChild(indukRow);
 
-  for (const sub in grouped[induk]) {
+    for (const sub in grouped[induk]) {
     const indikatorButuhCalc = grouped[induk][sub].some(row =>
       [
         "Penggunaan antibiotika pada penatalaksanaan ISPA non pneumonia",
@@ -378,24 +378,48 @@
       ].includes((row["Indikator Kerja"] || "").trim())
     );
 
+    const indikatorGigi = grouped[induk][sub].some(row =>
+      [
+        "Persentase pasien yang menderita karies yang berkunjung ke Puskesmas mendapatkan tatalaksana sesuai prosedur.",
+        "Persentase pasien penyakit periodontal (periodontitis dan ginggivitis) yang berkunjung ke Puskesmas mendapatkan tatalaksana sesuai prosedur."
+      ].includes((row["Indikator Kerja"] || "").trim())
+    );
+
+    const indikatorUGD = grouped[induk][sub].some(row =>
+      [
+        "Persentase tatalaksana Kegawatdaruratan kepada pasien dengan memberikan penanganan segera yang tepat dan sesuai Alur Kegawatdaruratan. Menerapkan TRIAGE (Alur registrasi, Inform Concent/pencatatan dan pelaporan IGD), tatalaksana sesuai klaster, tatalaksana kegawatdaruratan medis khusus",
+        "Pasien gawat darurat yang perlu dirujuk ke FKRTL diperiksa dan distabilisasi terlebih dahulu sesuai dengan kemampuan Puskesmas dan dipastikan dapat diterima di FKRTL sesuai dengan kebijakan, pedoman dan prosedur yang ditetapkan",
+        "Persentase kelengkapan pengisian informed consent pasien UGD dalam waktu24 jam"
+      ].includes((row["Indikator Kerja"] || "").trim())
+    );
+
     // Baris 1: Judul Sub
     const subRow = document.createElement("tr");
     subRow.style.backgroundColor = "#cff4fc";
     subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3">${sub}</td>`;
     fragment.appendChild(subRow);
 
-    // Baris 2: Tombol Calc (hanya jika perlu)
+    // Baris 2: Tombol Kalkulator (prioritas: Rasional Obat > UGD > Gigi)
+    let link = null;
     if (indikatorButuhCalc) {
+      link = "https://docs.google.com/spreadsheets/d/18N0l1rXg55lvZUStOvu9h4VVxuMuRTU_coRT6tVV004/edit?usp=sharing";
+    } else if (indikatorUGD) {
+      link = "https://docs.google.com/spreadsheets/d/1GPKNAx4JYSI99Nm0sMRCvopQl-fvPIH16VDyG_ufn-Y/edit?usp=sharing";
+    } else if (indikatorGigi) {
+      link = "https://docs.google.com/spreadsheets/d/1BDsGEIMljBQkHl0JLn86Oe4RPNZTdMdJp-xKe69wGNU/edit?usp=sharing";
+    }
+
+    if (link) {
       const calcRow = document.createElement("tr");
       calcRow.innerHTML = `
         <td colspan="3"></td>
         <td>
-          <a href="https://docs.google.com/spreadsheets/d/18N0l1rXg55lvZUStOvu9h4VVxuMuRTU_coRT6tVV004/edit?usp=sharing" target="_blank" class="btn  btn-warning btn-sm py-0 px-2 ms-0 shadow">Calculator</a>
+          <a href="${link}" target="_blank" class="btn btn-warning btn-sm py-0 px-2 ms-0 shadow">Calc</a>
         </td>
         <td colspan="26"></td>
       `;
       fragment.appendChild(calcRow);
-    }
+    };
 
     // Baris Data
     for (const row of grouped[induk][sub]) {
@@ -424,7 +448,12 @@
             value="${row["Total Sasaran"] || ""}" />
         </td>
         <td>${row["Target Sasaran"] || "-"}</td>
-        <td>${row["Pencapaian (dalam satuan sasaran)"] || "-"}</td>
+        <td>${
+  row["Pencapaian (dalam satuan sasaran)"]
+    ? Math.round(parseFloat(row["Pencapaian (dalam satuan sasaran)"]))
+    : "-"
+}</td>
+
         <td>${row["% Cakupan Rill"] ? parseFloat(row["% Cakupan Rill"]).toFixed(2) : "-"}</td>
         <td>${row["Ketercapaian Target Tahun N"] ? parseFloat(row["Ketercapaian Target Tahun N"]).toFixed(2) : "-"}</td>
       `;
