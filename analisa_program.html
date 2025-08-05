@@ -29,6 +29,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Tom Select CSS & JS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 
     <style>
       body {
@@ -215,14 +221,314 @@
               Simpan Perubahan
             </button>
           </div>
-          <div class="text-end mb-3">
+          <!-- <div class="text-end mb-3">
             <button
               onclick="window.print()"
               class="btn btn-outline-danger no-print"
             >
               🖨️ Cetak PDF
             </button>
+          </div> -->
+          <div class="text-end mb-3">
+            <button
+              class="btn btn-outline-danger no-print"
+              data-bs-toggle="modal"
+              data-bs-target="#modalPenanggungJawab"
+            >
+              🖨️ Cetak PDF
+            </button>
           </div>
+
+          <!-- Modal Pilih Penanggung Jawab -->
+          <div class="modal fade" id="modalPenanggungJawab" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Pilih Penanggung Jawab</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <select class="form-select" id="selectPenanggungJawab">
+                    <option value="" selected disabled>-- Pilih --</option>
+                    <option
+                      value="dr. TATIK SUKARYATI|19710611 200212 2 006|ttd1"
+                    >
+                      dr. TATIK SUKARYATI
+                    </option>
+                    <option
+                      value="dr. MURTI RUKIYANDARI|19800611 200903 2 004|ttd2"
+                    >
+                      dr. MURTI RUKIYANDARI
+                    </option>
+                    <option
+                      value="drg. DIAN SITA RISTIANA|19821022 201001 2 014"
+                    >
+                      drg. DIAN SITA RISTIANA
+                    </option>
+                    <option value="ASTUTIK, S.S.T.|19721011 199301 2 001">
+                      ASTUTIK, S.S.T.
+                    </option>
+                    <option
+                      value="DEWI ANDRIKA ASMARA, S.Gz.|19860807 200903 2 013"
+                    >
+                      DEWI ANDRIKA ASMARA, S.Gz.
+                    </option>
+                    <option
+                      value="HAYUNING DEWI OCTAVIANTI, S.K.M.|19801003 200604 2 022"
+                    >
+                      HAYUNING DEWI OCTAVIANTI, S.K.M.
+                    </option>
+                    <option value="PARYATI, Amd.Keb.|19700629 199102 2 003">
+                      PARYATI, Amd.Keb.
+                    </option>
+                    <option value="MUBINAH, Amd.Keb.|19701220 199102 2 002">
+                      MUBINAH, Amd.Keb.
+                    </option>
+                    <option
+                      value="LILIK SUSANTI, Amd.Keb|19700304 199203 2 005"
+                    >
+                      LILIK SUSANTI, Amd.Keb
+                    </option>
+                    <option value="SETIYANI, A.Md.Farm.|19680101 199203 2 018">
+                      SETIYANI, A.Md.Farm.
+                    </option>
+                    <option
+                      value="NINIK WARDIATI, Amd.Keb.|19730404 199302 2 003"
+                    >
+                      NINIK WARDIATI, Amd.Keb.
+                    </option>
+                    <option
+                      value="ENY KARYAWATI, Amd.Keb.|19710624 199302 2 001"
+                    >
+                      ENY KARYAWATI, Amd.Keb.
+                    </option>
+                    <option value="NURKOLIS, A.Md.Kep.|19780611 199803 1 005">
+                      NURKOLIS, A.Md.Kep.
+                    </option>
+                    <option value="SUPRIJONO, A.Md.Kep.|19680501 199003 1 009">
+                      SUPRIJONO, A.Md.Kep.
+                    </option>
+                    <option value="WINDAYANI, S.S.T.|19760426 200501 2 010">
+                      WINDAYANI, S.S.T.
+                    </option>
+                    <option
+                      value="Ns. SELIYA CITRA PRATIWI, S.Kep.|19841029 201001 2 019"
+                    >
+                      Ns. SELIYA CITRA PRATIWI, S.Kep.
+                    </option>
+                    <option value="MARJIANTO, Amd.Gz.|19720118 199203 1 009">
+                      MARJIANTO, Amd.Gz.
+                    </option>
+                    <option
+                      value="YUYUN WAHYU RETNOWATI, Amd.Keb.|19780302 200801 2 017"
+                    >
+                      YUYUN WAHYU RETNOWATI, Amd.Keb.
+                    </option>
+                    <option
+                      value="DHEARARA WIDHIAYU RIZKY, S.Farm.,Apt.|19950506 201903 2 005"
+                    >
+                      DHEARARA WIDHIAYU RIZKY, S.Farm.,Apt.
+                    </option>
+                    <option
+                      value="RUDY KURNIAWAN, A.Md.K.L.|19771107 200903 1 004"
+                    >
+                      RUDY KURNIAWAN, A.Md.K.L.
+                    </option>
+                    <option
+                      value="WILDA HAYYIN NAFI'AH, A.Md. Farm.|19861201 201101 2 016"
+                    >
+                      WILDA HAYYIN NAFI'AH, A.Md. Farm.
+                    </option>
+                    <option value="TITIK SUWANTI, A.Md.|19800408 201101 2 011">
+                      TITIK SUWANTI, A.Md.
+                    </option>
+                    <option
+                      value="BEKTI KUSUMADEWI, S.Kep.Ns.|19880706 201903 2 004"
+                    >
+                      BEKTI KUSUMADEWI, S.Kep.Ns.
+                    </option>
+                    <option
+                      value="ANIK HARYATI, A.Md.Kes.|19790817 200701 2 014"
+                    >
+                      ANIK HARYATI, A.Md.Kes.
+                    </option>
+                    <option
+                      value="AGUS WAHYONO, Amd.Kep.|19730821 200604 1 008"
+                    >
+                      AGUS WAHYONO, Amd.Kep.
+                    </option>
+                    <option value="dr. VIGA RESFIKASARI|19920411 202203 2 001">
+                      dr. VIGA RESFIKASARI
+                    </option>
+                    <option
+                      value="dr. GERALDI KUSUMA WIJAYA|19940723 202203 1 002"
+                    >
+                      dr. GERALDI KUSUMA WIJAYA
+                    </option>
+                    <option
+                      value="LURUH SETYORESMI, S.Gz.|19900618 201903 2 001"
+                    >
+                      LURUH SETYORESMI, S.Gz.
+                    </option>
+                    <option
+                      value="DINA ANINGGARWATI, Amd.Kep.|19821208 201406 2 003|ttd29"
+                    >
+                      DINA ANINGGARWATI, Amd.Kep.
+                    </option>
+                    <option
+                      value="RATNA DEWI KUSTANTI, A.Md.Keb.|19760606 200801 2 036"
+                    >
+                      RATNA DEWI KUSTANTI, A.Md.Keb.
+                    </option>
+                    <option
+                      value="DENY WAHYU PURNOMO, Amd.Kep.|19780615 200701 1 023"
+                    >
+                      DENY WAHYU PURNOMO, Amd.Kep.
+                    </option>
+                    <option
+                      value="SHEVI DWI ARDHIANI, S.KM|19930916 202012 2 004"
+                    >
+                      SHEVI DWI ARDHIANI, S.KM
+                    </option>
+                    <option
+                      value="FARHANI PUTRI MUNGGARANI, S.KM|19880410 202203 2 002"
+                    >
+                      FARHANI PUTRI MUNGGARANI, S.KM
+                    </option>
+                    <option
+                      value="DEWI NOVITASARI, Amd.Keb.|19791120 201905 2 001"
+                    >
+                      DEWI NOVITASARI, Amd.Keb.
+                    </option>
+                    <option
+                      value="RIA DWI YUSIANTI, A.Md.|19890109 201903 2 005"
+                    >
+                      RIA DWI YUSIANTI, A.Md.
+                    </option>
+                    <option
+                      value="BELLA NURVITASARI, A.Md.Kes.|19970526 201903 2 001"
+                    >
+                      BELLA NURVITASARI, A.Md.Kes.
+                    </option>
+                    <option
+                      value="BETY NARISWARI AZIZAH, A.Md.RMIK|19931023 201903 2 012"
+                    >
+                      BETY NARISWARI AZIZAH, A.Md.RMIK
+                    </option>
+                    <option
+                      value="ANJAR TRI CAHYANINGSIH, Amd.Kep|19910415 202012 2 003"
+                    >
+                      ANJAR TRI CAHYANINGSIH, Amd.Kep
+                    </option>
+                    <option value="NURJANAH, Amd.Kep|19880514 202012 2 002">
+                      NURJANAH, Amd.Kep
+                    </option>
+                    <option
+                      value="NOVITA ANGGRAINI, Amd.AK|19921104 202012 2 005"
+                    >
+                      NOVITA ANGGRAINI, Amd.AK
+                    </option>
+                    <option
+                      value="MARATUS SOLIKAH, Amd.K.G|19900323 202012 2 002"
+                    >
+                      MARATUS SOLIKAH, Amd.K.G
+                    </option>
+                    <option
+                      value="MUFIDATUL MUNAWAROH, Amd.AK|19930216 202012 2 006"
+                    >
+                      MUFIDATUL MUNAWAROH, Amd.AK
+                    </option>
+                    <option
+                      value="DWIYANTI PRA SETYANINGSIH, A.Md.Kep.|19980123 202203 2 003"
+                    >
+                      DWIYANTI PRA SETYANINGSIH, A.Md.Kep.
+                    </option>
+                    <option
+                      value="OKTARINA FADLILAH, A.Md.Kep.|19971030 202203 2 007"
+                    >
+                      OKTARINA FADLILAH, A.Md.Kep.
+                    </option>
+                    <option
+                      value="FITRIA RAHMAWATI, A.Md.Keb.|19950302 202203 2 003"
+                    >
+                      FITRIA RAHMAWATI, A.Md.Keb.
+                    </option>
+                    <option
+                      value="MUJAHIDAH FIDIENIA HARLIANI, A.Md.Gz.|19950324 202203 2 005"
+                    >
+                      MUJAHIDAH FIDIENIA HARLIANI, A.Md.Gz.
+                    </option>
+                    <option
+                      value="FAQIH AMRULLOH HUSEIN, A.Md.Kes.|19990610 202203 1 003"
+                    >
+                      FAQIH AMRULLOH HUSEIN, A.Md.Kes.
+                    </option>
+                    <option
+                      value="RIZQI ERY ISYADI, A.Md.|19960530 202203 1 005"
+                    >
+                      RIZQI ERY ISYADI, A.Md.
+                    </option>
+                    <option
+                      value="Ns.TANJUNG PANJI ASMORO, S.Kep|199206262023211001"
+                    >
+                      Ns.TANJUNG PANJI ASMORO, S.Kep
+                    </option>
+                    <option value="ADHITA AYU AGUSTIN, SKM|199608292023212001">
+                      ADHITA AYU AGUSTIN, SKM
+                    </option>
+                    <option
+                      value="DWIHAYU PRASTYANDARTI, A.Md.Kep.|198210202022212001"
+                    >
+                      DWIHAYU PRASTYANDARTI, A.Md.Kep.
+                    </option>
+                    <option value="LISA ENDRIENI, A.Md.Kep.|198701262022212001">
+                      LISA ENDRIENI, A.Md.Kep.
+                    </option>
+                    <option value="YANU PRASETYO, A.Md.Kep.|198401202022211001">
+                      YANU PRASETYO, A.Md.Kep.
+                    </option>
+                    <option
+                      value="WAHYU PUJI LESTARI, A.Md.Keb.|199010042022212002"
+                    >
+                      WAHYU PUJI LESTARI, A.Md.Keb.
+                    </option>
+                    <option
+                      value="TATIK SRISETYO RAHAYU, Amd,Kep|198210162023212002"
+                    >
+                      TATIK SRISETYO RAHAYU, Amd,Kep
+                    </option>
+                    <option
+                      value="LINDA DWI RAHAYU SETYARINI, Amd.Kep|198602122023212003"
+                    >
+                      LINDA DWI RAHAYU SETYARINI, Amd.Kep
+                    </option>
+                  </select>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="pilihPJDanCetak()"
+                  >
+                    OK & Cetak
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Awal Print Area -->
           <div id="printArea">
             <div class="table-responsive">
@@ -287,16 +593,23 @@
               <div class="row text-center" style="font-size: 0.9rem">
                 <!-- Penanggung Jawab -->
                 <div class="col-6">
+                  <!-- Penanggung Jawab -->
                   <p class="mb-0">Mengetahui,<br />Penanggung Jawab</p>
                   <img
+                    id="ttdPenanggungJawab"
                     src="img/ttd_murti.png"
                     alt="TTD PJ"
                     style="max-height: 60px; margin: 10px 0; opacity: 0.8"
                   />
-                  <p class="fw-bold text-decoration-underline mb-1">
+                  <p
+                    id="namaPenanggungJawab"
+                    class="fw-bold text-decoration-underline mb-1"
+                  >
                     dr. Murti Rukiyandari
                   </p>
-                  <p class="mb-0">NIP. 19780910 200604 2 001</p>
+                  <p id="nipPenanggungJawab" class="mb-0">
+                    NIP. 19780910 200604 2 001
+                  </p>
                 </div>
                 <!-- Pelaksana -->
                 <div class="col-6">
@@ -1014,6 +1327,63 @@
       if (namaPelaksana) {
         document.getElementById("namaPelaksana").textContent = namaPelaksana;
       }
+      function getParameterByNIP(nip) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(nip) || "";
+      }
+
+      const nipPelaksana = getParameterByNIP("nip");
+
+      if (nipPelaksana) {
+        document.getElementById("nipPelaksana").textContent =
+          "NIP. " + nipPelaksana;
+      }
+    </script>
+    <script>
+      function pilihPJDanCetak() {
+        const select = document.getElementById("selectPenanggungJawab");
+        const selectedValue = select.value;
+
+        if (!selectedValue) {
+          alert("Silakan pilih Penanggung Jawab terlebih dahulu.");
+          return;
+        }
+
+        const [nama, nip, ttdFile] = selectedValue.split("|");
+
+        // Update tampilan di halaman
+        document.getElementById("namaPenanggungJawab").textContent = nama;
+        document.getElementById("nipPenanggungJawab").textContent =
+          "NIP. " + nip;
+
+        // Ubah gambar tanda tangan berdasarkan file ttd
+        document.getElementById("ttdPenanggungJawab").src = "img/" + ttdFile;
+
+        // Tutup modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalPenanggungJawab")
+        );
+        modal.hide();
+
+        // Delay sedikit agar modal sempat hilang dulu
+        setTimeout(() => {
+          window.print();
+        }, 300);
+      }
+    </script>
+
+    <!-- tom select -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        new TomSelect("#selectPenanggungJawab", {
+          create: false,
+          sortField: {
+            field: "text",
+            direction: "asc",
+          },
+          placeholder: "Ketik untuk mencari nama...",
+        });
+      });
     </script>
   </body>
 </html>
