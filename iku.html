@@ -20,6 +20,11 @@
       href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
       rel="stylesheet"
     />
+    <!-- Bootstrap Icons CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -130,6 +135,7 @@
                   <th colspan="12">Hasil Kegiatan</th>
                   <!-- <th rowspan="2">Analisa Akar Penyebab Masalah</th>
                   <th rowspan="2">Rencana Tindak lanjut</th> -->
+                  <th rowspan="2">Upload Bukti Dukung</th>
                 </tr>
                 <tr class="text-center">
                   <th>Jan</th>
@@ -315,27 +321,41 @@
               tr.dataset.id = rowId;
 
               let html = `
-        <td>${index++}</td>
-        <td width="60px">${row["Indikator Utama"] || "-"}</td>
-        <td width="60px">${
-          row["Target Tahunan"] != null
-            ? (row["Target Tahunan"] * 100).toFixed(0) + "%"
-            : "-"
-        }</td>
+                <td>${index++}</td>
+                <td width="60px">${row["Indikator Utama"] || "-"}</td>
+                <td width="60px">${
+                  row["Target Tahunan"] != null
+                    ? (row["Target Tahunan"] * 100).toFixed(0) + "%"
+                    : "-"
+                }</td>
+                <td width="60px">${row["Sasaran Tahunan"] || "-"}</td>
+                <td>${row["Sasaran Bulanan"] || "-"}</td>
+              `;
 
-        <td width="60px">${row["Sasaran Tahunan"] || "-"}</td>
-        <td>${row["Sasaran Bulanan"] || "-"}</td>`;
-
+              // Tambahkan kolom per bulan
               for (const bulan of bulanKeys) {
                 html += renderEditableCell(bulan, rowId, row[bulan]);
               }
+
+              // Tombol Upload Bukti Dukung kecil + icon
+              const buktiLink = row["Bukti Dukung"];
+              html += `
+                <td class="text-center">
+                  ${
+                    buktiLink
+                      ? `<a href="${buktiLink}" target="_blank" class="btn btn-sm btn-outline-primary shadow-sm">
+                            <i class="bi bi-upload"></i> Upload
+                          </a>
+        `
+                      : `<span class="text-muted">-</span>`
+                  }
+                </td>`;
 
               tr.innerHTML = html;
               fragment.appendChild(tr);
             }
           }
         }
-
         tableBody.innerHTML = "";
         tableBody.appendChild(fragment);
         bindInputEvents();
