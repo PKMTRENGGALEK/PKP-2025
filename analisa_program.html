@@ -42,40 +42,141 @@
         font-family: "Segoe UI", sans-serif;
       }
       @media print {
-        /* Hapus visibility global — terlalu agresif */
+        html,
         body {
+          background: white !important;
+          color: black !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          height: auto !important;
+          width: 100% !important;
+          overflow: visible !important;
+        }
+
+        /* SEMUA DISEMBUNYIKAN TERLEBIH DULU */
+        body * {
+          visibility: hidden !important;
+        }
+
+        /* H1-H6 BERSIH DARI MARGIN DAN PADDING */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          margin: 0 !important;
+          padding: 0 !important;
+          line-height: 1.2 !important;
+        }
+
+        /* JUDUL PRINT */
+        .judul-print {
+          margin: 0 !important;
+          padding: 0 !important;
+          line-height: 1.2 !important;
           visibility: visible !important;
         }
 
+        /* AREA CETAK */
+        #printArea {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          visibility: visible !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        #printArea * {
+          visibility: visible !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        /* NON-PRINT */
+        .no-print {
+          display: none !important;
+        }
+
+        /* LAYOUT */
+        .container,
+        .card,
+        .shadow,
+        .rounded,
+        .border,
+        .row,
+        .col-6,
+        .card-body {
+          background: white !important;
+          box-shadow: none !important;
+          border: none !important;
+          overflow: visible !important;
+          height: auto !important;
+          max-height: none !important;
+          page-break-inside: avoid !important;
+        }
+
+        /* TABEL */
         .table-responsive {
           overflow: visible !important;
-          max-height: none !important;
           height: auto !important;
+          max-height: none !important;
         }
 
-        /* Lebih aman daripada visibility: hidden semua */
-        body * {
-          visibility: visible !important;
+        .table-responsive > table,
+        table {
+          width: 100% !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
 
-        /* Hindari position absolute di #print-area */
-        #print-area {
-          position: static !important;
-          width: 100%;
+        thead {
+          display: table-header-group !important;
         }
 
+        tfoot {
+          display: table-footer-group !important;
+        }
+
+        tr,
+        td,
+        th {
+          page-break-inside: auto !important;
+        }
+
+        /* GAMBAR */
+        img {
+          max-width: 100% !important;
+          page-break-inside: avoid !important;
+        }
+
+        /* AREA KHUSUS */
         #ttd-section {
-          display: block !important;
-          break-inside: avoid;
-          margin-top: 1cm; /* jarak fleksibel dari tabel terakhir */
+          page-break-inside: avoid !important;
         }
-
+        .container,
+        .row {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .table thead tr:nth-child(1) th,
+        .table thead tr:nth-child(2) th {
+          position: static !important;
+          top: auto !important;
+          z-index: auto !important;
+        }
+        /* #printArea * {
+          border: 1px dashed red;
+        } */
+        /* UKURAN KERTAS */
         @page {
           size: A4 landscape;
           margin: 1cm;
-        }
-        .no-print {
-          display: none !important;
         }
       }
 
@@ -163,11 +264,7 @@
     <div class="container-fluid py-4" style="max-width: 95%; margin: auto">
       <div class="card shadow-sm border-0">
         <div class="card-body">
-          <div class="text-center mb-4">
-            <h4 class="fw-bold mb-0">
-              IDENTIFIKASI DAN ANALISA MASALAH HASIL CAPAIAN PKP TAHUN 2025
-            </h4>
-          </div>
+          <div class="text-center mb-4"></div>
 
           <div class="d-flex justify-content-start mb-3">
             <a
@@ -531,76 +628,84 @@
 
           <!-- Awal Print Area -->
           <div id="printArea">
-            <div class="table-responsive">
-              <table
-                class="table table-bordered table-striped table-hover align-middle text-nowrap"
-                id="programTable"
-              >
-                <thead class="table-success text-center align-middle">
-                  <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2" width="300px">Indikator Kerja</th>
-                    <th colspan="2">Bulan</th>
-                    <th
-                      rowspan="2"
-                      id="targetHeader"
-                      width="70px"
-                      class="text-wrap"
-                    >
-                      % Target s/d Bulan ...
-                    </th>
-                    <th rowspan="2" width="70px" class="text-wrap">
-                      % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
-                    </th>
-                    <th
-                      rowspan="2"
-                      id="kesenjangan"
-                      width="60px"
-                      class="text-wrap"
-                    >
-                      % Kesenjangan
-                    </th>
-                    <th rowspan="2" id="Tren" width="70px" class="text-wrap">
-                      TREN
-                    </th>
-                    <th rowspan="2" width="30px">Grade</th>
-                    <th rowspan="2" width="220px" class="text-wrap">Masalah</th>
-                    <th rowspan="2" width="220px" class="text-wrap">
-                      Analisa Penyebab Masalah
-                    </th>
-                    <th rowspan="2" width="220px" class="text-wrap">
-                      Rencana Tindak Lanjut
-                    </th>
-                    <th rowspan="2" width="220px" class="text-wrap">
-                      Hasil Tindak Lanjut
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Bulan Lalu</th>
-                    <th>Bulan Ini</th>
-                  </tr>
-                </thead>
-                <tbody id="tableBody">
-                  <tr>
-                    <td colspan="25" class="text-center">Memuat data...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <!-- <div class="judul-print">
+              <h2>IDENTIFIKASI DAN ANALISA MASALAH PKP 2025</h2>
+            </div> -->
 
+            <div class="table-wrapper">
+              <div class="table-responsive">
+                <table
+                  class="table table-bordered table-striped table-hover align-middle text-nowrap"
+                  id="programTable"
+                >
+                  <thead class="table-success text-center align-middle">
+                    <tr>
+                      <th rowspan="2">No</th>
+                      <th rowspan="2" width="300px">Indikator Kerja</th>
+                      <th colspan="2">Bulan</th>
+                      <th
+                        rowspan="2"
+                        id="targetHeader"
+                        width="70px"
+                        class="text-wrap"
+                      >
+                        % Target s/d Bulan ...
+                      </th>
+                      <th rowspan="2" width="70px" class="text-wrap">
+                        % CAKUPAN s/d Bulan <span id="cakupanBulan">...</span>
+                      </th>
+                      <th
+                        rowspan="2"
+                        id="kesenjangan"
+                        width="60px"
+                        class="text-wrap"
+                      >
+                        % Kesenjangan
+                      </th>
+                      <th rowspan="2" id="Tren" width="70px" class="text-wrap">
+                        TREN
+                      </th>
+                      <th rowspan="2" width="30px">Grade</th>
+                      <th rowspan="2" width="220px" class="text-wrap">
+                        Masalah
+                      </th>
+                      <th rowspan="2" width="220px" class="text-wrap">
+                        Analisa Penyebab Masalah
+                      </th>
+                      <th rowspan="2" width="220px" class="text-wrap">
+                        Rencana Tindak Lanjut
+                      </th>
+                      <th rowspan="2" width="220px" class="text-wrap">
+                        Hasil Tindak Lanjut
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Bulan Lalu</th>
+                      <th>Bulan Ini</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableBody">
+                    <tr>
+                      <td colspan="25" class="text-center">Memuat data...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <!-- Tanda Tangan (TTD) -->
-            <div id="ttd-section" class="mt-5">
+            <div id="ttd-section" class="mt-4">
               <div class="row text-center" style="font-size: 0.9rem">
                 <!-- Penanggung Jawab -->
                 <div class="col-6">
                   <!-- Penanggung Jawab -->
                   <p class="mb-0">Mengetahui,<br />Penanggung Jawab</p>
-                  <img
+                  <!-- <img
                     id="ttdPenanggungJawab"
                     src="img/ttd_murti.png"
                     alt="TTD PJ"
                     style="max-height: 60px; margin: 10px 0; opacity: 0.8"
-                  />
+                  /> -->
+                  <br /><br /><br />
                   <p
                     id="namaPenanggungJawab"
                     class="fw-bold text-decoration-underline mb-1"
@@ -615,12 +720,13 @@
                 <div class="col-6">
                   <p class="mb-0"><br />Pelaksana,</p>
                   <!-- Gambar tanda tangan transparan -->
-                  <img
+                  <!-- <img
                     id="ttdPelaksana"
                     src="img/ttd_pelaksana.png"
                     alt="TTD Pelaksana"
                     style="max-height: 60px; margin: 10px 0; opacity: 0.8"
-                  />
+                  /> -->
+                  <br /><br /><br />
                   <p
                     id="namaPelaksana"
                     class="fw-bold text-decoration-underline mb-1"
@@ -1349,15 +1455,12 @@
           return;
         }
 
-        const [nama, nip, ttdFile] = selectedValue.split("|");
+        const [nama, nip] = selectedValue.split("|");
 
         // Update tampilan di halaman
         document.getElementById("namaPenanggungJawab").textContent = nama;
         document.getElementById("nipPenanggungJawab").textContent =
           "NIP. " + nip;
-
-        // Ubah gambar tanda tangan berdasarkan file ttd
-        document.getElementById("ttdPenanggungJawab").src = "img/" + ttdFile;
 
         // Tutup modal
         const modal = bootstrap.Modal.getInstance(
@@ -1371,7 +1474,6 @@
         }, 300);
       }
     </script>
-
     <!-- tom select -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
