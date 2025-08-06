@@ -365,7 +365,9 @@
           fragment.appendChild(indukRow);
 
           for (const sub in grouped[induk]) {
-            const indikatorButuhCalc = grouped[induk][sub].some((row) =>
+            const rows = grouped[induk][sub];
+
+            const indikatorButuhCalc = rows.some((row) =>
               [
                 "Penggunaan antibiotika pada penatalaksanaan ISPA non pneumonia",
                 "Penggunaan antibiotika pada penatalaksanaan kasus diare non spesifik",
@@ -378,14 +380,14 @@
               ].includes((row["Indikator Kerja"] || "").trim())
             );
 
-            const indikatorGigi = grouped[induk][sub].some((row) =>
+            const indikatorGigi = rows.some((row) =>
               [
                 "Persentase pasien yang menderita karies yang berkunjung ke Puskesmas mendapatkan tatalaksana sesuai prosedur.",
                 "Persentase pasien penyakit periodontal (periodontitis dan ginggivitis) yang berkunjung ke Puskesmas mendapatkan tatalaksana sesuai prosedur.",
               ].includes((row["Indikator Kerja"] || "").trim())
             );
 
-            const indikatorUGD = grouped[induk][sub].some((row) =>
+            const indikatorUGD = rows.some((row) =>
               [
                 "Persentase tatalaksana Kegawatdaruratan kepada pasien dengan memberikan penanganan segera yang tepat dan sesuai Alur Kegawatdaruratan. Menerapkan TRIAGE (Alur registrasi, Inform Concent/pencatatan dan pelaporan IGD), tatalaksana sesuai klaster, tatalaksana kegawatdaruratan medis khusus",
                 "Pasien gawat darurat yang perlu dirujuk ke FKRTL diperiksa dan distabilisasi terlebih dahulu sesuai dengan kemampuan Puskesmas dan dipastikan dapat diterima di FKRTL sesuai dengan kebijakan, pedoman dan prosedur yang ditetapkan",
@@ -393,13 +395,19 @@
               ].includes((row["Indikator Kerja"] || "").trim())
             );
 
-            // Baris 1: Judul Sub
+            const indikatorReproduksi = rows.some((row) =>
+              [
+                "KB aktif (Contraceptive Prevalence Rate/ CPR)",
+                "PUS dengan 4 T ber KB",
+              ].includes((row["Indikator Kerja"] || "").trim())
+            );
+
             const subRow = document.createElement("tr");
             subRow.style.backgroundColor = "#cff4fc";
             subRow.innerHTML = `<td colspan="30" class="fw-semibold text-primary ps-3">${sub}</td>`;
             fragment.appendChild(subRow);
 
-            // Baris 2: Tombol Kalkulator (prioritas: Rasional Obat > UGD > Gigi)
+            // Link Prioritas: Rasional Obat > UGD > Gigi > Reproduksi
             let link = null;
             if (indikatorButuhCalc) {
               link =
@@ -410,6 +418,9 @@
             } else if (indikatorGigi) {
               link =
                 "https://docs.google.com/spreadsheets/d/1BDsGEIMljBQkHl0JLn86Oe4RPNZTdMdJp-xKe69wGNU/edit?usp=sharing";
+            } else if (indikatorReproduksi) {
+              link =
+                "https://docs.google.com/spreadsheets/d/1x23OEaftdvozy5wzAr3FGiK8GBRjgfcQfvFIoWdmrRE/edit?usp=sharing";
             }
 
             if (link) {
@@ -417,7 +428,9 @@
               calcRow.innerHTML = `
         <td colspan="3"></td>
         <td>
-          <a href="${link}" target="_blank" class="btn btn-warning btn-sm py-0 px-2 ms-0 shadow">Calc</a>
+          <a href="${link}" target="_blank" class="btn btn-warning btn-sm py-0 px-2 ms-0 shadow">
+            <i class="bi bi-calculator"></i> Kalkulator
+          </a>
         </td>
         <td colspan="26"></td>
       `;
