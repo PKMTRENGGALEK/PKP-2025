@@ -978,8 +978,11 @@
               : 0;
             const targetTahun = parseFloat(row["Target 2025"]) || 0;
             const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
+
+            const bulanKe = idx + 1;
+
             const targetSD = targetSasaran
-              ? Math.round((targetSasaran / 12) * (idx + 1))
+              ? Math.round(((targetSasaran / 12) * bulanKe / targetSasaran) * 100)
               : "-";
 
             let totalCapaian = 0;
