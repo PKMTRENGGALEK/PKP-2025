@@ -980,10 +980,9 @@
             const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
 
             const bulanKe = idx + 1;
-
-            const targetSD = targetSasaran
-              ? Math.round(((targetSasaran / 12) * bulanKe / targetSasaran) * 100)
-              : "-";
+const targetSD = targetSasaran
+  ? ((targetSasaran / 12) * bulanKe / targetSasaran * 100).toFixed(2)
+  : "-";
 
             let totalCapaian = 0;
             for (let i = 0; i <= idx; i++) {
