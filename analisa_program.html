@@ -914,7 +914,7 @@
             console.error("Fetch error:", err);
           });
       };
-
+      
       function renderTable(data, bulan) {
         const tbody = document.getElementById("tableBody");
 
@@ -1080,18 +1080,21 @@ const targetSD = targetSasaran
                 </td>
                 <td>
                   <textarea class="form-control form-control-sm analisa-textarea"
+                  style="overflow:hidden; resize:none;"
                     rows="2"
                     data-id="${row["No"]}"
                     data-bulan="${kolomAnalisa}">${analisaBulanIni}</textarea>
                 </td>
                 <td>
                   <textarea class="form-control form-control-sm rtl-textarea"
+                  style="overflow:hidden; resize:none;"
                     rows="2"
                     data-id="${row["No"]}"
                     data-bulan="${kolomRTL}">${RTLBulanIni}</textarea>
                 </td>
                 <td>
                   <textarea class="form-control form-control-sm hasil-textarea"
+                  style="overflow:hidden; resize:none;"
                     rows="2"
                     data-id="${row["No"]}"
                     data-bulan="Hasil_${bulanIniKey}">${
@@ -1104,6 +1107,118 @@ const targetSD = targetSasaran
         }
 
         tbody.innerHTML = rows;
+        function autoResizeTextarea(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = textarea.scrollHeight + "px";
+}
+document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
+  autoResizeTextarea(textarea);
+  textarea.addEventListener("input", function () {
+    autoResizeTextarea(this);
+  });
+
+  textarea.addEventListener("change", async function () {
+    const id = this.dataset.id;
+    const bulan = this.dataset.bulan;
+    const nilai = this.value;
+
+    if (id && bulan) {
+      try {
+        const res = await fetch(
+          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(nilai)}`
+        );
+        const result = await res.json();
+        if (!result.success) {
+          alert("Gagal memperbarui data: " + result.message);
+        }
+      } catch (err) {
+        console.error("Update error:", err);
+        alert("Terjadi kesalahan saat menyimpan data.");
+      }
+    }
+  });
+});
+document.querySelectorAll(".analisa-textarea").forEach((textarea) => {
+  autoResizeTextarea(textarea);
+  textarea.addEventListener("input", function () {
+    autoResizeTextarea(this);
+  });
+
+  textarea.addEventListener("change", async function () {
+    const id = this.dataset.id;
+    const bulan = this.dataset.bulan;
+    const nilai = this.value;
+
+    if (id && bulan) {
+      try {
+        const res = await fetch(
+          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(nilai)}`
+        );
+        const result = await res.json();
+        if (!result.success) {
+          alert("Gagal memperbarui data: " + result.message);
+        }
+      } catch (err) {
+        console.error("Update error:", err);
+        alert("Terjadi kesalahan saat menyimpan data.");
+      }
+    }
+  });
+});
+document.querySelectorAll(".rtl-textarea").forEach((textarea) => {
+  autoResizeTextarea(textarea);
+  textarea.addEventListener("input", function () {
+    autoResizeTextarea(this);
+  });
+
+  textarea.addEventListener("change", async function () {
+    const id = this.dataset.id;
+    const bulan = this.dataset.bulan;
+    const nilai = this.value;
+
+    if (id && bulan) {
+      try {
+        const res = await fetch(
+          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(nilai)}`
+        );
+        const result = await res.json();
+        if (!result.success) {
+          alert("Gagal memperbarui data: " + result.message);
+        }
+      } catch (err) {
+        console.error("Update error:", err);
+        alert("Terjadi kesalahan saat menyimpan data.");
+      }
+    }
+  });
+});
+document.querySelectorAll(".hasil-textarea").forEach((textarea) => {
+  autoResizeTextarea(textarea);
+  textarea.addEventListener("input", function () {
+    autoResizeTextarea(this);
+  });
+
+  textarea.addEventListener("change", async function () {
+    const id = this.dataset.id;
+    const bulan = this.dataset.bulan;
+    const nilai = this.value;
+
+    if (id && bulan) {
+      try {
+        const res = await fetch(
+          `${endpoint}?action=update&id=${encodeURIComponent(id)}&bulan=${encodeURIComponent(bulan)}&nilai=${encodeURIComponent(nilai)}`
+        );
+        const result = await res.json();
+        if (!result.success) {
+          alert("Gagal memperbarui data: " + result.message);
+        }
+      } catch (err) {
+        console.error("Update error:", err);
+        alert("Terjadi kesalahan saat menyimpan data.");
+      }
+    }
+  });
+});
 
         document.querySelectorAll(".masalah-textarea").forEach((textarea) => {
           textarea.addEventListener("change", async function () {
