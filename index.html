@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PKP 2025 PKM-TRENGGALEK</title>
+    <title>PKP 2025</title>
 
     <!-- Google Sign-In -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -202,9 +202,7 @@
         ).innerHTML = `Halo, <strong>${data.name.toUpperCase()}</strong> (${
           data.email
         })`;
-
-        const lastPage = sessionStorage.getItem("lastPage") || "home.html";
-        document.getElementById("pageFrame").src = lastPage;
+        document.getElementById("pageFrame").src = "home.html";
       }
 
       function handleCredentialResponse(response) {
@@ -243,7 +241,7 @@
           confirmButtonColor: "#e53935",
         }).then((result) => {
           if (result.isConfirmed) {
-            sessionStorage.clear();
+            sessionStorage.removeItem("userCredential");
             document.getElementById("content").style.display = "none";
             document.getElementById("pageFrame").src = "";
             document.getElementById("loginDiv").style.display = "block";
@@ -265,32 +263,19 @@
           if (allowedEmails.includes(data.email)) {
             showContent(data);
           } else {
-            sessionStorage.clear();
-            document.getElementById("loginDiv").style.display = "block";
+            sessionStorage.removeItem("userCredential");
           }
-        } else {
-          document.getElementById("loginDiv").style.display = "block";
         }
       }
 
-      // Cek login saat halaman dimuat
+      // Jalankan saat halaman dimuat
       window.onload = checkSession;
 
-      // Tangkap event logout
+      // Pasang listener tombol logout setelah semua dimuat
       window.addEventListener("DOMContentLoaded", () => {
         const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", logout);
-        }
-
-        const iframe = document.getElementById("pageFrame");
-        if (iframe) {
-          iframe.addEventListener("load", () => {
-            sessionStorage.setItem(
-              "lastPage",
-              iframe.contentWindow.location.href
-            );
-          });
         }
       });
     </script>
