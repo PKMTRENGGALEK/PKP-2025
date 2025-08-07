@@ -202,7 +202,9 @@
         ).innerHTML = `Halo, <strong>${data.name.toUpperCase()}</strong> (${
           data.email
         })`;
-        document.getElementById("pageFrame").src = "home.html";
+
+        const lastPage = sessionStorage.getItem("lastPage") || "home.html";
+        document.getElementById("pageFrame").src = lastPage;
       }
 
       function handleCredentialResponse(response) {
@@ -241,7 +243,7 @@
           confirmButtonColor: "#e53935",
         }).then((result) => {
           if (result.isConfirmed) {
-            sessionStorage.removeItem("userCredential");
+            sessionStorage.clear();
             document.getElementById("content").style.display = "none";
             document.getElementById("pageFrame").src = "";
             document.getElementById("loginDiv").style.display = "block";
@@ -263,19 +265,32 @@
           if (allowedEmails.includes(data.email)) {
             showContent(data);
           } else {
-            sessionStorage.removeItem("userCredential");
+            sessionStorage.clear();
+            document.getElementById("loginDiv").style.display = "block";
           }
+        } else {
+          document.getElementById("loginDiv").style.display = "block";
         }
       }
 
-      // Jalankan saat halaman dimuat
+      // Cek login saat halaman dimuat
       window.onload = checkSession;
 
-      // Pasang listener tombol logout setelah semua dimuat
+      // Tangkap event logout
       window.addEventListener("DOMContentLoaded", () => {
         const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", logout);
+        }
+
+        const iframe = document.getElementById("pageFrame");
+        if (iframe) {
+          iframe.addEventListener("load", () => {
+            sessionStorage.setItem(
+              "lastPage",
+              iframe.contentWindow.location.href
+            );
+          });
         }
       });
     </script>
