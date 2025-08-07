@@ -239,18 +239,21 @@
               >⬅️ Kembali</a
             >
             <div>
-              <button
-                class="btn btn-outline-danger no-print"
-                data-bs-toggle="modal"
-                data-bs-target="#modalPenanggungJawab"
-              >
-                🖨️ Cetak PDF
-              </button>
+              <div class="text-end mb-3">
+                <button
+                  class="btn btn-outline-danger no-print"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalPenanggungJawab"
+                >
+                  🖨️ Cetak PDF
+                </button>
+              </div>
               <button id="saveAllBtn" class="btn btn-success shadow-sm">
                 💾 Simpan Semua
               </button>
             </div>
           </div>
+          <!-- modal penaggung jawab -->
           <div class="modal fade" id="modalPenanggungJawab" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
@@ -267,21 +270,23 @@
                   <select class="form-select" id="selectPenanggungJawab">
                     <option value="" selected disabled>-- Pilih --</option>
                     <option
-                      value="dr. TATIK SUKARYATI|19710611 200212 2 006|ttd1"
+                      value="dr. TATIK SUKARYATI|19710611 200212 2 006|assets/drtatik.png"
                     >
                       dr. TATIK SUKARYATI
                     </option>
                     <option
-                      value="dr. MURTI RUKIYANDARI|19800611 200903 2 004|ttd2"
+                      value="dr. MURTI RUKIYANDARI|19800611 200903 2 004|assets/kapus.png"
                     >
                       dr. MURTI RUKIYANDARI
                     </option>
                     <option
-                      value="drg. DIAN SITA RISTIANA|19821022 201001 2 014"
+                      value="drg. DIAN SITA RISTIANA|19821022 201001 2 014|assets/diansita.png"
                     >
                       drg. DIAN SITA RISTIANA
                     </option>
-                    <option value="ASTUTIK, S.S.T.|19721011 199301 2 001">
+                    <option
+                      value="ASTUTIK, S.S.T.|19721011 199301 2 001|assets/"
+                    >
                       ASTUTIK, S.S.T.
                     </option>
                     <option
@@ -387,7 +392,7 @@
                       LURUH SETYORESMI, S.Gz.
                     </option>
                     <option
-                      value="DINA ANINGGARWATI, Amd.Kep.|19821208 201406 2 003|ttd29"
+                      value="DINA ANINGGARWATI, Amd.Kep.|19821208 201406 2 003|assets/dina.png"
                     >
                       DINA ANINGGARWATI, Amd.Kep.
                     </option>
@@ -583,11 +588,11 @@
                   <!-- Penanggung Jawab -->
                   <div class="col-6">
                     <!-- Penanggung Jawab -->
-                    <p class="mb-0">Mengetahui,<br />Penanggung Jawab</p>
+                    <p class="mb-0">Mengetahui,<br />PJ Klaster 1 Manajemen</p>
                     <!-- id="ttdPelaksana" -->
                     <img
                       id="ttdPenanggungJawab"
-                      src="assets/kapus.png"
+                      src="assets/hayuning.png"
                       alt="TTD Pelaksana"
                       style="
                         position: absolute;
@@ -603,10 +608,10 @@
                       id="namaPenanggungJawab"
                       class="fw-bold text-decoration-underline mb-1"
                     >
-                      dr. Murti Rukiyandari
+                      Hayuning Dewi Octavianti S.KM
                     </p>
                     <p id="nipPenanggungJawab" class="mb-0">
-                      NIP. 19780910 200604 2 001
+                      NIP. 19801003 200604 2 022
                     </p>
                   </div>
                   <!-- Pelaksana -->

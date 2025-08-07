@@ -559,15 +559,16 @@
       const kategoriParam = getQueryParam("kategori");
       const namaParam = getQueryParam("nama");
       const nip = getQueryParam("nip");
+      const imgParam = getQueryParam("img"); // ✅ ambil parameter img
 
-      if (kategoriParam && namaParam && nip) {
+      if (kategoriParam && namaParam && nip && imgParam) {
         document.getElementById(
           "analisaLink"
         ).href = `analisa_program.html?kategori=${encodeURIComponent(
           kategoriParam
         )}&nama=${encodeURIComponent(namaParam)}&nip=${encodeURIComponent(
           nip
-        )}`;
+        )}&img=${encodeURIComponent(imgParam)}`; // ✅ tambahkan img ke URL
       }
 
       // Load data on page load
