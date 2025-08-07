@@ -90,6 +90,22 @@
         font-size: 0.85rem;
         color: #333;
         z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      #logoutBtn {
+        background: #e53935;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #logoutBtn:hover {
+        background: #c62828;
       }
     </style>
   </head>
@@ -114,7 +130,10 @@
     </div>
 
     <div id="content">
-      <div id="userInfo"></div>
+      <div id="userInfo">
+        <span id="userName"></span>
+        <button id="logoutBtn">Logout</button>
+      </div>
       <iframe id="pageFrame" src=""></iframe>
     </div>
 
@@ -175,6 +194,17 @@
         return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
       }
 
+      function showContent(data) {
+        document.getElementById("loginDiv").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        document.getElementById(
+          "userName"
+        ).innerHTML = `Halo, <strong>${data.name.toUpperCase()}</strong> (${
+          data.email
+        })`;
+        document.getElementById("pageFrame").src = "home.html";
+      }
+
       function handleCredentialResponse(response) {
         const data = decodeJwtResponse(response.credential);
         const email = data.email;
@@ -189,14 +219,8 @@
           return;
         }
 
-        document.getElementById("loginDiv").style.display = "none";
-        document.getElementById("content").style.display = "block";
-        document.getElementById(
-          "userInfo"
-        ).innerHTML = `<p>Halo, <strong>${data.name.toUpperCase()}</strong> (${
-          data.email
-        })</p>`;
-        document.getElementById("pageFrame").src = "home.html";
+        sessionStorage.setItem("userCredential", JSON.stringify(data));
+        showContent(data);
 
         Swal.fire({
           icon: "success",
@@ -207,9 +231,53 @@
         });
       }
 
-      function loadPage(page) {
-        document.getElementById("pageFrame").src = page;
+      function logout() {
+        Swal.fire({
+          title: "Yakin mau logout?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Logout",
+          cancelButtonText: "Batal",
+          confirmButtonColor: "#e53935",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            sessionStorage.removeItem("userCredential");
+            document.getElementById("content").style.display = "none";
+            document.getElementById("pageFrame").src = "";
+            document.getElementById("loginDiv").style.display = "block";
+
+            Swal.fire({
+              icon: "success",
+              title: "Logout berhasil",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
+        });
       }
+
+      function checkSession() {
+        const savedData = sessionStorage.getItem("userCredential");
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          if (allowedEmails.includes(data.email)) {
+            showContent(data);
+          } else {
+            sessionStorage.removeItem("userCredential");
+          }
+        }
+      }
+
+      // Jalankan saat halaman dimuat
+      window.onload = checkSession;
+
+      // Pasang listener tombol logout setelah semua dimuat
+      window.addEventListener("DOMContentLoaded", () => {
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", logout);
+        }
+      });
     </script>
   </body>
 </html>
