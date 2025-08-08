@@ -427,7 +427,7 @@
             <!-- <div class="judul-print">
               <h2>IDENTIFIKASI DAN ANALISA MASALAH PKP 2025</h2>
             </div> -->
-
+            <h4 id="judulKategori" class="fw-bold text-uppercase text-center"></h4>
             <div class="table-wrapper">
               <div class="table-responsive">
                 <table
@@ -703,7 +703,21 @@
           selectedkategori = decodeURIComponent(kategoriFromURL);
           // Set dropdown ke kategori yang sesuai
           document.getElementById("kategoriSelect").value = selectedkategori;
+          // Set judul berdasarkan kategori
+          document.getElementById("judulKategori").textContent = `IDENTIFIKASI DAN ANALISA MASALAH PROGRAM  ${selectedkategori.toUpperCase()} - PKP 2025`;
+
         }
+        // Tampilkan spinner di awal
+        document.getElementById("tableBody").innerHTML = `
+          <tr>
+            <td colspan="25" class="text-center">
+              <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Memuat...</span>
+              </div>
+              <div>Memuat data...</div>
+            </td>
+          </tr>
+        `;
         fetch(endpoint)
           .then((res) => res.json())
           .then((data) => {
