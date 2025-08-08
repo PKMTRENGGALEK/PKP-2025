@@ -1462,16 +1462,14 @@ document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASA
     </script>
     <!-- tom select -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        new TomSelect("#selectPenanggungJawab", {
-          create: false,
-          sortField: {
-            field: "text",
-            direction: "asc",
-          },
-          placeholder: "Ketik untuk mencari nama...",
-        });
-      });
+     document.addEventListener("DOMContentLoaded", function () {
+  new TomSelect("#selectPenanggungJawab", {
+    create: false,
+    sortField: false, // ⛔ Jangan urut otomatis
+    placeholder: "Ketik untuk mencari nama...",
+  });
+});
+
     </script>
   </body>
 </html>
