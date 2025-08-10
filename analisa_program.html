@@ -79,18 +79,11 @@
           padding: 0 !important;
           line-height: 1.2 !important;
           visibility: visible !important;
+          page-break-after: avoid !important; /* jaga tetap bersama tabel */
         }
 
         /* AREA CETAK */
-        #printArea {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          visibility: visible !important;
-          padding: 0 !important;
-          margin: 0 !important;
-        }
+       
 
         #printArea * {
           visibility: visible !important;
@@ -98,9 +91,9 @@
           padding: 0 !important;
         }
         #ttd-section {
-          margin-top: 2cm !important;
+          margin-top: 0.5cm !important;
           page-break-inside: avoid !important;
-          padding-top: 2px;
+          /* padding-top: 2px; */
         }
         /* TTD ABSOLUTE */
         #ttdPenanggungJawab {
@@ -140,7 +133,7 @@
           overflow: visible !important;
           height: auto !important;
           max-height: none !important;
-          page-break-inside: avoid !important;
+          page-break-inside: auto !important; /* ubah dari avoid ke auto */
         }
 
         /* TABEL */
@@ -153,8 +146,8 @@
         .table-responsive > table,
         table {
           width: 100% !important;
-          page-break-inside: avoid !important;
-          break-inside: avoid !important;
+          page-break-inside: auto !important;
+          break-inside: auto !important;
         }
 
         thead {
@@ -494,9 +487,10 @@
                 </table>
               </div>
             </div>
+            
             <!-- Tanda Tangan (TTD) -->
             <div class="row" id="ttd-section">
-              <div id="ttd-section" class="mt-2" style="margin-top: 2px">
+              <div id="ttd-section" class="mt-2">
                 <div class="row text-center" style="font-size: 0.9rem">
                   <!-- Penanggung Jawab -->
                   <div class="col-6">
