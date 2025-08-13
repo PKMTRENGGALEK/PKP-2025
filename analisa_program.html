@@ -808,145 +808,331 @@ document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASA
             <tr><td colspan="13" class="fw-semibold text-primary" style="background-color: #e2e3f3;">${sub}</td></tr>
           `;
 
-          rowsInSub.forEach((row) => {
-            const indikator = row["Indikator Kerja"] || "-";
-            const bulanIniVal = parseFloat(row[bulanIniKey]);
-            const bulanLaluVal = bulanLaluKey
-              ? parseFloat(row[bulanLaluKey])
-              : 0;
-            const targetTahun = parseFloat(row["Target 2025"]) || 0;
-            const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
+        rowsInSub.forEach((row) => {
+  const indikator = row["Indikator Kerja"] || "-";
+  const bulanIniVal = parseFloat(row[bulanIniKey]);
+  const bulanLaluVal = bulanLaluKey ? parseFloat(row[bulanLaluKey]) : 0;
+  const targetTahun = parseFloat(row["Target 2025"]) || 0;
+  const targetSasaran = parseFloat(row["Target Sasaran"]) || 0;
 
-            const bulanKe = idx + 1;
-            const targetSD = targetSasaran
-              ? (
-                  (((targetSasaran / 12) * bulanKe) / targetSasaran) *
-                  100
-                ).toFixed(2)
-              : "-";
+  const bulanKe = idx + 1;
 
-            let totalCapaian = 0;
-            for (let i = 0; i <= idx; i++) {
-              const val = parseFloat(row[bulanKeys[i]]);
-              if (!isNaN(val)) totalCapaian += val;
-            }
+  let targetSD, cakupanSD, gap = "-", tren, trenClass = "", grade = "-", gradeClass = "";
 
-            const cakupanSD = targetSasaran
-              ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
-              : "-";
+  // ==============================
+  // LOGIKA KHUSUS ANTIBIOTIKA ISPA
+  // ==============================
+  if (indikator === "Penggunaan antibiotika pada penatalaksanaan ISPA non pneumonia") {
+    targetSD = targetSasaran
+      ? (((targetSasaran / 12) * bulanKe) / targetSasaran * 100).toFixed(2)
+      : "-";
 
-            const masalahBulanIni = row[kolomMasalah] || "";
-            const analisaBulanIni = row[kolomAnalisa] || "";
-            const RTLBulanIni = row[kolomRTL] || "";
+    let totalCapaian = 0;
+    for (let i = 0; i <= idx; i++) {
+      const val = parseFloat(row[bulanKeys[i]]);
+      if (!isNaN(val)) totalCapaian += val;
+    }
+    cakupanSD = targetSasaran
+      ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+      : "-";
 
-            let gap = "-";
-            let tren =
-              "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
-            let trenClass = "";
+    const cakupanVal = parseFloat(cakupanSD);
+    const targetVal = parseFloat(targetSD);
+    if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+      const selisihGap = Math.round(cakupanVal - targetVal);
+      gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+    }
 
-            // Ganti GAP dari selisih antar bulan => selisih cakupan dan target kumulatif
-            const cakupanVal = parseFloat(cakupanSD);
-            const targetVal = parseFloat(targetSD);
+    // tren tetap
+    tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+    if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+      const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+      if (selisihBulan > 0) {
+        tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-success text-white";
+      } else if (selisihBulan < 0) {
+        tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-danger text-white";
+      }
+    }
 
-            if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
-              const selisihGap = Math.round(cakupanVal - targetVal);
-              gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
-            }
+    // GRADE khusus ISPA non pneumonia (bertingkat)
+    if (!isNaN(bulanIniVal) && targetSasaran > 0) {
+      const persentase = (bulanIniVal / targetSasaran) * 100;
+      if (persentase < 20) {
+        grade = "";        // 100
+        gradeClass = "bg-success text-white";
+      } else if (persentase < 40) {
+        grade = "";       // 75
+        gradeClass = "bg-warning text-dark";
+      } else if (persentase < 60) {
+        grade = "";      // 50
+        gradeClass = "bg-warning text-dark";
+      } else if (persentase < 80) {
+        grade = "";      // 25
+        gradeClass = "bg-warning text-dark";
+      } else {
+        grade = "";       // 0
+        gradeClass = "bg-danger text-white";
+      }
+    }
 
-            // Tetap hitung tren seperti sebelumnya
-            if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
-              const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
-              if (selisihBulan > 0) {
-                tren =
-                  "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
-                trenClass = "bg-success text-white";
-              } else if (selisihBulan < 0) {
-                tren =
-                  "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
-                trenClass = "bg-danger text-white";
-              }
-            }
 
-            let grade = "-";
-            let gradeClass = "";
+    // GRADE berdasar % pencapaian bulan ini dibanding sasaran
+    if (!isNaN(bulanIniVal) && targetSasaran > 0) {
+      const persentase = (bulanIniVal / targetSasaran) * 100;
+      if (persentase < 20) {
+        grade = "";
+        gradeClass = "bg-success text-white";
+      } else if (persentase < 40) {
+        grade = "";
+        gradeClass = "bg-warning text-dark";
+      } else {
+        grade = "";
+        gradeClass = "bg-danger text-white";
+      }
+    }
+// ===============================================
+// LOGIKA KHUSUS DIARE NON SPESIFIK
+// ===============================================
+} else if (indikator === "Penggunaan antibiotika pada penatalaksanaan kasus diare non spesifik") {
+  targetSD = targetSasaran
+    ? (((targetSasaran / 12) * bulanKe) / targetSasaran * 100).toFixed(2)
+    : "-";
 
-            if (
-              !isNaN(bulanIniVal) &&
-              !isNaN(bulanLaluVal) &&
-              !isNaN(cakupanSD) &&
-              !isNaN(targetSD)
-            ) {
-              const capaianNaik = bulanIniVal > bulanLaluVal;
-              const capaianTurun = bulanIniVal < bulanLaluVal;
-              const capaianSama = bulanIniVal === bulanLaluVal;
+  let totalCapaian = 0;
+  for (let i = 0; i <= idx; i++) {
+    const val = parseFloat(row[bulanKeys[i]]);
+    if (!isNaN(val)) totalCapaian += val;
+  }
+  cakupanSD = targetSasaran
+    ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+    : "-";
 
-              const selisihCakupan =
-                parseFloat(cakupanSD) - parseFloat(targetSD);
+  const cakupanVal = parseFloat(cakupanSD);
+  const targetVal = parseFloat(targetSD);
+  if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+    const selisihGap = Math.round(cakupanVal - targetVal);
+    gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+  }
 
-              if ((capaianNaik || capaianSama) && selisihCakupan >= 0) {
-                grade = "";
-                gradeClass = "bg-primary text-white";
-              } else if (capaianTurun && selisihCakupan >= 0) {
-                grade = "";
-                gradeClass = "bg-success text-white";
-              } else if (capaianNaik && selisihCakupan < 0) {
-                grade = "";
-                gradeClass = "bg-warning text-dark";
-              } else if ((capaianTurun || capaianSama) && selisihCakupan < 0) {
-                grade = "";
-                gradeClass = "bg-danger text-white";
-              }
-            }
+  // Tren tetap
+  tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+  if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+    const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+    if (selisihBulan > 0) {
+      tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+      trenClass = "bg-success text-white";
+    } else if (selisihBulan < 0) {
+      tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+      trenClass = "bg-danger text-white";
+    }
+  }
 
-            rows += `
-              <tr>
-                <td class="text-center">${counter++}</td>
-                <td class="text-wrap "  title="${indikator}">${indikator}</td>
-                <td class="text-wrap text-center">${
-                  isNaN(bulanLaluVal) ? "-" : bulanLaluVal
-                }</td>
-                <td class="text-wrap text-center">${
-                  isNaN(bulanIniVal) ? "-" : bulanIniVal
-                }</td>
-                <td class="text-wrap text-center">${targetSD}</td>
-                <td class="text-wrap text-center">${cakupanSD}</td>
-                <td class="text-center">${gap}</td>
-                <td class="text-center">${tren}</td>
-                <td class="${gradeClass} text-center fw-semibold">${grade}</td>
-                <td>
-                  <textarea class="form-control form-control-sm masalah-textarea"
-                    rows="2"
-                    data-id="${row["No"]}"
-                    data-bulan="${kolomMasalah}">${masalahBulanIni}</textarea>
-                </td>
-                <td>
-                  <textarea class="form-control form-control-sm analisa-textarea"
-                  style="overflow:hidden; resize:none;"
-                    rows="2"
-                    data-id="${row["No"]}"
-                    data-bulan="${kolomAnalisa}">${analisaBulanIni}</textarea>
-                </td>
-                <td>
-                  <textarea class="form-control form-control-sm rtl-textarea"
-                  style="overflow:hidden; resize:none;"
-                    rows="2"
-                    data-id="${row["No"]}"
-                    data-bulan="${kolomRTL}">${RTLBulanIni}</textarea>
-                </td>
-                <td>
-                  <textarea class="form-control form-control-sm hasil-textarea"
-                  style="overflow:hidden; resize:none;"
-                    rows="2"
-                    data-id="${row["No"]}"
-                    data-bulan="Hasil_${bulanIniKey}">${
-              row["Hasil_" + bulanIniKey] || ""
-            }</textarea>
-                </td>
+  // Grading bertingkat
+  if (!isNaN(bulanIniVal)) {
+    if (bulanIniVal < 8) {
+      grade = "";        // 100
+      gradeClass = "bg-success text-white";
+    } else if (bulanIniVal < 20) {
+      grade = "";       // 75
+      gradeClass = "bg-warning text-dark";
+    } else if (bulanIniVal < 40) {
+      grade = "";      // 50
+      gradeClass = "bg-warning text-dark";
+    } else if (bulanIniVal < 60) {
+      grade = "";      // 25
+      gradeClass = "bg-warning text-dark";
+    } else {
+      grade = "";       // 0
+      gradeClass = "bg-danger text-white";
+    }
+  }
+  } else if (indikator === "Rerata item obat yang diresepkan") {
+  targetSD = targetSasaran
+    ? (((targetSasaran / 12) * bulanKe) / targetSasaran * 100).toFixed(2)
+    : "-";
 
-              </tr>`;
-          });
+  let totalCapaian = 0;
+  for (let i = 0; i <= idx; i++) {
+    const val = parseFloat(row[bulanKeys[i]]);
+    if (!isNaN(val)) totalCapaian += val;
+  }
+  cakupanSD = targetSasaran
+    ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+    : "-";
+
+  const cakupanVal = parseFloat(cakupanSD);
+  const targetVal = parseFloat(targetSD);
+  if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+    const selisihGap = Math.round(cakupanVal - targetVal);
+    gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+  }
+
+  // Tren tetap
+  tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+  if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+    const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+    if (selisihBulan > 0) {
+      tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+      trenClass = "bg-success text-white";
+    } else if (selisihBulan < 0) {
+      tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+      trenClass = "bg-danger text-white";
+    }
+  }
+
+  // Grading bertingkat
+  if (!isNaN(bulanIniVal)) {
+    if (bulanIniVal <= 2.6) {
+      grade = "";        // 100
+      gradeClass = "bg-success text-white";
+    } else if (bulanIniVal <= 4) {
+      grade = "";       // 75
+      gradeClass = "bg-warning text-dark";
+    } else if (bulanIniVal <= 7) {
+      grade = "";      // 50
+      gradeClass = "bg-warning text-dark";
+    } else if (bulanIniVal <= 9) {
+      grade = "";      // 25
+      gradeClass = "bg-warning text-dark";
+    } else {
+      grade = "";       // 0
+      gradeClass = "bg-danger text-white";
+    }
+  }
+
+//logika lain
+} else if (indikator === "Penggunaan Injeksi pada Myalgia") {
+    targetSD = targetSasaran
+      ? (((targetSasaran / 12) * bulanKe) / targetSasaran * 100).toFixed(2)
+      : "-";
+
+    let totalCapaian = 0;
+    for (let i = 0; i <= idx; i++) {
+      const val = parseFloat(row[bulanKeys[i]]);
+      if (!isNaN(val)) totalCapaian += val;
+    }
+    cakupanSD = targetSasaran
+      ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+      : "-";
+
+    const cakupanVal = parseFloat(cakupanSD);
+    const targetVal = parseFloat(targetSD);
+    if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+      const selisihGap = Math.round(cakupanVal - targetVal);
+      gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+    }
+
+    // tren tetap
+    tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+    if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+      const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+      if (selisihBulan > 0) {
+        tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-success text-white";
+      } else if (selisihBulan < 0) {
+        tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-danger text-white";
+      }
+    }
+
+    // GRADE khusus Myalgia (bertingkat)
+    if (!isNaN(bulanIniVal)) {
+      if (bulanIniVal <= 1) {
+        grade = "";
+        gradeClass = "bg-success text-white"; // 100
+      } else if (bulanIniVal <= 10) {
+        grade = "";
+        gradeClass = "bg-success text-white"; // 75
+      } else if (bulanIniVal <= 20) {
+        grade = "";
+        gradeClass = "bg-warning text-dark"; // 50
+      } else if (bulanIniVal <= 30) {
+        grade = "";
+        gradeClass = "bg-warning text-dark"; // 25
+      } else {
+        grade = "";
+        gradeClass = "bg-danger text-white"; // 0
+      }
+    }
+
+  // ==============================
+  // LOGIKA UMUM (tetap)
+  // ==============================
+  } else {
+    targetSD = targetSasaran
+      ? (((targetSasaran / 12) * bulanKe) / targetSasaran * 100).toFixed(2)
+      : "-";
+
+    let totalCapaian = 0;
+    for (let i = 0; i <= idx; i++) {
+      const val = parseFloat(row[bulanKeys[i]]);
+      if (!isNaN(val)) totalCapaian += val;
+    }
+    cakupanSD = targetSasaran
+      ? ((totalCapaian / targetSasaran) * 100).toFixed(2)
+      : "-";
+
+    const cakupanVal = parseFloat(cakupanSD);
+    const targetVal = parseFloat(targetSD);
+    if (!isNaN(cakupanVal) && !isNaN(targetVal)) {
+      const selisihGap = Math.round(cakupanVal - targetVal);
+      gap = `${selisihGap > 0 ? "+" : ""}${selisihGap}`;
+    }
+
+    tren = "<i class='bi bi-arrow-right-circle-fill fs-4 text-dark'></i>";
+    if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal)) {
+      const selisihBulan = (bulanIniVal - bulanLaluVal).toFixed(2);
+      if (selisihBulan > 0) {
+        tren = "<i class='bi bi-arrow-up-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-success text-white";
+      } else if (selisihBulan < 0) {
+        tren = "<i class='bi bi-arrow-down-circle-fill fs-4 text-dark'></i>";
+        trenClass = "bg-danger text-white";
+      }
+    }
+
+    if (!isNaN(bulanIniVal) && !isNaN(bulanLaluVal) && !isNaN(cakupanSD) && !isNaN(targetSD)) {
+      const capaianNaik = bulanIniVal > bulanLaluVal;
+      const capaianTurun = bulanIniVal < bulanLaluVal;
+      const capaianSama = bulanIniVal === bulanLaluVal;
+      const selisihCakupan = parseFloat(cakupanSD) - parseFloat(targetSD);
+
+      if ((capaianNaik || capaianSama) && selisihCakupan >= 0) {
+        gradeClass = "bg-primary text-white";
+      } else if (capaianTurun && selisihCakupan >= 0) {
+        gradeClass = "bg-success text-white";
+      } else if (capaianNaik && selisihCakupan < 0) {
+        gradeClass = "bg-warning text-dark";
+      } else if ((capaianTurun || capaianSama) && selisihCakupan < 0) {
+        gradeClass = "bg-danger text-white";
+      }
+    }
+  }
+
+  const masalahBulanIni = row[kolomMasalah] || "";
+  const analisaBulanIni = row[kolomAnalisa] || "";
+  const RTLBulanIni = row[kolomRTL] || "";
+
+  rows += `
+    <tr>
+      <td class="text-center">${counter++}</td>
+      <td class="text-wrap" title="${indikator}">${indikator}</td>
+      <td class="text-center">${isNaN(bulanLaluVal) ? "-" : bulanLaluVal}</td>
+      <td class="text-center">${isNaN(bulanIniVal) ? "-" : bulanIniVal}</td>
+      <td class="text-center">${targetSD}</td>
+      <td class="text-center">${cakupanSD}</td>
+      <td class="text-center">${gap}</td>
+      <td class="text-center">${tren}</td>
+      <td class="${gradeClass} text-center fw-semibold">${grade}</td>
+      <td><textarea class="form-control form-control-sm masalah-textarea" rows="2" data-id="${row["No"]}" data-bulan="${kolomMasalah}">${masalahBulanIni}</textarea></td>
+      <td><textarea class="form-control form-control-sm analisa-textarea" style="overflow:hidden; resize:none;" rows="2" data-id="${row["No"]}" data-bulan="${kolomAnalisa}">${analisaBulanIni}</textarea></td>
+      <td><textarea class="form-control form-control-sm rtl-textarea" style="overflow:hidden; resize:none;" rows="2" data-id="${row["No"]}" data-bulan="${kolomRTL}">${RTLBulanIni}</textarea></td>
+      <td><textarea class="form-control form-control-sm hasil-textarea" style="overflow:hidden; resize:none;" rows="2" data-id="${row["No"]}" data-bulan="Hasil_${bulanIniKey}">${row["Hasil_" + bulanIniKey] || ""}</textarea></td>
+    </tr>`;
+});
         }
-
         tbody.innerHTML = rows;
         function autoResizeTextarea(textarea) {
           textarea.style.height = "auto";
