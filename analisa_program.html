@@ -691,7 +691,7 @@
         Mei: "Hasil_Mei",
         Juni: "Hasil_Jun",
         Juli: "Hasil_Jul",
-        Agustus: "Hasil_Agus",
+        Agustus: "Hasil_Agu",
         September: "Hasil_Sep",
         Oktober: "Hasil_Okt",
         November: "Hasil_Nop",
@@ -771,6 +771,7 @@
         const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
         const kolomAnalisa = analisaMap[labelBulan] || "Analisa_masalah_jan";
         const kolomRTL = rtlMap[labelBulan] || "RTL_jan";
+        const kolomHasil = hasilMap[labelBulan] || "Hasil_Jan";
 
         document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
           bulanLaluKey ? labelMap[bulanLaluKey] : "-";
@@ -1221,7 +1222,7 @@
           const kolomMasalahDipilih = masalahMap[labelBulan];
           const kolomAnalisaDipilih = analisaMap[labelBulan];
           const kolomRTLDipilih = rtlMap[labelBulan]; // Map RTL
-
+          const kolomHasil = hasilMap[labelBulan] || "Hasil_Jan";
           // Masalah
           textareas.forEach((textarea) => {
             const id = textarea.getAttribute("data-id");
