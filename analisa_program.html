@@ -83,7 +83,6 @@
         }
 
         /* AREA CETAK */
-       
 
         #printArea * {
           visibility: visible !important;
@@ -379,7 +378,7 @@
                     <option
                       value="Astutik, S.S.T.,Bd|19721011 199301 2 001|assets/astutik.png|PJ Klaster 2"
                     >
-                     Astutik, S.S.T.,Bd
+                      Astutik, S.S.T.,Bd
                     </option>
 
                     <option
@@ -394,11 +393,10 @@
                       DINA ANINGGARWATI, Amd.Kep.
                     </option>
                     <option
-                      value="Nurkolis S.Kep Ns|19780611 199803 1 005|assets/nurkolis.png|PJ Klaster 4"
+                      value="Nurkolis S.Kep.Ners|19780611 199803 1 005|assets/nurkolis.png|PJ Klaster 4"
                     >
-                      Nurkolis S.Kep Ns
+                      Nurkolis S.Kep.Ners
                     </option>
-                    
                   </select>
                 </div>
                 <div class="modal-footer">
@@ -426,7 +424,10 @@
             <!-- <div class="judul-print">
               <h2>IDENTIFIKASI DAN ANALISA MASALAH PKP 2025</h2>
             </div> -->
-            <h5 id="judulKategori" class="fw-bold text-uppercase text-center"></h5>
+            <h5
+              id="judulKategori"
+              class="fw-bold text-uppercase text-center"
+            ></h5>
             <div class="table-wrapper">
               <div class="table-responsive">
                 <table
@@ -487,7 +488,7 @@
                 </table>
               </div>
             </div>
-            
+
             <!-- Tanda Tangan (TTD) -->
             <div class="row" id="ttd-section">
               <div id="ttd-section" class="mt-2">
@@ -690,7 +691,7 @@
         Mei: "Hasil_Mei",
         Juni: "Hasil_Jun",
         Juli: "Hasil_Jul",
-        Agustus: "Hasil_Agus",
+        Agustus: "Hasil_Agu",
         September: "Hasil_Sep",
         Oktober: "Hasil_Okt",
         November: "Hasil_Nop",
@@ -704,8 +705,9 @@
           // Set dropdown ke kategori yang sesuai
           document.getElementById("kategoriSelect").value = selectedkategori;
           // Set judul berdasarkan kategori
-document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASALAH DAN RENCANA TINDAK LANJUT<br>PROGRAM ${selectedkategori.toUpperCase()} - PKP 2025`;
-
+          document.getElementById(
+            "judulKategori"
+          ).innerHTML = `IDENTIFIKASI, ANALISA MASALAH DAN RENCANA TINDAK LANJUT<br>PROGRAM ${selectedkategori.toUpperCase()} - PKP 2025`;
         }
         // Tampilkan spinner di awal
         document.getElementById("tableBody").innerHTML = `
@@ -769,6 +771,7 @@ document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASA
         const kolomMasalah = masalahMap[labelBulan] || "Masalah_Jan";
         const kolomAnalisa = analisaMap[labelBulan] || "Analisa_masalah_jan";
         const kolomRTL = rtlMap[labelBulan] || "RTL_jan";
+        const kolomHasil = hasilMap[labelBulan] || "Hasil_Jan";
 
         document.querySelectorAll("thead tr:nth-child(2) th")[0].innerText =
           bulanLaluKey ? labelMap[bulanLaluKey] : "-";
@@ -1405,7 +1408,7 @@ document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASA
           const kolomMasalahDipilih = masalahMap[labelBulan];
           const kolomAnalisaDipilih = analisaMap[labelBulan];
           const kolomRTLDipilih = rtlMap[labelBulan]; // Map RTL
-
+          const kolomHasil = hasilMap[labelBulan] || "Hasil_Jan";
           // Masalah
           textareas.forEach((textarea) => {
             const id = textarea.getAttribute("data-id");
@@ -1642,14 +1645,13 @@ document.getElementById("judulKategori").innerHTML = `IDENTIFIKASI, ANALISA MASA
     </script>
     <!-- tom select -->
     <script>
-     document.addEventListener("DOMContentLoaded", function () {
-  new TomSelect("#selectPenanggungJawab", {
-    create: false,
-    sortField: false, // ⛔ Jangan urut otomatis
-    placeholder: "Ketik untuk mencari nama...",
-  });
-});
-
+      document.addEventListener("DOMContentLoaded", function () {
+        new TomSelect("#selectPenanggungJawab", {
+          create: false,
+          sortField: false, // ⛔ Jangan urut otomatis
+          placeholder: "Ketik untuk mencari nama...",
+        });
+      });
     </script>
   </body>
 </html>

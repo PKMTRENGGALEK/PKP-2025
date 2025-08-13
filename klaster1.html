@@ -32,7 +32,7 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
       body {
         background: #f0f4f5;
@@ -264,16 +264,22 @@
             <a href="home.html" class="btn btn-outline-success shadow-sm"
               >⬅️ Kembali</a
             >
-            <div>
-              <div class="text-end mb-3">
-                <button
-                  class="btn btn-outline-danger no-print"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalPenanggungJawab"
-                >
-                  🖨️ Cetak PDF
-                </button>
-              </div>
+            <div class="mb-3 d-flex flex-wrap justify-content-end gap-2">
+              <button
+                class="btn btn-outline-danger no-print"
+                data-bs-toggle="modal"
+                data-bs-target="#modalPenanggungJawab"
+              >
+                🖨️ Cetak PDF
+              </button>
+
+              <button
+                id="btnExportExcel"
+                class="btn btn-outline-primary shadow-sm"
+              >
+                📥 Export ke Excel
+              </button>
+
               <button id="saveAllBtn" class="btn btn-success shadow-sm">
                 💾 Simpan Semua
               </button>
@@ -312,9 +318,9 @@
                       dr. MELISA TEGUH
                     </option>
                     <option
-                      value="ASTUTIK, S.S.T.|19721011 199301 2 001|assets/astutik.png|PJ Klaster 2"
+                      value="Astutik, S.S.T.,Bd|19721011 199301 2 001|assets/astutik.png|PJ Klaster 2"
                     >
-                      ASTUTIK, S.S.T.
+                      Astutik, S.S.T.,Bd
                     </option>
                     <option
                       value="HAYUNING DEWI OCTAVIANTI, S.K.M.|19801003 200604 2 022|assets/hayuning.png|PJ Klaster 1"
@@ -327,9 +333,9 @@
                       DINA ANINGGARWATI, Amd.Kep.
                     </option>
                     <option
-                      value="Nurkolis S.Kep Ns|19780611 199803 1 005|assets/nurkolis.png|PJ Klaster 4"
+                      value="Nurkolis S.Kep.Ners|19780611 199803 1 005|assets/nurkolis.png|PJ Klaster 4"
                     >
-                      NURKOLIS S.Kep Ns
+                      Nurkolis S.Kep.Ners
                     </option>
                   </select>
                 </div>
@@ -858,6 +864,33 @@
           placeholder: "Ketik untuk mencari nama...",
         });
       });
+    </script>
+    <script>
+      document
+        .getElementById("btnExportExcel")
+        .addEventListener("click", function () {
+          // Clone tabel agar tidak mengubah tampilan asli
+          const tableClone = document
+            .getElementById("programTable")
+            .cloneNode(true);
+
+          // Ganti semua <input> dengan nilai text
+          tableClone.querySelectorAll("input").forEach((input) => {
+            const td = input.parentElement;
+            td.textContent = input.value; // pakai value yang ada sekarang
+          });
+
+          // Convert clone tabel ke worksheet Excel
+          const wb = XLSX.utils.table_to_book(tableClone, {
+            sheet: "Data Program",
+          });
+
+          // Simpan file Excel
+          XLSX.writeFile(
+            wb,
+            `Data_Program_${new Date().toISOString().slice(0, 10)}.xlsx`
+          );
+        });
     </script>
   </body>
 </html>

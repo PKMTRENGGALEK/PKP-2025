@@ -20,7 +20,7 @@
       href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
       rel="stylesheet"
     />
-
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -63,7 +63,7 @@
       /* Sticky header baris 2 (bulan) */
       .table thead tr:nth-child(2) th {
         position: sticky;
-        top: 34px; /* Sesuaikan sesuai tinggi header baris 1 */
+        top: 52px; /* Sesuaikan sesuai tinggi header baris 1 */
         background-color: #198754 !important;
         color: white !important;
         z-index: 2;
@@ -108,6 +108,12 @@
           </div>
 
           <div class="text-end mt-3 mb-2">
+            <button
+              id="btnExportExcel"
+              class="btn btn-outline-primary shadow-sm mb-2"
+            >
+              📥 Export ke Excel
+            </button>
             <button
               id="btnSimpanSemua"
               class="btn btn-outline-success ms-2 shadow-sm mb-2"
@@ -474,7 +480,7 @@
         <td>${
           row["Pencapaian (dalam satuan sasaran)"]
             ? Math.round(parseFloat(row["Pencapaian (dalam satuan sasaran)"]))
-            : "-"
+            : "0"
         }</td>
 
         <td>${
@@ -623,6 +629,33 @@
           modal.show();
         }
       });
+    </script>
+    <script>
+      document
+        .getElementById("btnExportExcel")
+        .addEventListener("click", function () {
+          // Clone tabel agar tidak mengubah tampilan asli
+          const tableClone = document
+            .getElementById("programTable")
+            .cloneNode(true);
+
+          // Ganti semua <input> dengan nilai text
+          tableClone.querySelectorAll("input").forEach((input) => {
+            const td = input.parentElement;
+            td.textContent = input.value; // pakai value yang ada sekarang
+          });
+
+          // Convert clone tabel ke worksheet Excel
+          const wb = XLSX.utils.table_to_book(tableClone, {
+            sheet: "Data Program",
+          });
+
+          // Simpan file Excel
+          XLSX.writeFile(
+            wb,
+            `Data_Program_${new Date().toISOString().slice(0, 10)}.xlsx`
+          );
+        });
     </script>
   </body>
 </html>
